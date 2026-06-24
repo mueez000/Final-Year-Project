@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS HQ – Analytics & Reports</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --surface: #fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Sidebar */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--blue-900);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.4rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .sb-title {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-sub {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+            overflow-y: auto;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-sec {
+            padding: .4rem 1rem .2rem;
+            font-size: .62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.2rem;
+            color: rgba(255, 255, 255, .6);
+            font-size: .84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            margin: .1rem .6rem;
+            border-radius: 9px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: .88rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: .65rem;
+            font-weight: 800;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .sb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-uname {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sb-email {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: .8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tb-left h1 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .tb-left p {
+            font-size: .78rem;
+            color: var(--muted);
+        }
+
+        .tb-actions {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .tb-btn {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .5rem 1rem;
+            border-radius: 9px;
+            font-size: .8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tb-btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+        }
+
+        .tb-btn-primary {
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+            color: #fff;
+        }
+
+        /* Content */
+        .content {
+            padding: 1.4rem 1.5rem;
+            flex: 1;
+        }
+
+        /* date filter row */
+        .date-filter {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .df-pill {
+            padding: .42rem .9rem;
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            background: var(--surface);
+        }
+
+        .df-pill.active {
+            background: var(--blue-800);
+            border-color: var(--blue-800);
+            color: #fff;
+        }
+
+        .df-date {
+            padding: .42rem .9rem;
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            font-size: .78rem;
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        /* KPI strip */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .kpi-card {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 1.1rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+        }
+
+        .kpi-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kpi-ico {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .95rem;
+        }
+
+        .kpi-label {
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--muted);
+        }
+
+        .kpi-val {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .kpi-change {
+            font-size: .72rem;
+            font-weight: 700;
+        }
+
+        .up {
+            color: var(--green-600);
+        }
+
+        .down {
+            color: var(--danger);
+        }
+
+        /* Charts */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .chart-card {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 1.1rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+        }
+
+        .cc-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .cc-head h3 {
+            font-size: .9rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .cc-head select {
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            padding: .3rem .6rem;
+            font-size: .76rem;
+            color: var(--text);
+            background: var(--surface);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* bar chart */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: .6rem;
+            height: 130px;
+        }
+
+        .bc-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .35rem;
+            flex: 1;
+        }
+
+        .bc-bar {
+            width: 100%;
+            border-radius: 5px 5px 0 0;
+            min-height: 3px;
+            position: relative;
+        }
+
+        .bc-label {
+            font-size: .65rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .bc-val {
+            font-size: .65rem;
+            font-weight: 800;
+            color: var(--muted);
+        }
+
+        /* donut */
+        .donut-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .donut-legend {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+        }
+
+        .dl-item {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .76rem;
+        }
+
+        .dl-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dl-pct {
+            margin-left: auto;
+            font-weight: 800;
+            font-size: .8rem;
+        }
+
+        /* table */
+        .table-card {
+            background: var(--surface);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+            margin-bottom: 1.2rem;
+        }
+
+        .table-head {
+            padding: .9rem 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-head h3 {
+            font-size: .9rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: .65rem 1.1rem;
+            text-align: left;
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--muted);
+            background: var(--bg);
+        }
+
+        td {
+            padding: .72rem 1.1rem;
+            font-size: .83rem;
+            color: var(--text);
+            border-top: 1px solid var(--border);
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            font-size: .72rem;
+            font-weight: 700;
+            padding: .25rem .6rem;
+            border-radius: 20px;
+        }
+
+        .bg-green {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        .bg-red {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .bg-orange {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+        }
+
+        .bg-blue {
+            background: rgba(59, 130, 246, .1);
+            color: var(--info);
+        }
+
+        .score-bar {
+            height: 5px;
+            border-radius: 3px;
+            background: var(--border);
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="sb-title">IVMS HQ</div>
+                    <div class="sb-sub">Command Centre</div>
+                </div>
+            </div>
+            <div class="sb-nav">
+                <div class="nav-sec">Operations</div>
+                <div class="nav-item" onclick="window.location.href='hq_dashboard.html'"><i
+                        class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="nav-item" onclick="window.location.href='hq_incident_review.html'"><i
+                        class="fa-solid fa-magnifying-glass-chart"></i> Incident Review <span class="nav-badge">3</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_echallan_management.html'"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> e-Challan Management <span class="nav-badge">5</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_broadcasts.html'"><i
+                        class="fa-solid fa-bullhorn"></i> Broadcasts</div>
+                <div class="nav-item" onclick="window.location.href='hq_fleet_database.html'"><i
+                        class="fa-solid fa-truck-fast"></i> Fleet Database</div>
+                <div class="nav-sec">Reports</div>
+                <div class="nav-item active" onclick="window.location.href='hq_analytics.html'"><i
+                        class="fa-solid fa-chart-column"></i> Analytics</div>
+                <div class="nav-sec">Management</div>
+                <div class="nav-item" onclick="window.location.href='hq_driver_management.html'"><i class="fa-solid fa-id-badge"></i> Driver Accounts</div>
+                <div class="nav-item" onclick="window.location.href='hq_officer_management.html'"><i
+                        class="fa-solid fa-user-shield"></i> Officer Management</div>
+                <div class="nav-sec">System</div>
+                <div class="nav-item" onclick="window.location.href='hq_settings.html'"><i
+                        class="fa-solid fa-sliders"></i> System Settings</div>
+            </div>
+            <div class="sb-footer">
+                <div class="sb-user">
+                    <div class="sb-avatar">AN</div>
+                    <div>
+                        <div class="sb-uname">Admin Nawaz</div>
+                        <div class="sb-email">admin@nhmp.gov.pk</div>
+                    </div><i class="fa-solid fa-right-from-bracket"
+                        style="margin-left:auto;color:rgba(255,255,255,.3);cursor:pointer;"
+                        onclick="window.location.href='../auth/admin_login.html'"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="tb-left">
+                    <h1><i class="fa-solid fa-chart-column" style="color:var(--blue-600)"></i> Analytics & Reports</h1>
+                    <p>M2 Motorway · Performance data · Updated 5 min ago</p>
+                </div>
+                <div class="tb-actions">
+                    <button class="tb-btn tb-btn-outline" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-file-export"></i> Export PDF</button>
+                    <button class="tb-btn tb-btn-primary" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                </div>
+            </div>
+            <div class="content">
+                <!-- Date filter -->
+                <div class="date-filter">
+                    <div class="df-pill">Today</div>
+                    <div class="df-pill">This Week</div>
+                    <div class="df-pill active">This Month</div>
+                    <div class="df-pill">Last 3 Months</div>
+                    <div class="df-pill">Custom</div>
+                    <input type="date" class="df-date" value="2026-03-01">
+                    <span style="color:var(--muted);font-size:.8rem;">to</span>
+                    <input type="date" class="df-date" value="2026-03-05">
+                </div>
+
+                <!-- KPIs -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <div class="kpi-label">Total Journeys</div>
+                            <div class="kpi-ico" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                                    class="fa-solid fa-road"></i></div>
+                        </div>
+                        <div class="kpi-val">4,218</div>
+                        <div class="kpi-change up"><i class="fa-solid fa-arrow-up"></i> +12% vs last month</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <div class="kpi-label">Violations Detected</div>
+                            <div class="kpi-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                                    class="fa-solid fa-triangle-exclamation"></i></div>
+                        </div>
+                        <div class="kpi-val">847</div>
+                        <div class="kpi-change down"><i class="fa-solid fa-arrow-up"></i> +6% vs last month</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <div class="kpi-label">Challans Issued</div>
+                            <div class="kpi-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                                    class="fa-solid fa-file-invoice-dollar"></i></div>
+                        </div>
+                        <div class="kpi-val">612</div>
+                        <div class="kpi-change up"><i class="fa-solid fa-arrow-up"></i> Challan rate 72%</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <div class="kpi-label">Avg Safety Score</div>
+                            <div class="kpi-ico" style="background:rgba(5,150,105,.1);color:var(--green-600)"><i
+                                    class="fa-solid fa-star"></i></div>
+                        </div>
+                        <div class="kpi-val">78.4</div>
+                        <div class="kpi-change up"><i class="fa-solid fa-arrow-up"></i> +2.1 vs last month</div>
+                    </div>
+                </div>
+
+                <!-- Charts row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="cc-head">
+                            <h3>Monthly Violation Trend</h3><select>
+                                <option>Last 6 Months</option>
+                                <option>Last 12 Months</option>
+                            </select>
+                        </div>
+                        <div class="bar-chart">
+                            <div class="bc-col">
+                                <div class="bc-val">720</div>
+                                <div class="bc-bar"
+                                    style="height:75%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bc-label">Oct</div>
+                            </div>
+                            <div class="bc-col">
+                                <div class="bc-val">684</div>
+                                <div class="bc-bar"
+                                    style="height:71%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bc-label">Nov</div>
+                            </div>
+                            <div class="bc-col">
+                                <div class="bc-val">801</div>
+                                <div class="bc-bar"
+                                    style="height:84%;background:linear-gradient(180deg,var(--warning),#fcd34d)"></div>
+                                <div class="bc-label">Dec</div>
+                            </div>
+                            <div class="bc-col">
+                                <div class="bc-val">776</div>
+                                <div class="bc-bar"
+                                    style="height:81%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bc-label">Jan</div>
+                            </div>
+                            <div class="bc-col">
+                                <div class="bc-val">798</div>
+                                <div class="bc-bar"
+                                    style="height:83%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bc-label">Feb</div>
+                            </div>
+                            <div class="bc-col">
+                                <div class="bc-val" style="color:var(--danger)">847</div>
+                                <div class="bc-bar"
+                                    style="height:88%;background:linear-gradient(180deg,var(--danger),#f87171)"></div>
+                                <div class="bc-label"><strong>Mar</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="cc-head">
+                            <h3>Violation Types</h3>
+                        </div>
+                        <div class="donut-wrap">
+                            <svg width="90" height="90" viewBox="0 0 90 90">
+                                <circle cx="45" cy="45" r="35" fill="none" stroke="#e2e8f0" stroke-width="14" />
+                                <circle cx="45" cy="45" r="35" fill="none" stroke="var(--danger)" stroke-width="14"
+                                    stroke-dasharray="131.9 88" stroke-dashoffset="0" transform="rotate(-90 45 45)" />
+                                <circle cx="45" cy="45" r="35" fill="none" stroke="var(--warning)" stroke-width="14"
+                                    stroke-dasharray="62.8 157.1" stroke-dashoffset="-131.9"
+                                    transform="rotate(-90 45 45)" />
+                                <circle cx="45" cy="45" r="35" fill="none" stroke="var(--info)" stroke-width="14"
+                                    stroke-dasharray="47.1 172.8" stroke-dashoffset="-194.7"
+                                    transform="rotate(-90 45 45)" />
+                                <circle cx="45" cy="45" r="35" fill="none" stroke="var(--green-600)" stroke-width="14"
+                                    stroke-dasharray="27.2 192.7" stroke-dashoffset="-241.8"
+                                    transform="rotate(-90 45 45)" />
+                            </svg>
+                            <div class="donut-legend">
+                                <div class="dl-item">
+                                    <div class="dl-dot" style="background:var(--danger)"></div>Overspeeding<span
+                                        class="dl-pct" style="color:var(--danger)">60%</span>
+                                </div>
+                                <div class="dl-item">
+                                    <div class="dl-dot" style="background:var(--warning)"></div>Drowsiness<span
+                                        class="dl-pct" style="color:var(--warning)">19%</span>
+                                </div>
+                                <div class="dl-item">
+                                    <div class="dl-dot" style="background:var(--info)"></div>Phone Use<span
+                                        class="dl-pct" style="color:var(--info)">13%</span>
+                                </div>
+                                <div class="dl-item">
+                                    <div class="dl-dot" style="background:var(--green-600)"></div>Seatbelt<span
+                                        class="dl-pct" style="color:var(--green-600)">8%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top violators -->
+                <div class="table-card">
+                    <div class="table-head">
+                        <h3>Top 10 — Repeat Violation Drivers (This Month)</h3><button class="tb-btn tb-btn-outline"
+                            style="font-size:.75rem;" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='hq_driver_management.html'">View All</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Driver</th>
+                                <th>Reg. No.</th>
+                                <th>Company</th>
+                                <th>Violations</th>
+                                <th>Fine (Rs.)</th>
+                                <th>Safety Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Asif Mehmood</strong><br><span
+                                        style="font-size:.72rem;color:var(--muted)">DL-RWP-089412</span></td>
+                                <td>RWP-5589</td>
+                                <td>Niazi Express</td>
+                                <td><strong style="color:var(--danger)">9</strong></td>
+                                <td>Rs. 38,000</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:.4rem"><span
+                                            style="font-size:.8rem;font-weight:800;color:var(--danger)">38</span>
+                                        <div class="score-bar" style="width:60px">
+                                            <div class="score-fill" style="width:38%;background:var(--danger)"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-red">High Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tariq Bashir</strong><br><span
+                                        style="font-size:.72rem;color:var(--muted)">DL-LHR-114520</span></td>
+                                <td>LHR-8812</td>
+                                <td>Faisal Movers</td>
+                                <td><strong style="color:var(--danger)">7</strong></td>
+                                <td>Rs. 29,000</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:.4rem"><span
+                                            style="font-size:.8rem;font-weight:800;color:var(--warning)">52</span>
+                                        <div class="score-bar" style="width:60px">
+                                            <div class="score-fill" style="width:52%;background:var(--warning)"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-orange">Warning</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Khalid Mehmood</strong><br><span
+                                        style="font-size:.72rem;color:var(--muted)">DL-ISB-223819</span></td>
+                                <td>ISB-4491</td>
+                                <td>Daewoo Express</td>
+                                <td><strong style="color:var(--warning)">5</strong></td>
+                                <td>Rs. 17,500</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:.4rem"><span
+                                            style="font-size:.8rem;font-weight:800;color:var(--warning)">61</span>
+                                        <div class="score-bar" style="width:60px">
+                                            <div class="score-fill" style="width:61%;background:var(--info)"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-orange">Monitor</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Farhan Ali</strong><br><span
+                                        style="font-size:.72rem;color:var(--muted)">DL-SHK-332214</span></td>
+                                <td>SHK-7762</td>
+                                <td>Bilal Travels</td>
+                                <td><strong style="color:var(--warning)">4</strong></td>
+                                <td>Rs. 12,000</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:.4rem"><span
+                                            style="font-size:.8rem;font-weight:800;color:var(--info)">70</span>
+                                        <div class="score-bar" style="width:60px">
+                                            <div class="score-fill" style="width:70%;background:var(--info)"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-blue">Watch</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

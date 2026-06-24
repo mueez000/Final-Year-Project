@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS HQ – System Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --surface: #fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--blue-900);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.4rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .sb-title {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-sub {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+            overflow-y: auto;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-sec {
+            padding: .4rem 1rem .2rem;
+            font-size: .62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.2rem;
+            color: rgba(255, 255, 255, .6);
+            font-size: .84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            margin: .1rem .6rem;
+            border-radius: 9px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: .88rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: .65rem;
+            font-weight: 800;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .sb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-uname {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sb-email {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: .8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tb-left h1 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .tb-left p {
+            font-size: .78rem;
+            color: var(--muted);
+        }
+
+        .tb-btn {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .5rem 1rem;
+            border-radius: 9px;
+            font-size: .8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tb-btn-primary {
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+            color: #fff;
+        }
+
+        .content {
+            padding: 1.4rem 1.5rem;
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        /* Settings nav tabs */
+        .settings-tabs {
+            width: 200px;
+            flex-shrink: 0;
+        }
+
+        .st-tab {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .7rem .9rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: .3rem;
+            font-size: .84rem;
+            font-weight: 600;
+            color: var(--muted);
+            transition: .15s;
+        }
+
+        .st-tab:hover {
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .st-tab.active {
+            background: var(--surface);
+            color: var(--blue-600);
+            font-weight: 800;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .st-tab i {
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Settings panels */
+        .panels {
+            flex: 1;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* setting section */
+        .set-section {
+            background: var(--surface);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+        }
+
+        .ss-head {
+            padding: .85rem 1.1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .ss-head h3 {
+            font-size: .88rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .ss-head i {
+            color: var(--blue-600);
+        }
+
+        .set-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: .9rem 1.1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .set-row:last-child {
+            border-bottom: none;
+        }
+
+        .sr-info {
+            flex: 1;
+        }
+
+        .sr-label {
+            font-size: .85rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .sr-desc {
+            font-size: .73rem;
+            color: var(--muted);
+            margin-top: .1rem;
+        }
+
+        .sr-input {
+            padding: .42rem .8rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: .84rem;
+            color: var(--text);
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            min-width: 120px;
+        }
+
+        .sr-input:focus {
+            outline: none;
+            border-color: var(--blue-600);
+        }
+
+        .sr-select {
+            padding: .42rem .8rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: .84rem;
+            color: var(--text);
+            background: var(--surface);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* toggle */
+        .toggle {
+            width: 40px;
+            height: 22px;
+            background: #ccc;
+            border-radius: 11px;
+            cursor: pointer;
+            transition: .2s;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .toggle.on {
+            background: var(--blue-600);
+        }
+
+        .toggle::after {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: .2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+        }
+
+        .toggle.on::after {
+            left: 20px;
+        }
+
+        /* speed slider */
+        .speed-slider {
+            width: 140px;
+            accent-color: var(--blue-600);
+        }
+
+        .val-badge {
+            background: rgba(0, 61, 130, .1);
+            color: var(--blue-600);
+            font-size: .78rem;
+            font-weight: 800;
+            padding: .22rem .6rem;
+            border-radius: 7px;
+            min-width: 55px;
+            text-align: center;
+        }
+
+        .danger-zone {
+            background: rgba(239, 68, 68, .04);
+            border: 1.5px solid rgba(239, 68, 68, .15);
+            border-radius: 14px;
+            padding: 1.1rem;
+        }
+
+        .dz-head {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .88rem;
+            font-weight: 800;
+            color: var(--danger);
+            margin-bottom: .9rem;
+        }
+
+        .dz-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .7rem 0;
+            border-bottom: 1px solid rgba(239, 68, 68, .1);
+        }
+
+        .dz-row:last-child {
+            border-bottom: none;
+        }
+
+        .dz-info h4 {
+            font-size: .84rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .dz-info p {
+            font-size: .72rem;
+            color: var(--muted);
+        }
+
+        .dz-btn {
+            padding: .45rem .9rem;
+            background: rgba(239, 68, 68, .08);
+            border: 1.5px solid rgba(239, 68, 68, .2);
+            border-radius: 8px;
+            color: var(--danger);
+            font-size: .8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .save-bar {
+            background: rgba(0, 33, 71, .05);
+            border: 1.5px solid rgba(0, 33, 71, .1);
+            border-radius: 12px;
+            padding: .8rem 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .save-bar p {
+            font-size: .8rem;
+            color: var(--muted);
+        }
+
+        .save-btn {
+            padding: .6rem 1.4rem;
+            background: linear-gradient(135deg, var(--blue-900), var(--blue-600));
+            color: #fff;
+            border: none;
+            border-radius: 9px;
+            font-size: .84rem;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="sb-title">IVMS HQ</div>
+                    <div class="sb-sub">Command Centre</div>
+                </div>
+            </div>
+            <div class="sb-nav">
+                <div class="nav-sec">Operations</div>
+                <div class="nav-item" onclick="window.location.href='hq_dashboard.html'"><i
+                        class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="nav-item" onclick="window.location.href='hq_incident_review.html'"><i
+                        class="fa-solid fa-magnifying-glass-chart"></i> Incident Review <span class="nav-badge">3</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_echallan_management.html'"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> e-Challan Management <span class="nav-badge">5</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_broadcasts.html'"><i
+                        class="fa-solid fa-bullhorn"></i> Broadcasts</div>
+                <div class="nav-item" onclick="window.location.href='hq_fleet_database.html'"><i
+                        class="fa-solid fa-truck-fast"></i> Fleet Database</div>
+                <div class="nav-sec">Reports</div>
+                <div class="nav-item" onclick="window.location.href='hq_analytics.html'"><i
+                        class="fa-solid fa-chart-column"></i> Analytics</div>
+                <div class="nav-sec">Management</div>
+                <div class="nav-item" onclick="window.location.href='hq_driver_management.html'"><i class="fa-solid fa-id-badge"></i> Driver Accounts</div>
+                <div class="nav-item" onclick="window.location.href='hq_officer_management.html'"><i
+                        class="fa-solid fa-user-shield"></i> Officer Management</div>
+                <div class="nav-sec">System</div>
+                <div class="nav-item active" onclick="window.location.href='hq_settings.html'"><i
+                        class="fa-solid fa-sliders"></i> System Settings</div>
+            </div>
+            <div class="sb-footer">
+                <div class="sb-user">
+                    <div class="sb-avatar">AN</div>
+                    <div>
+                        <div class="sb-uname">Admin Nawaz</div>
+                        <div class="sb-email">admin@nhmp.gov.pk</div>
+                    </div><i class="fa-solid fa-right-from-bracket"
+                        style="margin-left:auto;color:rgba(255,255,255,.3);cursor:pointer;"
+                        onclick="window.location.href='../auth/admin_login.html'"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="tb-left">
+                    <h1><i class="fa-solid fa-sliders" style="color:var(--blue-600)"></i> System Settings</h1>
+                    <p>AI thresholds, alerts, geofences, notifications, and system configuration</p>
+                </div>
+                <button class="tb-btn tb-btn-primary"
+                    onclick="document.querySelectorAll('.save-btn').forEach(b=>b.textContent='✓ Saved!')"><i
+                        class="fa-solid fa-floppy-disk"></i> Save All Changes</button>
+            </div>
+            <div class="content">
+                <!-- Left tabs -->
+                <div class="settings-tabs">
+                    <div class="st-tab active" onclick="sw(0,this)"><i class="fa-solid fa-microchip"></i> AI Settings
+                    </div>
+                    <div class="st-tab" onclick="sw(1,this)"><i class="fa-solid fa-gauge-high"></i> Speed & Limits</div>
+                    <div class="st-tab" onclick="sw(2,this)"><i class="fa-solid fa-location-dot"></i> Geofencing</div>
+                    <div class="st-tab" onclick="sw(3,this)"><i class="fa-solid fa-bell"></i> Notifications</div>
+                    <div class="st-tab" onclick="sw(4,this)"><i class="fa-solid fa-file-invoice-dollar"></i> Challan
+                        Config</div>
+                    <div class="st-tab" onclick="sw(5,this)"><i class="fa-solid fa-triangle-exclamation"></i> Danger
+                        Zone</div>
+                </div>
+
+                <!-- Panels -->
+                <div class="panels">
+                    <!-- AI Settings -->
+                    <div class="panel active" id="p0">
+                        <div class="set-section">
+                            <div class="ss-head"><i class="fa-solid fa-eye"></i>
+                                <h3>Drowsiness Detection</h3>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Enable Drowsiness AI</div>
+                                    <div class="sr-desc">Real-time eye & head pose monitoring</div>
+                                </div>
+                                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Alert Sensitivity</div>
+                                    <div class="sr-desc">Stage at which driver alert triggers</div>
+                                </div><select class="sr-select">
+                                    <option>Stage 1 (Early Warning)</option>
+                                    <option selected>Stage 2 (Moderate – Recommended)</option>
+                                    <option>Stage 3 (Severe Only)</option>
+                                </select>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Alert Volume (In-Cab)</div>
+                                    <div class="sr-desc">Sound level of in-vehicle drowsiness alarm</div>
+                                </div><select class="sr-select">
+                                    <option>Low</option>
+                                    <option selected>High</option>
+                                    <option>Maximum</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="set-section">
+                            <div class="ss-head"><i class="fa-solid fa-mobile-screen"></i>
+                                <h3>Phone Use Detection</h3>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Enable Mobile Detection AI</div>
+                                    <div class="sr-desc">Detects phone held to ear or in hand</div>
+                                </div>
+                                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Detection Confidence Threshold</div>
+                                    <div class="sr-desc">Minimum confidence % to trigger alert</div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:.6rem"><input type="range"
+                                        class="speed-slider" min="50" max="95" value="80" id="conf"
+                                        oninput="document.getElementById('confv').textContent=this.value+'%'">
+                                    <div class="val-badge" id="confv">80%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="set-section">
+                            <div class="ss-head"><i class="fa-solid fa-car-burst"></i>
+                                <h3>Crash / Emergency Detection</h3>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Enable Crash Detection</div>
+                                    <div class="sr-desc">Uses accelerometer + AI audio pattern</div>
+                                </div>
+                                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">G-Force Threshold</div>
+                                    <div class="sr-desc">Impact force that triggers crash alert</div>
+                                </div><select class="sr-select">
+                                    <option>-2g (Low)</option>
+                                    <option selected>-4g (Standard)</option>
+                                    <option>-6g (Severe Only)</option>
+                                </select>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Auto-dispatch Rescue</div>
+                                    <div class="sr-desc">Notify 1122 & nearest officer automatically</div>
+                                </div>
+                                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                            </div>
+                        </div>
+                        <div class="save-bar">
+                            <p>Changes will apply to all active vehicles on next sync</p><button class="save-btn" onclick="alert('This action will be fully functional in the backend implementation.')">Save
+                                AI Settings</button>
+                        </div>
+                    </div>
+
+                    <!-- Speed & Limits -->
+                    <div class="panel" id="p1">
+                        <div class="set-section">
+                            <div class="ss-head"><i class="fa-solid fa-gauge-high"></i>
+                                <h3>M2 Speed Thresholds</h3>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Max Permitted Speed (Bus/HTV)</div>
+                                    <div class="sr-desc">Speed limit for heavy transport vehicles</div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:.6rem"><input type="range"
+                                        class="speed-slider" min="60" max="130" value="100" id="sl1"
+                                        oninput="document.getElementById('sl1v').textContent=this.value+' km/h'">
+                                    <div class="val-badge" id="sl1v">100 km/h</div>
+                                </div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Overspeeding Alert Trigger</div>
+                                    <div class="sr-desc">Speed at which alert is sent to HQ</div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:.6rem"><input type="range"
+                                        class="speed-slider" min="70" max="140" value="110" id="sl2"
+                                        oninput="document.getElementById('sl2v').textContent=this.value+' km/h'">
+                                    <div class="val-badge" id="sl2v">110 km/h</div>
+                                </div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Auto-Challan Speed Threshold</div>
+                                    <div class="sr-desc">Auto-generate challan without officer action</div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:.6rem"><input type="range"
+                                        class="speed-slider" min="100" max="160" value="125" id="sl3"
+                                        oninput="document.getElementById('sl3v').textContent=this.value+' km/h'">
+                                    <div class="val-badge" id="sl3v">125 km/h</div>
+                                </div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Critical Speed Threshold</div>
+                                    <div class="sr-desc">Triggers emergency officer dispatch</div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:.6rem"><input type="range"
+                                        class="speed-slider" min="130" max="200" value="150" id="sl4"
+                                        oninput="document.getElementById('sl4v').textContent=this.value+' km/h'">
+                                    <div class="val-badge" id="sl4v">150 km/h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="save-bar">
+                            <p>Changes apply from next monitoring sync cycle</p><button class="save-btn" onclick="alert('This action will be fully functional in the backend implementation.')">Save Speed
+                                Settings</button>
+                        </div>
+                    </div>
+
+                    <!-- Geofencing -->
+                    <div class="panel" id="p2">
+                        <div class="set-section">
+                            <div class="ss-head"><i class="fa-solid fa-location-dot"></i>
+                                <h3>Route & Geofence Settings</h3>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Enable Route Boundary Monitoring</div>
+                                    <div class="sr-desc">Alert if vehicle leaves permitted M2 corridor</div>
+                                </div>
+                                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Corridor Width (off-route tolerance)</div>
+                                    <div class="sr-desc">Meters outside roadway before alert</div>
+                                </div><input class="sr-input" type="number" value="500"> m
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Unauthorized Stop Alert</div>
+                                    <div class="sr-desc">Alert if vehicle stops for over X minutes at non-rest area
+                                    </div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:.5rem"><input class="sr-input"
+                                        style="width:80px" type="number" value="15"> <span
+                                        style="font-size:.82rem;color:var(--muted)">minutes</span></div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Rest Stop Enforcement</div>
+                                    <div class="sr-desc">Force rest after consecutive driving hours</div>
+                                </div><select class="sr-select">
+                                    <option>3 hours</option>
+                                    <option selected>4 hours (Legal Requirement)</option>
+                                    <option>5 hours</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="save-bar">
+                            <p>Geofence changes will update vehicle tracking zones</p><button class="save-btn" onclick="alert('This action will be fully functional in the backend implementation.')">Save
+                                Geofence Settings</button>
+                        </div>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="panel" id="p3">
+                        <div class="set-section">
+                            <div class="ss-head"><i class="fa-solid fa-bell"></i>
+                                <h3>Alert & Notification Config</h3>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">SMS Alerts to Officers</div>
+                                    <div class="sr-desc">Send SMS on critical incident</div>
+                                </div>
+                                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Email Reports to HQ Admin</div>
+                                    <div class="sr-desc">Automatic daily summary report</div>
+                                </div><input class="sr-input" type="email" value="hq@nhmp.gov.pk"
+                                    style="min-width:220px">
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Weekly Analytics Digest</div>
+                                    <div class="sr-desc">Sent every Monday 8:00 AM</div>
+                                </div>
+                                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Escalation Threshold</div>
+                                    <div class="sr-desc">Incidents requiring senior SP notification</div>
+                                </div><select class="sr-select">
+                                    <option>All Incidents</option>
+                                    <option selected>Critical Only (Category A)</option>
+                                    <option>Fatalities Only</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="save-bar">
+                            <p>Notification changes take effect immediately</p><button class="save-btn" onclick="alert('This action will be fully functional in the backend implementation.')">Save
+                                Notification Settings</button>
+                        </div>
+                    </div>
+
+                    <!-- Challan Config -->
+                    <div class="panel" id="p4">
+                        <div class="set-section">
+                            <div class="ss-head"><i class="fa-solid fa-file-invoice-dollar"></i>
+                                <h3>e-Challan Configuration</h3>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Auto-Challan Generation</div>
+                                    <div class="sr-desc">System auto-generates challan for AI-detected violations</div>
+                                </div>
+                                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Overspeeding Fine (per 10 km/h over limit)</div>
+                                </div><input class="sr-input" type="number" value="1500"> Rs.
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Drowsiness Violation Fine</div>
+                                </div><input class="sr-input" type="number" value="2500"> Rs.
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Mobile Phone Use Fine</div>
+                                </div><input class="sr-input" type="number" value="3000"> Rs.
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Payment Deadline (days from issue)</div>
+                                </div><input class="sr-input" type="number" value="14" style="width:80px"> days
+                            </div>
+                            <div class="set-row">
+                                <div class="sr-info">
+                                    <div class="sr-label">Points Deducted from Safety Score</div>
+                                    <div class="sr-desc">Per challan issued</div>
+                                </div><input class="sr-input" type="number" value="8" style="width:80px"> pts
+                            </div>
+                        </div>
+                        <div class="save-bar">
+                            <p>Fine changes will apply to all future challans only</p><button class="save-btn" onclick="alert('This action will be fully functional in the backend implementation.')">Save
+                                Challan Config</button>
+                        </div>
+                    </div>
+
+                    <!-- Danger Zone -->
+                    <div class="panel" id="p5">
+                        <div class="danger-zone">
+                            <div class="dz-head"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone –
+                                Irreversible Actions</div>
+                            <div class="dz-row">
+                                <div class="dz-info">
+                                    <h4>Clear All Pending Challans</h4>
+                                    <p>Permanently dismisses all unmapped violation records</p>
+                                </div><button class="dz-btn" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="if(confirm('Clear all challan cache? This cannot be undone.')) alert('Challan cache cleared.')">Clear Challans</button>
+                            </div>
+                            <div class="dz-row">
+                                <div class="dz-info">
+                                    <h4>Reset All Driver Safety Scores</h4>
+                                    <p>Resets all 1,847 driver scores to 100 — irreversible</p>
+                                </div><button class="dz-btn" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="if(confirm('Reset all driver safety scores? This cannot be undone.')) alert('Safety scores reset to baseline.')">Reset Scores</button>
+                            </div>
+                            <div class="dz-row">
+                                <div class="dz-info">
+                                    <h4>Purge AI Incident Logs (>90 days)</h4>
+                                    <p>Permanently deletes AI detection logs older than 90 days</p>
+                                </div><button class="dz-btn" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="if(confirm('Purge all system logs older than 90 days?')) alert('Logs purged. System audit trail retained.')">Purge Logs</button>
+                            </div>
+                            <div class="dz-row">
+                                <div class="dz-info">
+                                    <h4>System Maintenance Mode</h4>
+                                    <p>Takes IVMS offline for maintenance — no monitoring active</p>
+                                </div><button class="dz-btn"
+                                    style="background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4);color:var(--danger);font-weight:800" onclick="alert('This action will be fully functional in the backend implementation.')">Enable
+                                    Maintenance</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function sw(idx, el) { document.querySelectorAll('.panel').forEach((p, i) => p.classList.toggle('active', i === idx)); document.querySelectorAll('.st-tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+    </script>
+</body>
+
+</html>

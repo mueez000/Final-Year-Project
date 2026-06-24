@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IVMS Officer – Field Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-400: #34d399;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f1f5f9;
+            --surface: #fff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --muted: #94a3b8;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+
+        .app-shell {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            height: 44px;
+            background: var(--blue-900);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .status-bar .time {
+            font-size: .82rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            color: #fff;
+            font-size: .8rem;
+        }
+
+        /* Top nav */
+        .top-nav {
+            background: var(--blue-900);
+            padding: .9rem 1.2rem 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .tn-row {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            margin-bottom: .9rem;
+        }
+
+        .back-btn {
+            width: 34px;
+            height: 34px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: .9rem;
+            cursor: pointer;
+            border: none;
+            flex-shrink: 0;
+        }
+
+        .ptn {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .ptn-sub {
+            font-size: .72rem;
+            color: rgba(255, 255, 255, .6);
+        }
+
+        /* incident ref */
+        .inc-ref {
+            background: linear-gradient(135deg, #7f1d1d, var(--danger));
+            border-radius: 13px;
+            padding: .8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .ir-ico {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .15);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: .95rem;
+            flex-shrink: 0;
+        }
+
+        .ir-text h4 {
+            font-size: .84rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .ir-text p {
+            font-size: .7rem;
+            color: rgba(255, 255, 255, .75);
+        }
+
+        /* scroll */
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1rem 100px;
+            display: flex;
+            flex-direction: column;
+            gap: .9rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .scroll-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* form section */
+        .form-section {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .fs-head {
+            padding: .8rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .83rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .fs-head i {
+            color: var(--blue-600);
+        }
+
+        .fs-body {
+            padding: 1rem;
+        }
+
+        .fg {
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+            margin-bottom: .8rem;
+        }
+
+        .fg:last-child {
+            margin-bottom: 0;
+        }
+
+        .fg label {
+            font-size: .76rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .iw {
+            position: relative;
+        }
+
+        .iw i {
+            position: absolute;
+            left: .85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: .82rem;
+            pointer-events: none;
+        }
+
+        .iw input,
+        .iw select,
+        .iw textarea {
+            width: 100%;
+            padding: .7rem .9rem .7rem 2.4rem;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: .86rem;
+            color: var(--text);
+            background: #fafafa;
+            transition: .2s;
+            appearance: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .iw textarea {
+            height: 80px;
+            resize: none;
+            padding-top: .75rem;
+        }
+
+        .iw input:focus,
+        .iw select:focus,
+        .iw textarea:focus {
+            outline: none;
+            border-color: var(--blue-600);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0, 61, 130, .08);
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .7rem;
+        }
+
+        /* Severity picker */
+        .sev-row {
+            display: flex;
+            gap: .5rem;
+        }
+
+        .sev-btn {
+            flex: 1;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: .65rem .3rem;
+            text-align: center;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .sev-btn i {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: .2rem;
+        }
+
+        .sev-btn span {
+            font-size: .73rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .sev-btn.low {
+            color: var(--green-600);
+        }
+
+        .sev-btn.med {
+            color: var(--warning);
+        }
+
+        .sev-btn.high {
+            color: var(--danger);
+        }
+
+        .sev-btn.selected.low {
+            border-color: var(--green-600);
+            background: rgba(16, 185, 129, .07);
+        }
+
+        .sev-btn.selected.med {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, .07);
+        }
+
+        .sev-btn.selected.high {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, .07);
+        }
+
+        /* upload */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            background: var(--bg);
+        }
+
+        .upload-zone i {
+            font-size: 1.6rem;
+            color: var(--muted);
+            display: block;
+            margin-bottom: .4rem;
+        }
+
+        .upload-zone h4 {
+            font-size: .82rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: .2rem;
+        }
+
+        .upload-zone p {
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        .thumb-row {
+            display: flex;
+            gap: .5rem;
+            margin-top: .7rem;
+        }
+
+        .thumb {
+            width: 56px;
+            height: 56px;
+            border-radius: 9px;
+            background: #1a2a4a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, .3);
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .thumb .tick {
+            position: absolute;
+            top: .2rem;
+            right: .2rem;
+            width: 14px;
+            height: 14px;
+            background: var(--green-600);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .55rem;
+            color: #fff;
+        }
+
+        .thumb-add {
+            background: var(--bg);
+            border: 1.5px dashed var(--border);
+            color: var(--muted);
+        }
+
+        /* bottom action bar */
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: .8rem 1rem calc(.8rem + env(safe-area-inset-bottom));
+            display: flex;
+            gap: .6rem;
+            z-index: 100;
+        }
+
+        .ab-btn {
+            flex: 1;
+            padding: .78rem;
+            border-radius: 10px;
+            border: none;
+            font-size: .88rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .4rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .ab-draft {
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+        }
+
+        .ab-submit {
+            background: linear-gradient(135deg, var(--green-700), var(--green-600));
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, .3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell">
+        <div class="status-bar"><span class="time">9:41 AM</span>
+            <div class="status-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i
+                    class="fa-solid fa-battery-full"></i></div>
+        </div>
+
+        <div class="top-nav">
+            <div class="tn-row">
+                <button class="back-btn" onclick="window.location.href='officer_dashboard.html'"><i
+                        class="fa-solid fa-arrow-left"></i></button>
+                <div>
+                    <div class="ptn">Field Report</div>
+                    <div class="ptn-sub">Required before incident closure</div>
+                </div>
+            </div>
+            <div class="inc-ref">
+                <div class="ir-ico"><i class="fa-solid fa-car-burst"></i></div>
+                <div class="ir-text">
+                    <h4>INC-Alert-992 · Crash Detection</h4>
+                    <p>Daewoo Express · ABC-123 · M2 KM-224 · ~42 passengers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-content">
+            <!-- Basic info -->
+            <div class="form-section">
+                <div class="fs-head"><i class="fa-solid fa-info-circle"></i> Scene Information</div>
+                <div class="fs-body">
+                    <div class="two-col">
+                        <div class="fg"><label>Arrival Time</label>
+                            <div class="iw"><i class="fa-regular fa-clock"></i><input type="time" value="01:34"></div>
+                        </div>
+                        <div class="fg"><label>Incident Type</label>
+                            <div class="iw"><i class="fa-solid fa-triangle-exclamation"></i><select>
+                                    <option selected>Crash / Collision</option>
+                                    <option>Breakdown</option>
+                                    <option>Medical Emergency</option>
+                                    <option>Overspeeding</option>
+                                </select></div>
+                        </div>
+                    </div>
+                    <div class="fg"><label>GPS Location (Auto-filled)</label>
+                        <div class="iw"><i class="fa-solid fa-location-dot"></i><input type="text"
+                                value="32.874°N, 72.902°E · M2 KM 224" readonly style="color:var(--muted)"></div>
+                    </div>
+                    <div class="fg"><label>Vehicle Registration</label>
+                        <div class="iw"><i class="fa-solid fa-car"></i><input type="text" value="ABC-123"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Severity -->
+            <div class="form-section">
+                <div class="fs-head"><i class="fa-solid fa-gauge"></i> Severity Assessment</div>
+                <div class="fs-body">
+                    <div class="sev-row">
+                        <div class="sev-btn low" onclick="s(this)"><i
+                                class="fa-solid fa-circle-check"></i><span>Minor</span></div>
+                        <div class="sev-btn med selected" onclick="s(this)"><i
+                                class="fa-solid fa-triangle-exclamation"></i><span>Moderate</span></div>
+                        <div class="sev-btn high" onclick="s(this)"><i
+                                class="fa-solid fa-skull-crossbones"></i><span>Critical</span></div>
+                    </div>
+                    <div class="two-col" style="margin-top:.8rem;">
+                        <div class="fg"><label>Estimated Injuries</label>
+                            <div class="iw"><i class="fa-solid fa-user-injured"></i><input type="number" value="3">
+                            </div>
+                        </div>
+                        <div class="fg"><label>Rescue Dispatched?</label>
+                            <div class="iw"><i class="fa-solid fa-truck-medical"></i><select>
+                                    <option selected>Yes – Rescue 1122</option>
+                                    <option>No</option>
+                                    <option>Pending</option>
+                                </select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Narrative -->
+            <div class="form-section">
+                <div class="fs-head"><i class="fa-solid fa-pen"></i> Officer's Narrative</div>
+                <div class="fs-body">
+                    <div class="fg"><label>Describe what you observed</label>
+                        <div class="iw"><i class="fa-solid fa-align-left"
+                                style="top:.85rem;transform:none;"></i><textarea>Vehicle ABC-123 found stationary on left lane of M2 Southbound at KM-224. Brake marks visible. Front-end collision with barrier. Driver conscious. 3 passengers sustained minor injuries. Rescue dispatched.</textarea>
+                        </div>
+                    </div>
+                    <div class="fg"><label>Follow-up Recommendation</label>
+                        <div class="iw"><i class="fa-solid fa-list-check"></i><select>
+                                <option selected>Issue e-Challan + Monitor Recovery</option>
+                                <option>No further action</option>
+                                <option>Refer to Traffic Court</option>
+                                <option>HQ Investigation</option>
+                            </select></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evidence -->
+            <div class="form-section">
+                <div class="fs-head"><i class="fa-solid fa-camera-retro"></i> Evidence Capture</div>
+                <div class="fs-body">
+                    <div class="upload-zone">
+                        <i class="fa-solid fa-camera"></i>
+                        <h4>Tap to Capture Photo / Video</h4>
+                        <p>Geo-tagged & Timestamped · Cryptographically hashed · Court-admissible</p>
+                    </div>
+                    <div class="thumb-row">
+                        <div class="thumb"><i class="fa-solid fa-image"></i>
+                            <div class="tick"><i class="fa-solid fa-check"></i></div>
+                        </div>
+                        <div class="thumb"><i class="fa-solid fa-video"></i>
+                            <div class="tick"><i class="fa-solid fa-check"></i></div>
+                        </div>
+                        <div class="thumb thumb-add"><i class="fa-solid fa-plus"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fixed action bar -->
+        <div class="action-bar">
+            <button class="ab-btn ab-draft" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-regular fa-floppy-disk"></i> Save Draft</button>
+            <button class="ab-btn ab-submit" onclick="window.location.href='officer_dashboard.html'"><i
+                    class="fa-solid fa-paper-plane"></i> Submit & Close</button>
+        </div>
+    </div>
+    <script>
+        function s(el) { document.querySelectorAll('.sev-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); }
+    </script>
+</body>
+
+</html>

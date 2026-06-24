@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS HQ – Broadcasts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --surface: #fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--blue-900);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.4rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .sb-title {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-sub {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+            overflow-y: auto;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-sec {
+            padding: .4rem 1rem .2rem;
+            font-size: .62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.2rem;
+            color: rgba(255, 255, 255, .6);
+            font-size: .84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            margin: .1rem .6rem;
+            border-radius: 9px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: .88rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: .65rem;
+            font-weight: 800;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .sb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-uname {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sb-email {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: .8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tb-left h1 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .tb-left p {
+            font-size: .78rem;
+            color: var(--muted);
+        }
+
+        .tb-btn {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .5rem 1rem;
+            border-radius: 9px;
+            font-size: .8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tb-btn-primary {
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+            color: #fff;
+        }
+
+        .content {
+            padding: 1.4rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header h3 {
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .card-header h3 i {
+            color: var(--blue-600);
+        }
+
+        .card-body {
+            padding: 1.2rem;
+            flex: 1;
+        }
+
+        /* Composer Form */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: .4rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: .6rem .8rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: .85rem;
+            color: var(--text);
+            transition: .2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--blue-600);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .radio-btn {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .85rem;
+            cursor: pointer;
+        }
+
+        /* History Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: .75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: .8rem;
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-size: .7rem;
+            background: var(--bg);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: .2rem .5rem;
+            border-radius: 12px;
+            font-size: .7rem;
+            font-weight: 700;
+        }
+
+        .bg-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .bg-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+        }
+
+        .bg-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="sb-title">IVMS HQ</div>
+                    <div class="sb-sub">Command Centre</div>
+                </div>
+            </div>
+            <div class="sb-nav">
+                <div class="nav-sec">Operations</div>
+                <div class="nav-item" onclick="window.location.href='hq_dashboard.html'"><i
+                        class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="nav-item" onclick="window.location.href='hq_incident_review.html'"><i
+                        class="fa-solid fa-magnifying-glass-chart"></i> Incident Review <span class="nav-badge">3</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_echallan_management.html'"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> e-Challan Management <span class="nav-badge">5</span></div>
+                <div class="nav-item active" onclick="window.location.href='hq_broadcasts.html'"><i
+                        class="fa-solid fa-bullhorn"></i> Broadcasts</div>
+                <div class="nav-item" onclick="window.location.href='hq_fleet_database.html'"><i
+                        class="fa-solid fa-truck-fast"></i> Fleet Database</div>
+                <div class="nav-sec">Reports</div>
+                <div class="nav-item" onclick="window.location.href='hq_analytics.html'"><i
+                        class="fa-solid fa-chart-column"></i> Analytics</div>
+                <div class="nav-sec">Management</div>
+                <div class="nav-item" onclick="window.location.href='hq_driver_management.html'"><i class="fa-solid fa-id-badge"></i> Driver Accounts</div>
+                <div class="nav-item" onclick="window.location.href='hq_officer_management.html'"><i
+                        class="fa-solid fa-user-shield"></i> Officer Management</div>
+                <div class="nav-sec">System</div>
+                <div class="nav-item" onclick="window.location.href='hq_settings.html'"><i
+                        class="fa-solid fa-sliders"></i> System Settings</div>
+            </div>
+            <div class="sb-footer">
+                <div class="sb-user">
+                    <div class="sb-avatar">AN</div>
+                    <div>
+                        <div class="sb-uname">Admin Nawaz</div>
+                        <div class="sb-email">admin@nhmp.gov.pk</div>
+                    </div><i class="fa-solid fa-right-from-bracket"
+                        style="margin-left:auto;color:rgba(255,255,255,.3);cursor:pointer;"
+                        onclick="window.location.href='../auth/admin_login.html'"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="tb-left">
+                    <h1><i class="fa-solid fa-bullhorn" style="color:var(--blue-600)"></i> Broadcasts</h1>
+                    <p>Send safety alerts and notifications to drivers and officers</p>
+                </div>
+            </div>
+            <div class="content">
+                <!-- Composer -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-pen-to-square"></i> Compose New Message</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" placeholder="e.g., Heavy Fog Warning">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" placeholder="Type your broadcast message here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Target Audience</label>
+                            <div class="radio-group">
+                                <label class="radio-btn"><input type="radio" name="audience" checked> All Users</label>
+                                <label class="radio-btn"><input type="radio" name="audience"> Drivers Only</label>
+                                <label class="radio-btn"><input type="radio" name="audience"> Officers Only</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Urgency Level</label>
+                            <select class="form-control">
+                                <option>Information</option>
+                                <option>Warning</option>
+                                <option>Critical/Emergency</option>
+                            </select>
+                        </div>
+                        <button class="tb-btn tb-btn-primary" style="width:100%; justify-content:center; margin-top: 1rem;" onclick="alert('Broadcast sent!')">
+                            <i class="fa-solid fa-paper-plane"></i> Send Broadcast
+                        </button>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Broadcast History</h3>
+                    </div>
+                    <div class="card-body" style="padding: 0; overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date/Time</th>
+                                    <th>Title</th>
+                                    <th>Audience</th>
+                                    <th>Urgency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Oct 15, 08:30 AM</td>
+                                    <td><strong>Salt Range Convoy Setup</strong></td>
+                                    <td>Drivers</td>
+                                    <td><span class="badge bg-warning">Warning</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 14, 09:15 PM</td>
+                                    <td><strong>Accident Clear at KM 218</strong></td>
+                                    <td>All Users</td>
+                                    <td><span class="badge bg-info">Info</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 14, 08:00 PM</td>
+                                    <td><strong>CRITICAL: Multi-Vehicle Pileup</strong></td>
+                                    <td>All Users</td>
+                                    <td><span class="badge bg-danger">Critical</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 12, 10:00 AM</td>
+                                    <td><strong>System Maintenance Tonight</strong></td>
+                                    <td>Officers</td>
+                                    <td><span class="badge bg-info">Info</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

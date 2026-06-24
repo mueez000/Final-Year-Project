@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IVMS Driver – Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --green-400: #34d399;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f1f5f9;
+            --surface: #fff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --muted: #94a3b8;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+
+        /* ── App Shell ── */
+        .app-shell {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ── Status Bar ── */
+        .status-bar {
+            height: 44px;
+            background: var(--blue-900);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .status-bar .time {
+            font-size: .82rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            color: #fff;
+            font-size: .8rem;
+        }
+
+        /* ── Top Nav ── */
+        .top-nav {
+            background: linear-gradient(135deg, var(--blue-900), var(--blue-800));
+            padding: 1rem 1.2rem 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .tn-row1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .9rem;
+        }
+
+        .greeting {
+            color: rgba(255, 255, 255, .7);
+            font-size: .78rem;
+            font-weight: 500;
+        }
+
+        .greeting strong {
+            display: block;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 800;
+            margin-top: .1rem;
+        }
+
+        .tn-actions {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+        }
+
+        .icon-pill {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: .9rem;
+            position: relative;
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 7px;
+            height: 7px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 1.5px solid var(--blue-900);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-700), var(--green-500));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: .88rem;
+            color: #fff;
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+        }
+
+        /* Journey card in top nav */
+        .journey-card {
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 14px;
+            padding: .9rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .journey-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--green-400);
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, .3);
+            flex-shrink: 0;
+            animation: gpulse 1.5s infinite;
+        }
+
+        @keyframes gpulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 3px rgba(52, 211, 153, .3)
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(52, 211, 153, .1)
+            }
+        }
+
+        .journey-info {
+            flex: 1;
+        }
+
+        .journey-info h4 {
+            font-size: .84rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: .1rem;
+        }
+
+        .journey-info p {
+            font-size: .72rem;
+            color: rgba(255, 255, 255, .65);
+        }
+
+        .journey-speed {
+            text-align: right;
+        }
+
+        .journey-speed .speed {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .journey-speed .unit {
+            font-size: .65rem;
+            color: var(--green-400);
+            font-weight: 700;
+        }
+
+        /* ── Scroll Content ── */
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.1rem 1rem 90px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .scroll-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Section title */
+        .section-title {
+            font-size: .75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            color: var(--muted);
+            margin-bottom: -.3rem;
+        }
+
+        /* ── Metric Strips ── */
+        .metric-strip {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .7rem;
+        }
+
+        .metric-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+        }
+
+        .mc-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mc-ico {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .9rem;
+        }
+
+        .mc-label {
+            font-size: .7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--muted);
+        }
+
+        .mc-val {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .mc-sub {
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        /* ── AI Status Card ── */
+        .ai-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 1.1rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .9rem;
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .88rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .ai-title i {
+            color: var(--blue-600);
+        }
+
+        .ai-live {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .7rem;
+            font-weight: 700;
+            color: var(--green-600);
+            background: rgba(16, 185, 129, .1);
+            padding: .25rem .6rem;
+            border-radius: 20px;
+        }
+
+        .ai-live::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--green-500);
+            border-radius: 50%;
+            display: inline-block;
+            animation: gpulse 1.5s infinite;
+        }
+
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: .5rem;
+        }
+
+        .ai-item {
+            text-align: center;
+        }
+
+        .ai-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            margin: 0 auto .4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .circle-ok {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        .circle-warn {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+        }
+
+        .circle-danger {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .ai-item-lbl {
+            font-size: .62rem;
+            font-weight: 700;
+            color: var(--muted);
+            line-height: 1.2;
+        }
+
+        /* ── Map Card ── */
+        .map-card {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .map-card-head {
+            padding: .8rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .map-card-head h3 {
+            font-size: .85rem;
+            font-weight: 800;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .map-card-head h3 i {
+            color: var(--blue-600);
+        }
+
+        .map-area {
+            height: 145px;
+            background: #1a2a4a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-area svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-overlay {
+            position: absolute;
+            bottom: .6rem;
+            right: .6rem;
+            background: rgba(15, 23, 42, .85);
+            border-radius: 9px;
+            padding: .4rem .7rem;
+            font-size: .7rem;
+            color: rgba(255, 255, 255, .85);
+            font-weight: 700;
+        }
+
+        /* ── SOS Button ── */
+        .sos-card {
+            background: linear-gradient(135deg, #7f1d1d, var(--danger));
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, .35);
+        }
+
+        .sos-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #fff;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, .3);
+        }
+
+        .sos-text h4 {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: .1rem;
+        }
+
+        .sos-text p {
+            font-size: .72rem;
+            color: rgba(255, 255, 255, .8);
+        }
+
+        .sos-btn {
+            margin-left: auto;
+            background: rgba(255, 255, 255, .2);
+            border: 1.5px solid rgba(255, 255, 255, .3);
+            color: #fff;
+            font-size: .8rem;
+            font-weight: 800;
+            padding: .5rem .9rem;
+            border-radius: 9px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* ── Recent violations ── */
+        .mini-challan {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .mc-head {
+            padding: .8rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mc-head h3 {
+            font-size: .85rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .mc-head a {
+            font-size: .75rem;
+            color: var(--blue-600);
+            font-weight: 700;
+        }
+
+        .challan-row {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: .75rem 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .ch-ico {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .9rem;
+            flex-shrink: 0;
+        }
+
+        .ch-info {
+            flex: 1;
+        }
+
+        .ch-info h4 {
+            font-size: .82rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: .1rem;
+        }
+
+        .ch-info p {
+            font-size: .72rem;
+            color: var(--muted);
+        }
+
+        .ch-badge {
+            font-size: .72rem;
+            font-weight: 700;
+            padding: .25rem .6rem;
+            border-radius: 20px;
+        }
+
+        .b-pending {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .b-paid {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        /* ── Bottom Nav ── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            z-index: 100;
+            padding: .4rem 0 calc(.4rem + env(safe-area-inset-bottom));
+        }
+
+        .bn-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .2rem;
+            padding: .5rem;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .bn-item i {
+            font-size: 1.15rem;
+            color: var(--muted);
+            transition: .15s;
+        }
+
+        .bn-item span {
+            font-size: .65rem;
+            font-weight: 700;
+            color: var(--muted);
+            transition: .15s;
+        }
+
+        .bn-item.active i,
+        .bn-item.active span {
+            color: var(--green-600);
+        }
+
+        .bn-center {
+            border-radius: 50%;
+            background: var(--green-600);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -18px;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, .45);
+            border: 3px solid var(--bg);
+        }
+
+        .bn-center i {
+            color: #fff;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell">
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="time">9:41 AM</span>
+            <div class="status-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i
+                    class="fa-solid fa-battery-full"></i></div>
+        </div>
+
+        <!-- Top Nav -->
+        <div class="top-nav">
+            <div class="tn-row1">
+                <div class="greeting">Good Morning,<strong>Ali Hassan 🚌</strong></div>
+                <div class="tn-actions">
+                    <div class="icon-pill"><i class="fa-solid fa-bell"></i>
+                        <div class="notif-dot"></div>
+                    </div>
+                    <div class="avatar">AH</div>
+                </div>
+            </div>
+            <!-- Live speed strip -->
+            <div class="journey-card">
+                <div class="journey-dot"></div>
+                <div class="journey-info">
+                    <h4>Geofence Active · M2 South</h4>
+                    <p>Auto-Tracking On · KM 218 · All systems nominal</p>
+                </div>
+                <div class="journey-speed">
+                    <div class="speed">107</div>
+                    <div class="unit">km/h</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Body -->
+        <div class="scroll-content">
+
+            <!-- Metrics -->
+            <div class="section-title">Live Metrics</div>
+            <div class="metric-strip">
+                <div class="metric-card">
+                    <div class="mc-top"><span class="mc-label">Distance</span>
+                        <div class="mc-ico" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                                class="fa-solid fa-road"></i></div>
+                    </div>
+                    <div class="mc-val">142<span style="font-size:.85rem;font-weight:600;color:var(--muted)"> km</span>
+                    </div>
+                    <div class="mc-sub">Today's journey</div>
+                </div>
+                <div class="metric-card">
+                    <div class="mc-top"><span class="mc-label">Safety Score</span>
+                        <div class="mc-ico" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                                class="fa-solid fa-star"></i></div>
+                    </div>
+                    <div class="mc-val" style="color:var(--green-600)">82</div>
+                    <div class="mc-sub">Good · +3 this week</div>
+                </div>
+                <div class="metric-card">
+                    <div class="mc-top"><span class="mc-label">Drive Time</span>
+                        <div class="mc-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                                class="fa-regular fa-clock"></i></div>
+                    </div>
+                    <div class="mc-val">3h<span style="font-size:.85rem;font-weight:600;color:var(--muted)"> 24m</span>
+                    </div>
+                    <div class="mc-sub">Rest in 36 min</div>
+                </div>
+                <div class="metric-card">
+                    <div class="mc-top"><span class="mc-label">Violations</span>
+                        <div class="mc-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                                class="fa-solid fa-triangle-exclamation"></i></div>
+                    </div>
+                    <div class="mc-val" style="color:var(--danger)">1</div>
+                    <div class="mc-sub">Pending challan</div>
+                </div>
+            </div>
+
+            <!-- AI Monitor -->
+            <div class="section-title">AI Monitoring</div>
+            <div class="ai-card">
+                <div class="ai-header">
+                    <div class="ai-title"><i class="fa-solid fa-microchip"></i> AI Safety Monitor</div>
+                    <div class="ai-live">LIVE</div>
+                </div>
+                <div class="ai-grid">
+                    <div class="ai-item">
+                        <div class="ai-circle circle-ok"><i class="fa-solid fa-eye"></i></div>
+                        <div class="ai-item-lbl">Eyes Open</div>
+                    </div>
+                    <div class="ai-item">
+                        <div class="ai-circle circle-ok"><i class="fa-solid fa-gauge"></i></div>
+                        <div class="ai-item-lbl">In Speed Limit</div>
+                    </div>
+                    <div class="ai-item">
+                        <div class="ai-circle circle-warn" style="color: var(--danger); background: rgba(239, 68, 68, 0.1);"><i class="fa-solid fa-car-burst"></i></div>
+                        <div class="ai-item-lbl">Crash Det.</div>
+                    </div>
+                    <div class="ai-item">
+                        <div class="ai-circle circle-ok"><i class="fa-solid fa-eye-slash"></i></div>
+                        <div class="ai-item-lbl">Fatigue Mon.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="section-title">Live Position</div>
+            <div class="map-card">
+                <div class="map-card-head">
+                    <h3><i class="fa-solid fa-map"></i> M2 Route Tracker</h3>
+                    <span style="font-size:.72rem;color:var(--muted);">Updates every 5s</span>
+                </div>
+                <div class="map-area">
+                    <svg viewBox="0 0 400 145" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="145" fill="#1a2a4a" />
+                        <ellipse cx="320" cy="110" rx="140" ry="70" fill="#1e3a2a" opacity=".7" />
+                        <ellipse cx="60" cy="130" rx="100" ry="50" fill="#1e3a2a" opacity=".6" />
+                        <!-- road -->
+                        <path d="M0 100 Q100 95 200 80 Q300 65 400 55" stroke="#374151" stroke-width="28" fill="none" />
+                        <path d="M0 100 Q100 95 200 80 Q300 65 400 55" stroke="#4b5563" stroke-width=".8"
+                            stroke-dasharray="12 8" fill="none" />
+                        <!-- vehicle dot -->
+                        <circle cx="210" cy="79" r="9" fill="#10b981" />
+                        <circle cx="210" cy="79" r="15" fill="none" stroke="#10b981" stroke-width="1.5" opacity=".5" />
+                        <!-- future route dashed -->
+                        <path d="M210 79 Q300 65 400 55" stroke="#34d399" stroke-width="2" stroke-dasharray="6 5"
+                            fill="none" opacity=".7" />
+                        <!-- labels -->
+                        <text x="10" y="118" fill="rgba(255,255,255,.5)" font-size="8" font-family="Inter">Islamabad
+                            ›</text>
+                        <text x="350" y="45" fill="rgba(255,255,255,.5)" font-size="8" font-family="Inter">Lahore</text>
+                        <text x="195" y="67" fill="rgba(255,255,255,.9)" font-size="8" font-family="Inter"
+                            font-weight="700">KM 218</text>
+                    </svg>
+                    <div class="map-overlay"><i class="fa-solid fa-location-dot" style="color:var(--green-400)"></i> KM
+                        218 · 107 km/h</div>
+                </div>
+                <!-- Dynamic Routing Alert -->
+                <div style="background: rgba(59,130,246,0.1); padding: 0.8rem; margin: 1rem; border-radius: 12px; display: flex; align-items: center; gap: 0.8rem;">
+                    <div style="width: 32px; height: 32px; background: rgba(59,130,246,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--info);">
+                        <i class="fa-solid fa-route"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 0.1rem;">Alternate Route Available</h4>
+                        <p style="font-size: 0.7rem; color: var(--muted);">AI suggests taking Exit 14 to avoid congestion.</p>
+                    </div>
+                    <button style="background: var(--info); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.7rem; font-weight: 700; cursor: pointer;">View</button>
+                </div>
+            </div>
+
+            <!-- SOS -->
+            <div class="sos-card">
+                <div class="sos-icon"><i class="fa-solid fa-truck-medical"></i></div>
+                <div class="sos-text">
+                    <h4>Emergency SOS</h4>
+                    <p>Instantly alerts nearest NH&MP unit</p>
+                </div>
+                <button class="sos-btn" onclick="document.getElementById('sosModal').style.display='flex'"><i class="fa-solid fa-phone-volume"></i>
+                    SOS</button>
+            </div>
+
+            <!-- Recent Challans -->
+            <div class="section-title">Recent Challans</div>
+            <div class="mini-challan">
+                <div class="mc-head">
+                    <h3>e-Challan Activity</h3><a href="driver_violations.html">View All →</a>
+                </div>
+                <div class="challan-row">
+                    <div class="ch-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                            class="fa-solid fa-gauge-high"></i></div>
+                    <div class="ch-info">
+                        <h4>Overspeeding · 125 km/h</h4>
+                        <p>M2 KM-190 · 03 Mar 2026</p>
+                    </div>
+                    <span class="ch-badge b-pending">Unpaid</span>
+                </div>
+                <div class="challan-row">
+                    <div class="ch-ico" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                            class="fa-solid fa-gauge"></i></div>
+                    <div class="ch-info">
+                        <h4>Overspeeding · 118 km/h</h4>
+                        <p>M2 KM-240 · 18 Feb 2026</p>
+                    </div>
+                    <span class="ch-badge b-paid">Paid</span>
+                </div>
+            </div>
+
+        </div><!-- /scroll-content -->
+
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+            <div class="bn-item active" onclick="window.location.href='driver_dashboard.html'"><i
+                    class="fa-solid fa-house"></i><span>Home</span></div>
+            <div class="bn-item" onclick="window.location.href='driver_violations.html'"><i
+                    class="fa-solid fa-file-invoice-dollar"></i><span>Challans</span></div>
+            <div class="bn-item" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;"
+                onclick="document.getElementById('sosModal').style.display='flex'">
+                <div class="bn-center"><i class="fa-solid fa-truck-medical"></i></div>
+                <span style="font-size:.65rem;font-weight:700;color:var(--text);margin-top:.2rem;">SOS</span>
+            </div>
+            <div class="bn-item" onclick="window.location.href='driver_safety_profile.html'"><i
+                    class="fa-solid fa-chart-line"></i><span>Safety</span></div>
+            <div class="bn-item" onclick="window.location.href='driver_profile.html'"><i
+                    class="fa-regular fa-user"></i><span>Profile</span></div>
+        </div>
+
+    </div>
+    </div>
+
+    <!-- SOS Modal -->
+    <div class="modal-overlay" id="sosModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-end; justify-content: center;">
+        <div class="modal-content"
+            style="background: var(--surface); width: 100%; max-width: 430px; border-radius: 20px 20px 0 0; padding: 2rem; text-align: center; animation: slideUp 0.3s ease-out;">
+            <div
+                style="width: 50px; height: 5px; background: var(--border); border-radius: 10px; margin: 0 auto 1.5rem;">
+            </div>
+            <div
+                style="width: 80px; height: 80px; background: rgba(239,68,68,0.1); color: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1rem;">
+                <i class="fa-solid fa-truck-medical"></i>
+            </div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text); margin-bottom: 0.5rem;">Emergency SOS
+            </h2>
+            <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem;">You are about to send an emergency
+                alert with your live location to the nearest NH&MP unit.</p>
+            <div style="display: flex; gap: 1rem;">
+                <button onclick="document.getElementById('sosModal').style.display='none'"
+                    style="flex: 1; padding: 1rem; border-radius: 12px; border: none; background: var(--bg); color: var(--text); font-weight: 700; cursor: pointer;">Cancel</button>
+                <button
+                    onclick="alert('SOS Alert Sent! Help is on the way.'); document.getElementById('sosModal').style.display='none'"
+                    style="flex: 1; padding: 1rem; border-radius: 12px; border: none; background: var(--danger); color: white; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i
+                        class="fa-solid fa-triangle-exclamation"></i> Send Alert</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+    <!-- Consent Modal -->
+    <div class="modal-overlay" id="consentModal"
+        style="display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center;">
+        <div class="modal-content"
+            style="background: var(--surface); width: 90%; max-width: 400px; border-radius: 20px; padding: 2rem; text-align: center; animation: slideUp 0.3s ease-out;">
+            <div style="width: 60px; height: 60px; background: rgba(16,185,129,0.1); color: var(--green-600); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1rem;">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 1rem;">Data Collection Consent</h2>
+            <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; text-align: left;">
+                IVMS requires access to your device's <strong>GPS, Camera, Microphone, and Motion Sensors</strong> to monitor speed, detect crashes, and ensure driver safety.
+            </p>
+            <div style="display: flex; gap: 1rem; flex-direction: column;">
+                <button
+                    onclick="document.getElementById('consentModal').style.display='none'; document.getElementById('vehicleModal').style.display='flex';"
+                    style="padding: 1rem; border-radius: 12px; border: none; background: var(--green-600); color: white; font-weight: 700; cursor: pointer; font-size: 0.9rem;">I Consent to Monitoring</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vehicle Association Modal -->
+    <div class="modal-overlay" id="vehicleModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center;">
+        <div class="modal-content"
+            style="background: var(--surface); width: 90%; max-width: 400px; border-radius: 20px; padding: 2rem; text-align: center; animation: slideUp 0.3s ease-out;">
+            <div style="width: 60px; height: 60px; background: rgba(59,130,246,0.1); color: var(--info); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1rem;">
+                <i class="fa-solid fa-bus"></i>
+            </div>
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 1rem;">Select Vehicle</h2>
+            <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Please enter the registration number of the vehicle you are operating today.</p>
+            <input type="text" placeholder="e.g. LHR-1234" style="width: 100%; padding: 1rem; border: 2px solid var(--border); border-radius: 12px; margin-bottom: 1.5rem; font-size: 1rem; font-weight: 700; text-align: center; text-transform: uppercase;">
+            <div style="display: flex; gap: 1rem;">
+                <button
+                    onclick="document.getElementById('vehicleModal').style.display='none'"
+                    style="flex: 1; padding: 1rem; border-radius: 12px; border: none; background: var(--blue-900); color: white; font-weight: 700; cursor: pointer;">Start Journey</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

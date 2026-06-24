@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS – HQ Operations Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-700: #002d5f;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --green-300: #6ee7b7;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f1f5f9;
+            --surface: #fff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-2: #475569;
+            --muted: #94a3b8;
+            --sidebar: #0f172a;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--blue-900);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.4rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .sb-title {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-sub {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-sec {
+            padding: .4rem 1rem .2rem;
+            font-size: .62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.2rem;
+            color: rgba(255, 255, 255, .6);
+            font-size: .84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            margin: .1rem .6rem;
+            border-radius: 9px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: .88rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: .65rem;
+            font-weight: 800;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .sb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-uname {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sb-email {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 1.2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-wrap input {
+            padding: .5rem 1rem .5rem 2.2rem;
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            font-size: .84rem;
+            color: var(--text);
+            background: var(--bg);
+            width: 250px;
+            transition: .2s;
+        }
+
+        .search-wrap input:focus {
+            outline: none;
+            border-color: var(--blue-600);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0, 61, 130, .1);
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: .75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: .84rem;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            color: var(--text-2);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: .2s;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .content {
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+        }
+
+        /* header row */
+        .pg-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .pg-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .pg-header p {
+            font-size: .82rem;
+            color: var(--muted);
+            margin-top: .2rem;
+        }
+
+        .hdr-btns {
+            display: flex;
+            gap: .8rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .6rem 1.1rem;
+            border: none;
+            border-radius: 9px;
+            font-size: .84rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text-2);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(0, 33, 71, .25);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 16px rgba(0, 33, 71, .35);
+            transform: translateY(-1px);
+        }
+
+        /* KPI row */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.1rem;
+        }
+
+        .kpi {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+            transition: .2s;
+        }
+
+        .kpi:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+        }
+
+        .kpi-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kpi-top h4 {
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--muted);
+        }
+
+        .kpi-ico {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .95rem;
+        }
+
+        .kpi-val {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        .kpi-sub {
+            font-size: .73rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: .25rem;
+        }
+
+        .trend-up {
+            color: var(--danger)
+        }
+
+        .trend-down {
+            color: var(--green-600)
+        }
+
+        /* layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 3fr 1.2fr;
+            gap: 1.4rem;
+        }
+
+        .side-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        /* Map */
+        .map-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+            display: flex;
+            flex-direction: column;
+            height: 420px;
+        }
+
+        .panel-header {
+            padding: 1rem 1.4rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafcff;
+        }
+
+        .panel-header h3 {
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .panel-header h3 i {
+            color: var(--blue-600);
+        }
+
+        .map-area {
+            flex: 1;
+            position: relative;
+            background: #1a2a4a;
+            overflow: hidden;
+        }
+
+        .map-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Fleet table */
+        .table-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .82rem;
+        }
+
+        thead th {
+            padding: .65rem 1rem;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+            font-weight: 700;
+            text-align: left;
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: .15s;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        td {
+            padding: .75rem 1rem;
+            vertical-align: middle;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            padding: .2rem .6rem;
+            border-radius: 20px;
+            font-size: .7rem;
+            font-weight: 700;
+        }
+
+        .b-ok {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        .b-warn {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+        }
+
+        .b-danger {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .b-info {
+            background: rgba(59, 130, 246, .1);
+            color: var(--info);
+        }
+
+        .pulse-red {
+            animation: pr 1.5s infinite;
+        }
+
+        @keyframes pr {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .5
+            }
+        }
+
+        /* Activity feed */
+        .feed-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        }
+
+        .feed-list {
+            max-height: 390px;
+            overflow-y: auto;
+        }
+
+        .feed-item {
+            display: flex;
+            gap: .9rem;
+            padding: .9rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            transition: .15s;
+        }
+
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+
+        .feed-item:hover {
+            background: var(--bg);
+        }
+
+        .feed-ico {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .82rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .fi-red {
+            background: var(--danger)
+        }
+
+        .fi-orange {
+            background: var(--warning)
+        }
+
+        .fi-blue {
+            background: var(--blue-600)
+        }
+
+        .fi-green {
+            background: var(--green-600)
+        }
+
+        .feed-body h4 {
+            font-size: .83rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: .15rem;
+        }
+
+        .feed-body p {
+            font-size: .74rem;
+            color: var(--muted);
+            margin-bottom: .3rem;
+        }
+
+        .feed-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        /* Bottom analytics row */
+        .analytics-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.4rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        }
+
+        .card-hd {
+            padding: 1rem 1.4rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-hd h3 {
+            font-size: .93rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .card-hd h3 i {
+            color: var(--blue-600);
+        }
+
+        .card-bd {
+            padding: 1.2rem 1.4rem;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: flex-end;
+            gap: .5rem;
+            height: 120px;
+            margin-bottom: .8rem;
+        }
+
+        .bar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .3rem;
+            flex: 1;
+        }
+
+        .bar {
+            width: 100%;
+            border-radius: 5px 5px 0 0;
+            min-height: 3px;
+        }
+
+        .bar-lbl {
+            font-size: .68rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .donut-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: .5rem 0;
+        }
+
+        .donut-chart {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .donut-chart svg {
+            transform: rotate(-90deg);
+        }
+
+        .donut-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-center .num {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .donut-center .lbl {
+            font-size: .6rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+        }
+
+        .leg-item {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-size: .78rem;
+        }
+
+        .leg-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .leg-item span {
+            color: var(--muted)
+        }
+
+        .leg-item strong {
+            margin-left: auto;
+            color: var(--text);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="sb-title">IVMS HQ</div>
+                    <div class="sb-sub">Command Centre</div>
+                </div>
+            </div>
+            <div class="sb-nav">
+                <div class="nav-sec">Operations</div>
+                <div class="nav-item active" onclick="window.location.href='hq_dashboard.html'"><i
+                        class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="nav-item" onclick="window.location.href='hq_incident_review.html'"><i
+                        class="fa-solid fa-magnifying-glass-chart"></i> Incident Review <span class="nav-badge">3</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_echallan_management.html'"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> e-Challan Management <span class="nav-badge">5</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_broadcasts.html'"><i
+                        class="fa-solid fa-bullhorn"></i> Broadcasts</div>
+                <div class="nav-item" onclick="window.location.href='hq_fleet_database.html'"><i
+                        class="fa-solid fa-truck-fast"></i> Fleet Database</div>
+                <div class="nav-sec">Reports</div>
+                <div class="nav-item" onclick="window.location.href='hq_analytics.html'"><i
+                        class="fa-solid fa-chart-column"></i> Analytics</div>
+                <div class="nav-sec">Management</div>
+                <div class="nav-item" onclick="window.location.href='hq_driver_management.html'"><i class="fa-solid fa-id-badge"></i> Driver Accounts</div>
+                <div class="nav-item" onclick="window.location.href='hq_officer_management.html'"><i
+                        class="fa-solid fa-user-shield"></i> Officer Management</div>
+                <div class="nav-sec">System</div>
+                <div class="nav-item" onclick="window.location.href='hq_settings.html'"><i
+                        class="fa-solid fa-sliders"></i> System Settings</div>
+            </div>
+            <div class="sb-footer">
+                <div class="sb-user">
+                    <div class="sb-avatar">AN</div>
+                    <div>
+                        <div class="sb-uname">Admin Nawaz</div>
+                        <div class="sb-email">admin@nhmp.gov.pk</div>
+                    </div><i class="fa-solid fa-right-from-bracket"
+                        style="margin-left:auto;color:rgba(255,255,255,.3);cursor:pointer;"
+                        onclick="window.location.href='../auth/admin_login.html'"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+        <div class="topbar">
+            <div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input type="text"
+                    placeholder="Search vehicle, driver, incident…"></div>
+            <div class="spacer"></div>
+            <button class="icon-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-bell"></i><span class="notif-dot"></span></button>
+            <button class="icon-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-gear"></i></button>
+        </div>
+
+        <div class="content">
+            <!-- Header -->
+            <div class="pg-header">
+                <div>
+                    <h2>M2 Operations Overview</h2>
+                    <p>Real-time dashboard · Updated 5 seconds ago</p>
+                </div>
+                <div class="hdr-btns">
+                    <button class="btn btn-outline" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-broadcast-tower"></i> Broadcast Alert</button>
+                    <button class="btn btn-primary" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-download"></i> Export Report</button>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="kpi-row">
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Tracked Vehicles</h4>
+                        <div class="kpi-ico" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                                class="fa-solid fa-bus"></i></div>
+                    </div>
+                    <div class="kpi-val">1,248</div>
+                    <div class="kpi-sub"><span class="trend-down"><i class="fa-solid fa-arrow-right"></i></span> Stable
+                    </div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Active SOS</h4>
+                        <div class="kpi-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                                class="fa-solid fa-truck-medical"></i></div>
+                    </div>
+                    <div class="kpi-val" style="color:var(--danger)">3</div>
+                    <div class="kpi-sub pulse-red"><i class="fa-solid fa-circle-dot"></i> Requires action</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Violations (Today)</h4>
+                        <div class="kpi-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                                class="fa-solid fa-gauge-high"></i></div>
+                    </div>
+                    <div class="kpi-val">342</div>
+                    <div class="kpi-sub"><span class="trend-down"><i class="fa-solid fa-arrow-down"></i></span> -12% vs
+                        yesterday</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Pending e-Challans</h4>
+                        <div class="kpi-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                                class="fa-solid fa-file-invoice-dollar"></i></div>
+                    </div>
+                    <div class="kpi-val">45</div>
+                    <div class="kpi-sub"><span class="trend-down"><i class="fa-solid fa-clock"></i></span> Awaiting Validation
+                    </div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Officers On Duty</h4>
+                        <div class="kpi-ico" style="background:rgba(0,33,71,.1);color:var(--blue-600)"><i
+                                class="fa-solid fa-user-shield"></i></div>
+                    </div>
+                    <div class="kpi-val">24</div>
+                    <div class="kpi-sub"><span class="trend-down"><i class="fa-solid fa-arrow-right"></i></span> Full
+                        deployment</div>
+                </div>
+            </div>
+
+            <!-- Map + Feed -->
+            <div class="main-layout">
+                <div class="map-panel">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-map"></i> Live Fleet & Incident Tracking · M2 Motorway</h3>
+                        <div style="display:flex;gap:.5rem;">
+                            <button class="btn btn-outline" style="padding:.4rem .8rem;font-size:.76rem;" onclick="alert('This action will be fully functional in the backend implementation.')"><i
+                                    class="fa-solid fa-filter"></i> Filter</button>
+                            <button class="btn btn-outline" style="padding:.4rem .8rem;font-size:.76rem;" onclick="alert('This action will be fully functional in the backend implementation.')"><i
+                                    class="fa-solid fa-expand"></i> Fullscreen</button>
+                        </div>
+                    </div>
+                    <div class="map-area">
+                        <svg class="map-svg" viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="900" height="340" fill="#1a2a4a" />
+                            <!-- hills -->
+                            <ellipse cx="700" cy="250" rx="250" ry="120" fill="#1e3a2a" opacity=".8" />
+                            <ellipse cx="150" cy="290" rx="200" ry="90" fill="#1e3a2a" opacity=".7" />
+                            <!-- main motorway -->
+                            <path d="M0 200 Q150 195 300 175 Q450 155 600 140 Q720 130 900 115" stroke="#374151"
+                                stroke-width="60" fill="none" />
+                            <!-- lane markings -->
+                            <path d="M0 200 Q150 195 300 175 Q450 155 600 140 Q720 130 900 115" stroke="#4b5563"
+                                stroke-width="1" stroke-dasharray="18 12" fill="none" />
+                            <!-- vehicles (buses) -->
+                            <rect x="195" y="167" width="18" height="10" rx="3" fill="#3b82f6" />
+                            <rect x="355" y="152" width="18" height="10" rx="3" fill="#3b82f6" />
+                            <rect x="560" y="128" width="18" height="10" rx="3" fill="#3b82f6" />
+                            <rect x="700" y="113" width="18" height="10" rx="3" fill="#3b82f6" />
+                            <!-- officers -->
+                            <circle cx="270" cy="170" r="8" fill="#10b981" />
+                            <circle cx="500" cy="148" r="8" fill="#10b981" />
+                            <!-- incidents -->
+                            <circle cx="415" cy="158" r="10" fill="#ef4444" />
+                            <circle cx="415" cy="158" r="16" fill="none" stroke="#ef4444" stroke-width="2"
+                                opacity=".5" />
+                            <circle cx="620" cy="136" r="8" fill="#ef4444" opacity=".8" />
+                            <circle cx="620" cy="136" r="13" fill="none" stroke="#ef4444" stroke-width="1.5"
+                                opacity=".4" />
+                            <!-- labels -->
+                            <text x="420" y="145" fill="#ff6b6b" font-size="9" font-family="Inter"
+                                font-weight="700">CRASH</text>
+                            <text x="625" y="126" fill="#ff6b6b" font-size="8" font-family="Inter">SOS</text>
+                            <text x="20" y="230" fill="rgba(255,255,255,.6)" font-size="9"
+                                font-family="Inter">Islamabad</text>
+                            <text x="820" y="105" fill="rgba(255,255,255,.6)" font-size="9"
+                                font-family="Inter">Lahore</text>
+                        </svg>
+                        <!-- legend -->
+                        <div
+                            style="position:absolute;bottom:.8rem;right:.8rem;background:rgba(15,23,42,.9);border-radius:10px;padding:.8rem;display:flex;flex-direction:column;gap:.4rem;font-size:.73rem;">
+                            <div style="display:flex;align-items:center;gap:.5rem;color:#cbd5e1"><span
+                                    style="width:10px;height:7px;background:#3b82f6;border-radius:2px;display:inline-block;"></span>Bus/Van
+                            </div>
+                            <div style="display:flex;align-items:center;gap:.5rem;color:#cbd5e1"><span
+                                    style="width:8px;height:8px;background:#10b981;border-radius:50%;display:inline-block;"></span>Patrol
+                                Unit</div>
+                            <div style="display:flex;align-items:center;gap:.5rem;color:#cbd5e1"><span
+                                    style="width:8px;height:8px;background:#ef4444;border-radius:50%;display:inline-block;"></span>Crash
+                                Alert</div>
+                            <div style="display:flex;align-items:center;gap:.5rem;color:#cbd5e1"><span
+                                    style="width:8px;height:8px;background:#f59e0b;border-radius:50%;display:inline-block;"></span>Drowsiness
+                                Alert</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right feed -->
+                <div class="side-stack">
+                    <div class="feed-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-bell"></i> Priority Alerts</h3><a href="#" onclick="alert('Link placeholder. Content will be added later.')"
+                                style="font-size:.8rem;color:var(--blue-600);font-weight:600;">View All</a>
+                        </div>
+                        <div class="feed-list">
+                            <div class="feed-item">
+                                <div class="feed-ico fi-red"><i class="fa-solid fa-car-burst"></i></div>
+                                <div class="feed-body">
+                                    <h4>AI Crash · Daewoo ABC-123</h4>
+                                    <p>M2 KM-224 · Unit 42 en route</p>
+                                    <div class="feed-meta"><span>2 min ago</span><span
+                                            class="badge b-warn">Assigned</span></div>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-ico fi-orange"><i class="fa-solid fa-bed"></i></div>
+                                <div class="feed-body">
+                                    <h4>Driver Drowsiness · ABC-789</h4>
+                                    <p>Faisal Movers · M2 KM-180</p>
+                                    <div class="feed-meta"><span>7 min ago</span><span
+                                            class="badge b-danger">Pending</span></div>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-ico fi-blue"><i class="fa-solid fa-gauge-high"></i></div>
+                                <div class="feed-body">
+                                    <h4>Overspeeding · LMN-456</h4>
+                                    <p>Niazi Express · 135 km/h</p>
+                                    <div class="feed-meta"><span>15 min ago</span><span class="badge b-ok">e-Challan
+                                            Issued</span></div>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-ico fi-red"><i class="fa-solid fa-truck-medical"></i></div>
+                                <div class="feed-body">
+                                    <h4>Manual SOS · QRS-112</h4>
+                                    <p>Kohistan Travels · KM-310</p>
+                                    <div class="feed-meta"><span>22 min ago</span><span
+                                            class="badge b-ok">Resolved</span></div>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-ico fi-green"><i class="fa-solid fa-circle-check"></i></div>
+                                <div class="feed-body">
+                                    <h4>Incident Closed · DEF-901</h4>
+                                    <p>Breakdown, tow dispatched</p>
+                                    <div class="feed-meta"><span>35 min ago</span><span class="badge b-ok">Closed</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics row -->
+            <div class="analytics-row">
+                <div class="card">
+                    <div class="card-hd">
+                        <h3><i class="fa-solid fa-chart-bar"></i> Violation Trend (Last 7 Days)</h3>
+                    </div>
+                    <div class="card-bd">
+                        <div class="bar-row">
+                            <div class="bar-col">
+                                <div class="bar"
+                                    style="height:60%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bar-lbl">Sat</div>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar"
+                                    style="height:80%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bar-lbl">Sun</div>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar"
+                                    style="height:55%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bar-lbl">Mon</div>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar"
+                                    style="height:90%;background:linear-gradient(180deg,var(--warning),#fcd34d)"></div>
+                                <div class="bar-lbl">Tue</div>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar"
+                                    style="height:70%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bar-lbl">Wed</div>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar"
+                                    style="height:65%;background:linear-gradient(180deg,var(--info),#60a5fa)"></div>
+                                <div class="bar-lbl">Thu</div>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar"
+                                    style="height:50%;background:linear-gradient(180deg,var(--green-500),var(--green-300));box-shadow:0 4px 12px rgba(16,185,129,.4)">
+                                </div>
+                                <div class="bar-lbl"><strong>Fri</strong></div>
+                            </div>
+                        </div>
+                        <!-- active fleet table -->
+                        <table style="margin-top:.5rem;">
+                            <thead>
+                                <tr>
+                                    <th>Vehicle</th>
+                                    <th>Company</th>
+                                    <th>Speed</th>
+                                    <th>Status</th>
+                                    <th>Officer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>ABC-123</strong></td>
+                                    <td>Daewoo Express</td>
+                                    <td style="color:var(--danger);font-weight:700">—</td>
+                                    <td><span class="badge b-danger pulse-red"><i class="fa-solid fa-car-burst"></i>
+                                            Crash</span></td>
+                                    <td>Sgt. Raza</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>XYZ-987</strong></td>
+                                    <td>Faisal Movers</td>
+                                    <td style="color:var(--danger);font-weight:700">135 km/h</td>
+                                    <td><span class="badge b-warn"><i class="fa-solid fa-gauge-high"></i>
+                                            Speeding</span></td>
+                                    <td>Cpl. Tariq</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>LMN-456</strong></td>
+                                    <td>Niazi Express</td>
+                                    <td style="font-weight:700;">98 km/h</td>
+                                    <td><span class="badge b-ok"><i class="fa-solid fa-circle-check"></i> Normal</span>
+                                    </td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>MNO-321</strong></td>
+                                    <td>Kohistan Travels</td>
+                                    <td style="font-weight:700;">82 km/h</td>
+                                    <td><span class="badge b-ok"><i class="fa-solid fa-circle-check"></i> Normal</span>
+                                    </td>
+                                    <td>—</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-hd">
+                        <h3><i class="fa-solid fa-chart-pie"></i> Incident Types</h3>
+                    </div>
+                    <div class="card-bd">
+                        <div class="donut-wrap">
+                            <div class="donut-chart">
+                                <svg width="100" height="100" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#e2e8f0" stroke-width="14" />
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#ef4444" stroke-width="14"
+                                        stroke-dasharray="238.76" stroke-dashoffset="0" stroke-linecap="butt" />
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#f59e0b" stroke-width="14"
+                                        stroke-dasharray="71.6 167.16" stroke-dashoffset="-71.6" />
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#3b82f6" stroke-width="14"
+                                        stroke-dasharray="47.75 191.01" stroke-dashoffset="-143.2" />
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#10b981" stroke-width="14"
+                                        stroke-dasharray="23.87 214.89" stroke-dashoffset="-190.95" />
+                                </svg>
+                                <div class="donut-center">
+                                    <div class="num">458</div>
+                                    <div class="lbl">This Month</div>
+                                </div>
+                            </div>
+                            <div class="legend">
+                                <div class="leg-item">
+                                    <div class="leg-dot" style="background:#ef4444"></div>
+                                    <span>Overspeeding</span><strong>48%</strong>
+                                </div>
+                                <div class="leg-item">
+                                    <div class="leg-dot" style="background:#f59e0b"></div>
+                                    <span>Drowsiness</span><strong>18%</strong>
+                                </div>
+                                <div class="leg-item">
+                                    <div class="leg-dot" style="background:#3b82f6"></div><span>Crash
+                                        Alerts</span><strong>12%</strong>
+                                </div>
+                                <div class="leg-item">
+                                    <div class="leg-dot" style="background:#10b981"></div><span>Zone
+                                        Bypass</span><strong>6%</strong>
+                                </div>
+                                <div class="leg-item">
+                                    <div class="leg-dot" style="background:#e2e8f0"></div>
+                                    <span>Other</span><strong>16%</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

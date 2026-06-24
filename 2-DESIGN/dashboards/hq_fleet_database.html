@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS – HQ Fleet Database</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-700: #002d5f;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f1f5f9;
+            --surface: #fff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --muted: #94a3b8;
+            --sidebar: #0f172a;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--blue-900);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.4rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .sb-title {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-sub {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+            overflow-y: auto;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-sec {
+            padding: .4rem 1rem .2rem;
+            font-size: .62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.2rem;
+            color: rgba(255, 255, 255, .6);
+            font-size: .84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            margin: .1rem .6rem;
+            border-radius: 9px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: .88rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: .65rem;
+            font-weight: 800;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .sb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-uname {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sb-email {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.8rem;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar .page-title h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .topbar .page-title p {
+            font-size: .75rem;
+            color: var(--muted);
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .content {
+            padding: 1.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        /* KPIs */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .kpi {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        }
+
+        .kpi-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .5rem;
+        }
+
+        .kpi-top h4 {
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--muted);
+        }
+
+        .kpi-ico {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .95rem;
+        }
+
+        .kpi-val {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        /* Filter / search bar */
+        .filter-bar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            flex-wrap: wrap;
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: .6rem 1rem .6rem 2.2rem;
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            font-size: .85rem;
+            color: var(--text);
+            background: var(--bg);
+            transition: .2s;
+        }
+
+        .search-wrap input:focus {
+            outline: none;
+            border-color: var(--blue-600);
+            background: #fff;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: .8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: .85rem;
+        }
+
+        .sel {
+            padding: .6rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            font-size: .84rem;
+            color: var(--text);
+            background: var(--bg);
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .6rem 1.1rem;
+            border: none;
+            border-radius: 9px;
+            font-size: .83rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(0, 33, 71, .25);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 16px rgba(0, 33, 71, .35);
+            transform: translateY(-1px);
+        }
+
+        .btn-gh {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+        }
+
+        .btn-gh:hover {
+            background: var(--bg);
+        }
+
+        .view-btns {
+            display: flex;
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            overflow: hidden;
+        }
+
+        .v-btn {
+            padding: .55rem .9rem;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-size: .9rem;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .v-btn.active,
+        .v-btn:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Grid view */
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .vehicle-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        .vehicle-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .1);
+            transform: translateY(-2px);
+        }
+
+        .vc-head {
+            padding: 1.1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+        }
+
+        .vc-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .vc-reg {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .vc-company {
+            font-size: .75rem;
+            color: var(--muted);
+        }
+
+        .vc-status {
+            margin-left: auto;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            padding: .2rem .6rem;
+            border-radius: 20px;
+            font-size: .7rem;
+            font-weight: 700;
+        }
+
+        .b-ok {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        .b-warn {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+        }
+
+        .b-danger {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .b-off {
+            background: rgba(148, 163, 184, .15);
+            color: var(--muted);
+        }
+
+        .b-info {
+            background: rgba(59, 130, 246, .1);
+            color: var(--info);
+        }
+
+        .vc-body {
+            padding: 1rem;
+        }
+
+        .vc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: .35rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: .8rem;
+        }
+
+        .vc-row:last-child {
+            border-bottom: none;
+        }
+
+        .vc-label {
+            color: var(--muted);
+        }
+
+        .vc-val {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .vc-foot {
+            padding: .8rem 1rem;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: .6rem;
+        }
+
+        .mini-btn {
+            flex: 1;
+            padding: .5rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: .76rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text);
+            transition: .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .3rem;
+        }
+
+        .mini-btn:hover {
+            background: var(--surface);
+        }
+
+        .mini-btn.blue {
+            border-color: rgba(59, 130, 246, .3);
+            color: var(--info);
+            background: rgba(59, 130, 246, .07);
+        }
+
+        .mini-btn.red {
+            border-color: rgba(239, 68, 68, .3);
+            color: var(--danger);
+            background: rgba(239, 68, 68, .07);
+        }
+
+        /* Table view */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .83rem;
+        }
+
+        thead th {
+            padding: .65rem 1rem;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+            font-weight: 700;
+            text-align: left;
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: .15s;
+            cursor: pointer;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        td {
+            padding: .8rem 1rem;
+            vertical-align: middle;
+        }
+
+        .driver-cell {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .d-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            font-size: .75rem;
+            flex-shrink: 0;
+        }
+
+        .d-name {
+            font-weight: 700;
+            color: var(--text);
+            font-size: .84rem;
+        }
+
+        .d-sub {
+            font-size: .72rem;
+            color: var(--muted);
+        }
+
+        .score-bar-wrap {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+        }
+
+        .score-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="sb-title">IVMS HQ</div>
+                    <div class="sb-sub">Command Centre</div>
+                </div>
+            </div>
+            <div class="sb-nav">
+                <div class="nav-sec">Operations</div>
+                <div class="nav-item" onclick="window.location.href='hq_dashboard.html'"><i
+                        class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="nav-item" onclick="window.location.href='hq_incident_review.html'"><i
+                        class="fa-solid fa-magnifying-glass-chart"></i> Incident Review <span class="nav-badge">3</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_echallan_management.html'"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> e-Challan Management <span class="nav-badge">5</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_broadcasts.html'"><i
+                        class="fa-solid fa-bullhorn"></i> Broadcasts</div>
+                <div class="nav-item active" onclick="window.location.href='hq_fleet_database.html'"><i
+                        class="fa-solid fa-truck-fast"></i> Fleet Database</div>
+                <div class="nav-sec">Reports</div>
+                <div class="nav-item" onclick="window.location.href='hq_analytics.html'"><i
+                        class="fa-solid fa-chart-column"></i> Analytics</div>
+                <div class="nav-sec">Management</div>
+                <div class="nav-item" onclick="window.location.href='hq_driver_management.html'"><i class="fa-solid fa-id-badge"></i> Driver Accounts</div>
+                <div class="nav-item" onclick="window.location.href='hq_officer_management.html'"><i
+                        class="fa-solid fa-user-shield"></i> Officer Management</div>
+                <div class="nav-sec">System</div>
+                <div class="nav-item" onclick="window.location.href='hq_settings.html'"><i
+                        class="fa-solid fa-sliders"></i> System Settings</div>
+            </div>
+            <div class="sb-footer">
+                <div class="sb-user">
+                    <div class="sb-avatar">AN</div>
+                    <div>
+                        <div class="sb-uname">Admin Nawaz</div>
+                        <div class="sb-email">admin@nhmp.gov.pk</div>
+                    </div><i class="fa-solid fa-right-from-bracket"
+                        style="margin-left:auto;color:rgba(255,255,255,.3);cursor:pointer;"
+                        onclick="window.location.href='../auth/admin_login.html'"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+        <div class="topbar">
+            <div class="page-title">
+                <h2>Fleet & Driver Database</h2>
+                <p>All registered commercial vehicles on M2 Motorway</p>
+            </div>
+            <div class="spacer"></div>
+            <button class="btn btn-primary" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-plus"></i> Register New Vehicle</button>
+        </div>
+
+        <div class="content">
+            <!-- KPIs -->
+            <div class="kpi-row">
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Total Vehicles</h4>
+                        <div class="kpi-ico" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                                class="fa-solid fa-bus"></i></div>
+                    </div>
+                    <div class="kpi-val">2,847</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Active Drivers</h4>
+                        <div class="kpi-ico" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                                class="fa-solid fa-users"></i></div>
+                    </div>
+                    <div class="kpi-val">3,121</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>High-Risk Drivers</h4>
+                        <div class="kpi-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                                class="fa-solid fa-user-slash"></i></div>
+                    </div>
+                    <div class="kpi-val" style="color:var(--danger)">47</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Transport Companies</h4>
+                        <div class="kpi-ico" style="background:rgba(0,33,71,.1);color:var(--blue-600)"><i
+                                class="fa-solid fa-building"></i></div>
+                    </div>
+                    <div class="kpi-val">12</div>
+                </div>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="filter-bar">
+                <div class="search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search by vehicle reg, driver name, CNIC, company…">
+                </div>
+                <select class="sel">
+                    <option>All Companies</option>
+                    <option>Faisal Movers</option>
+                    <option>Daewoo Express</option>
+                    <option>Niazi Express</option>
+                    <option>Kohistan Travels</option>
+                </select>
+                <select class="sel">
+                    <option>All Status</option>
+                    <option>Active</option>
+                    <option>On Journey</option>
+                    <option>Off Duty</option>
+                    <option>Suspended</option>
+                </select>
+                <select class="sel">
+                    <option>All Scores</option>
+                    <option>90–100 (Excellent)</option>
+                    <option>70–89 (Good)</option>
+                    <option>50–69 (Fair)</option>
+                    <option>Below 50 (High Risk)</option>
+                </select>
+                <button class="btn btn-gh" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-download"></i> Export</button>
+                <div class="view-btns">
+                    <button class="v-btn active" id="gridViewBtn" onclick="showGrid()"><i
+                            class="fa-solid fa-grid-2"></i></button>
+                    <button class="v-btn" id="tableViewBtn" onclick="showTable()"><i
+                            class="fa-solid fa-list"></i></button>
+                </div>
+            </div>
+
+            <!-- Grid View -->
+            <div id="gridView" class="vehicle-grid">
+                <!-- Card 1: On Journey -->
+                <div class="vehicle-card">
+                    <div class="vc-head">
+                        <div class="vc-icon" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                                class="fa-solid fa-bus"></i></div>
+                        <div>
+                            <div class="vc-reg">ABC-1234</div>
+                            <div class="vc-company">Faisal Movers Pvt. Ltd.</div>
+                        </div>
+                        <div class="vc-status"><span class="badge b-info"><i class="fa-solid fa-road"></i> On
+                                Journey</span></div>
+                    </div>
+                    <div class="vc-body">
+                        <div class="vc-row"><span class="vc-label">Driver</span><span class="vc-val">Ali Hassan
+                                Khan</span></div>
+                        <div class="vc-row"><span class="vc-label">CNIC</span><span
+                                class="vc-val">37405-1234567-1</span></div>
+                        <div class="vc-row"><span class="vc-label">Speed</span><span class="vc-val">107 km/h</span>
+                        </div>
+                        <div class="vc-row"><span class="vc-label">Location</span><span class="vc-val">M2 KM-218</span>
+                        </div>
+                        <div class="vc-row"><span class="vc-label">Safety Score</span><span class="vc-val"
+                                style="color:var(--green-600)">82 / 100</span></div>
+                    </div>
+                    <div class="vc-foot">
+                        <button class="mini-btn blue" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-map-location-dot"></i> Track</button>
+                        <button class="mini-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-file-invoice"></i> Challans</button>
+                        <button class="mini-btn red" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-ban"></i> Suspend</button>
+                    </div>
+                </div>
+
+                <!-- Card 2: High Risk -->
+                <div class="vehicle-card" style="border-color:rgba(239,68,68,.3);">
+                    <div class="vc-head">
+                        <div class="vc-icon" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                                class="fa-solid fa-bus"></i></div>
+                        <div>
+                            <div class="vc-reg">XYZ-9876</div>
+                            <div class="vc-company">Niazi Express</div>
+                        </div>
+                        <div class="vc-status"><span class="badge b-danger"><i
+                                    class="fa-solid fa-triangle-exclamation"></i> High Risk</span></div>
+                    </div>
+                    <div class="vc-body">
+                        <div class="vc-row"><span class="vc-label">Driver</span><span class="vc-val">Tariq
+                                Mehmood</span></div>
+                        <div class="vc-row"><span class="vc-label">CNIC</span><span
+                                class="vc-val">35202-0000001-5</span></div>
+                        <div class="vc-row"><span class="vc-label">Speed</span><span class="vc-val"
+                                style="color:var(--danger)">135 km/h</span></div>
+                        <div class="vc-row"><span class="vc-label">Violations</span><span class="vc-val"
+                                style="color:var(--danger)">12 this month</span></div>
+                        <div class="vc-row"><span class="vc-label">Safety Score</span><span class="vc-val"
+                                style="color:var(--danger)">34 / 100</span></div>
+                    </div>
+                    <div class="vc-foot">
+                        <button class="mini-btn blue" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-map-location-dot"></i> Track</button>
+                        <button class="mini-btn red" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-file-invoice-dollar"></i> Issue
+                            Challan</button>
+                    </div>
+                </div>
+
+                <!-- Card 3: Normal -->
+                <div class="vehicle-card">
+                    <div class="vc-head">
+                        <div class="vc-icon" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                                class="fa-solid fa-van-shuttle"></i></div>
+                        <div>
+                            <div class="vc-reg">LMN-4567</div>
+                            <div class="vc-company">Daewoo Express</div>
+                        </div>
+                        <div class="vc-status"><span class="badge b-ok"><i class="fa-solid fa-circle-check"></i>
+                                Active</span></div>
+                    </div>
+                    <div class="vc-body">
+                        <div class="vc-row"><span class="vc-label">Driver</span><span class="vc-val">Shahid Ali</span>
+                        </div>
+                        <div class="vc-row"><span class="vc-label">CNIC</span><span
+                                class="vc-val">37104-9876543-9</span></div>
+                        <div class="vc-row"><span class="vc-label">Speed</span><span class="vc-val">96 km/h</span></div>
+                        <div class="vc-row"><span class="vc-label">Location</span><span class="vc-val">M2 KM-292</span>
+                        </div>
+                        <div class="vc-row"><span class="vc-label">Safety Score</span><span class="vc-val"
+                                style="color:var(--green-600)">91 / 100</span></div>
+                    </div>
+                    <div class="vc-foot">
+                        <button class="mini-btn blue" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-map-location-dot"></i> Track</button>
+                        <button class="mini-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-file-lines"></i> Report</button>
+                        <button class="mini-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-pen"></i> Edit</button>
+                    </div>
+                </div>
+
+                <!-- Card 4: Suspended -->
+                <div class="vehicle-card" style="opacity:.7;">
+                    <div class="vc-head">
+                        <div class="vc-icon" style="background:var(--border);color:var(--muted)"><i
+                                class="fa-solid fa-bus"></i></div>
+                        <div>
+                            <div class="vc-reg">PQR-0001</div>
+                            <div class="vc-company">Kohistan Travels</div>
+                        </div>
+                        <div class="vc-status"><span class="badge b-off"><i class="fa-solid fa-ban"></i>
+                                Suspended</span></div>
+                    </div>
+                    <div class="vc-body">
+                        <div class="vc-row"><span class="vc-label">Driver</span><span class="vc-val"
+                                style="color:var(--muted)">Imran Raza</span></div>
+                        <div class="vc-row"><span class="vc-label">Reason</span><span class="vc-val"
+                                style="color:var(--danger)">3 DUI violations</span></div>
+                        <div class="vc-row"><span class="vc-label">Suspend Until</span><span class="vc-val">31 Mar
+                                2026</span></div>
+                        <div class="vc-row"><span class="vc-label">Safety Score</span><span class="vc-val"
+                                style="color:var(--danger)">22 / 100</span></div>
+                    </div>
+                    <div class="vc-foot">
+                        <button class="mini-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-file-shield"></i> Case File</button>
+                        <button class="mini-btn blue" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-rotate-left"></i> Reinstate</button>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="vehicle-card">
+                    <div class="vc-head">
+                        <div class="vc-icon" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                                class="fa-solid fa-bus"></i></div>
+                        <div>
+                            <div class="vc-reg">STU-2233</div>
+                            <div class="vc-company">Bilal Travels</div>
+                        </div>
+                        <div class="vc-status"><span class="badge b-warn"><i class="fa-solid fa-clock"></i> Off
+                                Duty</span></div>
+                    </div>
+                    <div class="vc-body">
+                        <div class="vc-row"><span class="vc-label">Driver</span><span class="vc-val">Kamran Iqbal</span>
+                        </div>
+                        <div class="vc-row"><span class="vc-label">Last Seen</span><span class="vc-val">M2 Terminal
+                                Lahore</span></div>
+                        <div class="vc-row"><span class="vc-label">Last Journey</span><span class="vc-val">04 Mar
+                                2026</span></div>
+                        <div class="vc-row"><span class="vc-label">Safety Score</span><span class="vc-val"
+                                style="color:var(--warning)">67 / 100</span></div>
+                    </div>
+                    <div class="vc-foot">
+                        <button class="mini-btn blue" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-map-location-dot"></i> Last
+                            Location</button>
+                        <button class="mini-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-pen"></i> Edit</button>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="vehicle-card">
+                    <div class="vc-head">
+                        <div class="vc-icon" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                                class="fa-solid fa-van-shuttle"></i></div>
+                        <div>
+                            <div class="vc-reg">VWX-5544</div>
+                            <div class="vc-company">Faisal Movers Pvt. Ltd.</div>
+                        </div>
+                        <div class="vc-status"><span class="badge b-info"><i class="fa-solid fa-road"></i> On
+                                Journey</span></div>
+                    </div>
+                    <div class="vc-body">
+                        <div class="vc-row"><span class="vc-label">Driver</span><span class="vc-val">Zeeshan
+                                Malik</span></div>
+                        <div class="vc-row"><span class="vc-label">Speed</span><span class="vc-val">92 km/h</span></div>
+                        <div class="vc-row"><span class="vc-label">Location</span><span class="vc-val">M2 KM-145</span>
+                        </div>
+                        <div class="vc-row"><span class="vc-label">Safety Score</span><span class="vc-val"
+                                style="color:var(--green-600)">88 / 100</span></div>
+                    </div>
+                    <div class="vc-foot">
+                        <button class="mini-btn blue" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-map-location-dot"></i> Track</button>
+                        <button class="mini-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-pen"></i> Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table View (hidden by default) -->
+            <div id="tableView" style="display:none;" class="panel">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vehicle Reg</th>
+                            <th>Driver</th>
+                            <th>Company</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Safety Score</th>
+                            <th>Violations</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ABC-1234</strong></td>
+                            <td>
+                                <div class="driver-cell">
+                                    <div class="d-avatar">AK</div>
+                                    <div>
+                                        <div class="d-name">Ali Hassan Khan</div>
+                                        <div class="d-sub">SP-23421</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Faisal Movers</td>
+                            <td>Bus</td>
+                            <td><span class="badge b-info">On Journey</span></td>
+                            <td>
+                                <div class="score-bar-wrap">
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width:82%;background:var(--green-600)"></div>
+                                    </div><strong>82</strong>
+                                </div>
+                            </td>
+                            <td>3</td>
+                            <td><button
+                                    style="padding:.4rem .8rem;border:1.5px solid var(--border);border-radius:7px;background:transparent;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--text);" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='hq_echallan_management.html'">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>XYZ-9876</strong></td>
+                            <td>
+                                <div class="driver-cell">
+                                    <div class="d-avatar"
+                                        style="background:linear-gradient(135deg,#7f1d1d,var(--danger))">TM</div>
+                                    <div>
+                                        <div class="d-name">Tariq Mehmood</div>
+                                        <div class="d-sub">SP-19841</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Niazi Express</td>
+                            <td>Bus</td>
+                            <td><span class="badge b-danger">High Risk</span></td>
+                            <td>
+                                <div class="score-bar-wrap">
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width:34%;background:var(--danger)"></div>
+                                    </div><strong style="color:var(--danger)">34</strong>
+                                </div>
+                            </td>
+                            <td style="color:var(--danger);font-weight:700">12</td>
+                            <td><button
+                                    style="padding:.4rem .8rem;border:1.5px solid var(--border);border-radius:7px;background:transparent;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--text);" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='hq_echallan_management.html'">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>LMN-4567</strong></td>
+                            <td>
+                                <div class="driver-cell">
+                                    <div class="d-avatar">SA</div>
+                                    <div>
+                                        <div class="d-name">Shahid Ali</div>
+                                        <div class="d-sub">SP-30021</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Daewoo Express</td>
+                            <td>Coach</td>
+                            <td><span class="badge b-ok">Active</span></td>
+                            <td>
+                                <div class="score-bar-wrap">
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width:91%;background:var(--green-600)"></div>
+                                    </div><strong style="color:var(--green-600)">91</strong>
+                                </div>
+                            </td>
+                            <td>0</td>
+                            <td><button
+                                    style="padding:.4rem .8rem;border:1.5px solid var(--border);border-radius:7px;background:transparent;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--text);" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='hq_echallan_management.html'">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>PQR-0001</strong></td>
+                            <td>
+                                <div class="driver-cell">
+                                    <div class="d-avatar" style="background:var(--muted)">IR</div>
+                                    <div>
+                                        <div class="d-name">Imran Raza</div>
+                                        <div class="d-sub">SP-15432</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Kohistan Travels</td>
+                            <td>Bus</td>
+                            <td><span class="badge b-off">Suspended</span></td>
+                            <td>
+                                <div class="score-bar-wrap">
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width:22%;background:var(--danger)"></div>
+                                    </div><strong style="color:var(--danger)">22</strong>
+                                </div>
+                            </td>
+                            <td style="color:var(--danger);font-weight:700">18</td>
+                            <td><button
+                                    style="padding:.4rem .8rem;border:1.5px solid var(--border);border-radius:7px;background:transparent;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--text);" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='hq_echallan_management.html'">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function showGrid() {
+            document.getElementById('gridView').style.display = 'grid';
+            document.getElementById('tableView').style.display = 'none';
+            document.getElementById('gridViewBtn').classList.add('active');
+            document.getElementById('tableViewBtn').classList.remove('active');
+        }
+        function showTable() {
+            document.getElementById('gridView').style.display = 'none';
+            document.getElementById('tableView').style.display = 'block';
+            document.getElementById('tableViewBtn').classList.add('active');
+            document.getElementById('gridViewBtn').classList.remove('active');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS – HQ e-Challan Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-700: #002d5f;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f1f5f9;
+            --surface: #fff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --muted: #94a3b8;
+            --sidebar: #0f172a;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--blue-900);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.4rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .sb-title {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-sub {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+            overflow-y: auto;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-sec {
+            padding: .4rem 1rem .2rem;
+            font-size: .62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.2rem;
+            color: rgba(255, 255, 255, .6);
+            font-size: .84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            margin: .1rem .6rem;
+            border-radius: 9px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: .88rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: .65rem;
+            font-weight: 800;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .sb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-uname {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sb-email {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.8rem;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar .page-title h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .topbar .page-title p {
+            font-size: .75rem;
+            color: var(--muted);
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .content {
+            padding: 1.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        /* KPIs */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .kpi {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        }
+
+        .kpi-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .5rem;
+        }
+
+        .kpi-top h4 {
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--muted);
+        }
+
+        .kpi-ico {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .95rem;
+        }
+
+        .kpi-val {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        .kpi-sub {
+            font-size: .73rem;
+            color: var(--muted);
+        }
+
+        /* Review queue */
+        .review-queue {
+            display: flex;
+            flex-direction: column;
+            gap: .8rem;
+        }
+
+        .queue-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+            transition: .2s;
+        }
+
+        .queue-item:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+            transform: translateY(-1px);
+        }
+
+        .queue-item.urgent {
+            border-left: 4px solid var(--danger);
+        }
+
+        .queue-item.normal {
+            border-left: 4px solid var(--warning);
+        }
+
+        .qi-head {
+            padding: 1rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .qi-type {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .95rem;
+            flex-shrink: 0;
+        }
+
+        .qi-info {
+            flex: 1;
+        }
+
+        .qi-info h4 {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: .15rem;
+        }
+
+        .qi-info p {
+            font-size: .76rem;
+            color: var(--muted);
+        }
+
+        .qi-amount {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .qi-amount .fine {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .qi-amount .fine-label {
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        .qi-evidence {
+            padding: .7rem 1.4rem;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: .6rem;
+            align-items: center;
+        }
+
+        .ev-preview {
+            width: 52px;
+            height: 40px;
+            border-radius: 6px;
+            background: #1a2a4a;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .85rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .ev-preview.img {
+            background: linear-gradient(135deg, #1a263a, #1e3a2a);
+        }
+
+        .ev-meta {
+            font-size: .74rem;
+            color: var(--muted);
+            display: flex;
+            flex-direction: column;
+            gap: .1rem;
+        }
+
+        .qi-actions {
+            padding: .9rem 1.4rem;
+            display: flex;
+            gap: .7rem;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .6rem 1rem;
+            border: none;
+            border-radius: 9px;
+            font-size: .82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, var(--green-700), var(--green-600));
+            color: #fff;
+            box-shadow: 0 3px 8px rgba(5, 150, 105, .25);
+        }
+
+        .btn-approve:hover {
+            box-shadow: 0 6px 14px rgba(5, 150, 105, .35);
+        }
+
+        .btn-send {
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+            color: #fff;
+            box-shadow: 0 3px 8px rgba(0, 33, 71, .25);
+        }
+
+        .btn-reject {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, .2);
+        }
+
+        .btn-adjust {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, .2);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            padding: .2rem .6rem;
+            border-radius: 20px;
+            font-size: .7rem;
+            font-weight: 700;
+        }
+
+        .b-danger {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .b-warning {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+        }
+
+        /* Issued challans table */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        }
+
+        .panel-header {
+            padding: 1rem 1.4rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafcff;
+        }
+
+        .panel-header h3 {
+            font-size: .93rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .panel-header h3 i {
+            color: var(--blue-600);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .82rem;
+        }
+
+        thead th {
+            padding: .65rem 1rem;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+            font-weight: 700;
+            text-align: left;
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: .15s;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        td {
+            padding: .75rem 1rem;
+            vertical-align: middle;
+        }
+
+        .b-ok {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        .b-paid {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        .b-pending {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .b-disputed {
+            background: rgba(59, 130, 246, .1);
+            color: var(--info);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="sb-title">IVMS HQ</div>
+                    <div class="sb-sub">Command Centre</div>
+                </div>
+            </div>
+            <div class="sb-nav">
+                <div class="nav-sec">Operations</div>
+                <div class="nav-item" onclick="window.location.href='hq_dashboard.html'"><i
+                        class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="nav-item" onclick="window.location.href='hq_incident_review.html'"><i
+                        class="fa-solid fa-magnifying-glass-chart"></i> Incident Review <span class="nav-badge">3</span></div>
+                <div class="nav-item active" onclick="window.location.href='hq_echallan_management.html'"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> e-Challan Management <span class="nav-badge">5</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_broadcasts.html'"><i
+                        class="fa-solid fa-bullhorn"></i> Broadcasts</div>
+                <div class="nav-item" onclick="window.location.href='hq_fleet_database.html'"><i
+                        class="fa-solid fa-truck-fast"></i> Fleet Database</div>
+                <div class="nav-sec">Reports</div>
+                <div class="nav-item" onclick="window.location.href='hq_analytics.html'"><i
+                        class="fa-solid fa-chart-column"></i> Analytics</div>
+                <div class="nav-sec">Management</div>
+                <div class="nav-item" onclick="window.location.href='hq_driver_management.html'"><i class="fa-solid fa-id-badge"></i> Driver Accounts</div>
+                <div class="nav-item" onclick="window.location.href='hq_officer_management.html'"><i
+                        class="fa-solid fa-user-shield"></i> Officer Management</div>
+                <div class="nav-sec">System</div>
+                <div class="nav-item" onclick="window.location.href='hq_settings.html'"><i
+                        class="fa-solid fa-sliders"></i> System Settings</div>
+            </div>
+            <div class="sb-footer">
+                <div class="sb-user">
+                    <div class="sb-avatar">AN</div>
+                    <div>
+                        <div class="sb-uname">Admin Nawaz</div>
+                        <div class="sb-email">admin@nhmp.gov.pk</div>
+                    </div><i class="fa-solid fa-right-from-bracket"
+                        style="margin-left:auto;color:rgba(255,255,255,.3);cursor:pointer;"
+                        onclick="window.location.href='../auth/admin_login.html'"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+        <div class="topbar">
+            <div class="page-title">
+                <h2>e-Challan Management</h2>
+                <p>Review, approve, and dispatch digital challans</p>
+            </div>
+            <div class="spacer"></div>
+            <button
+                style="padding:.5rem 1.1rem;background:linear-gradient(135deg,var(--blue-800),var(--blue-600));color:#fff;border:none;border-radius:9px;font-size:.83rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.5rem;" onclick="alert('This action will be fully functional in the backend implementation.')"><i
+                    class="fa-solid fa-plus"></i> Issue Manual Challan</button>
+        </div>
+
+        <div class="content">
+            <!-- KPIs -->
+            <div class="kpi-row">
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Pending Review</h4>
+                        <div class="kpi-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                                class="fa-solid fa-clock"></i></div>
+                    </div>
+                    <div class="kpi-val" style="color:var(--warning)">18</div>
+                    <div class="kpi-sub">Awaiting HQ approval</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Issued Today</h4>
+                        <div class="kpi-ico" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                                class="fa-solid fa-paper-plane"></i></div>
+                    </div>
+                    <div class="kpi-val">289</div>
+                    <div class="kpi-sub">Total dispatched</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Amount Collected</h4>
+                        <div class="kpi-ico" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                                class="fa-solid fa-money-bill-wave"></i></div>
+                    </div>
+                    <div class="kpi-val" style="color:var(--green-600)">Rs. 8.4L</div>
+                    <div class="kpi-sub">This month</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-top">
+                        <h4>Disputes Filed</h4>
+                        <div class="kpi-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                                class="fa-solid fa-gavel"></i></div>
+                    </div>
+                    <div class="kpi-val">7</div>
+                    <div class="kpi-sub">Under review</div>
+                </div>
+            </div>
+
+            <!-- Review queue -->
+            <div class="panel-header"
+                style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem 1.4rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:-.6rem;">
+                <h3
+                    style="font-size:.93rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:.5rem;">
+                    <i class="fa-solid fa-clock" style="color:var(--warning)"></i> Pending Review Queue (18)
+                </h3>
+                <span style="font-size:.76rem;color:var(--muted);">Oldest first · Auto-approved after 24h</span>
+            </div>
+
+            <div class="review-queue">
+                <!-- Item 1 - Urgent -->
+                <div class="queue-item urgent">
+                    <div class="qi-head">
+                        <div class="qi-type" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                                class="fa-solid fa-gauge-high"></i></div>
+                        <div class="qi-info">
+                            <h4>Overspeeding at 138 km/h in 110 zone · Challan #C-2026-03191</h4>
+                            <p>Faisal Movers · Bus ABC-987 · Driver: Bilal Khan (SP23321) · M2 KM-178 · 05 Mar 2026,
+                                00:14</p>
+                        </div>
+                        <div class="qi-amount">
+                            <div class="fine">Rs. 5,000</div>
+                            <div class="fine-label"><span class="badge b-danger">URGENT</span></div>
+                        </div>
+                    </div>
+                    <div class="qi-evidence">
+                        <div class="ev-preview img"><i class="fa-solid fa-image"></i></div>
+                        <div class="ev-preview img"><i class="fa-solid fa-video"></i></div>
+                        <div class="ev-meta">
+                            <span><i class="fa-solid fa-location-dot"></i> GPS: 32.87°N 72.90°E · Hash:
+                                SHA256:a9f3…</span>
+                            <span><i class="fa-solid fa-clock"></i> Captured 00:14:03 · Evidence validated ✓</span>
+                            <span><i class="fa-solid fa-camera"></i> 2 files · Speed snapshot + cabin camera</span>
+                        </div>
+                    </div>
+                    <div class="qi-actions">
+                        <button class="btn btn-approve" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-check"></i> Approve & Issue</button>
+                        <button class="btn btn-send" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-paper-plane"></i> Send to Driver</button>
+                        <button class="btn btn-adjust" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-edit"></i> Adjust Fine</button>
+                        <button class="btn btn-reject" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-xmark"></i> Reject</button>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="queue-item normal">
+                    <div class="qi-head">
+                        <div class="qi-type" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                                class="fa-solid fa-bed"></i></div>
+                        <div class="qi-info">
+                            <h4>Persistent Drowsiness Detected · Challan #C-2026-03188</h4>
+                            <p>Daewoo Express · Bus XYZ-321 · Driver: Rashid Shah (SP21934) · M2 KM-215 · 04 Mar 2026,
+                                22:55</p>
+                        </div>
+                        <div class="qi-amount">
+                            <div class="fine">Rs. 2,500</div>
+                            <div class="fine-label"><span class="badge b-warning">REVIEW</span></div>
+                        </div>
+                    </div>
+                    <div class="qi-evidence">
+                        <div class="ev-preview img"><i class="fa-solid fa-eye"></i></div>
+                        <div class="ev-meta">
+                            <span><i class="fa-solid fa-microchip"></i> AI detected Stage 2 fatigue · Blink rate
+                                &lt;5/min for 4 min</span>
+                            <span><i class="fa-solid fa-clock"></i> Frame-by-frame logs available · 12 AI
+                                detections</span>
+                        </div>
+                    </div>
+                    <div class="qi-actions">
+                        <button class="btn btn-approve" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-check"></i> Approve & Issue</button>
+                        <button class="btn btn-send" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-paper-plane"></i> Send to Driver</button>
+                        <button class="btn btn-adjust" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-edit"></i> Adjust Fine</button>
+                        <button class="btn btn-reject" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-xmark"></i> Reject</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issued challans table -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-list-check"></i> Recently Issued Challans</h3>
+                    <a href="#" onclick="alert('Link placeholder. Content will be added later.')" style="font-size:.8rem;color:var(--blue-600);font-weight:600;">View All →</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Challan ID</th>
+                            <th>Driver</th>
+                            <th>Company</th>
+                            <th>Violation</th>
+                            <th>Fine</th>
+                            <th>Issued</th>
+                            <th>Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#C-2026-03191</strong></td>
+                            <td>Bilal Khan</td>
+                            <td>Faisal Movers</td>
+                            <td><span class="badge b-danger">Overspeeding</span></td>
+                            <td><strong>Rs. 5,000</strong></td>
+                            <td>Today 00:14</td>
+                            <td><span class="badge b-pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#C-2026-03185</strong></td>
+                            <td>Tariq Mehmood</td>
+                            <td>Niazi Express</td>
+                            <td><span class="badge b-warning">Phone Usage</span></td>
+                            <td><strong>Rs. 3,000</strong></td>
+                            <td>Yesterday</td>
+                            <td><span class="badge b-pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#C-2026-03174</strong></td>
+                            <td>Shahid Ali</td>
+                            <td>Daewoo Express</td>
+                            <td><span class="badge b-danger">Overspeeding</span></td>
+                            <td><strong>Rs. 4,500</strong></td>
+                            <td>04 Mar</td>
+                            <td><span class="badge b-paid">Paid</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#C-2026-03162</strong></td>
+                            <td>Imran Raza</td>
+                            <td>Kohistan Travels</td>
+                            <td><span class="badge b-warning">Drowsiness</span></td>
+                            <td><strong>Rs. 2,000</strong></td>
+                            <td>03 Mar</td>
+                            <td><span class="badge b-disputed">Disputed</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#C-2026-03150</strong></td>
+                            <td>Kamran Iqbal</td>
+                            <td>Bilal Travels</td>
+                            <td><span class="badge b-danger">Zone Bypass</span></td>
+                            <td><strong>Rs. 6,000</strong></td>
+                            <td>02 Mar</td>
+                            <td><span class="badge b-paid">Paid</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

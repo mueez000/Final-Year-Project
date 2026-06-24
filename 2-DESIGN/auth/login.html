@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IVMS – Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-950: #0a192f;
+            --blue-900: #0f2a4a;
+            --blue-800: #173d6e;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-400: #34d399;
+            --gold: #fbbf24;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .app-wrapper {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: linear-gradient(145deg, var(--blue-950), var(--blue-800));
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        /* Ambient glowing circles */
+        .app-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(52, 211, 153, 0.1) 0%, transparent 70%);
+            top: 5%;
+            left: -100px;
+        }
+
+        .app-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23ffffff" fill-opacity="0.03" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="3"/%3E%3Ccircle cx="13" cy="13" r="3"/%3E%3C/g%3E%3C/svg%3E');
+            z-index: 0;
+        }
+
+        /* Status bar */
+        .status-bar {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+            color: #fff;
+        }
+
+        .status-bar .time {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        /* Hero */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.6rem 3rem;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .logo-wrap {
+            width: 90px;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            color: var(--gold);
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1.5px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero h1 span {
+            color: var(--green-400);
+        }
+
+        .hero p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+            max-width: 280px;
+            margin: 0 auto 1rem;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.85);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge i {
+            color: var(--gold);
+            font-size: 0.75rem;
+        }
+
+        /* Role Cards Container */
+        .bottom-card {
+            background: #fff;
+            border-radius: 30px 30px 0 0;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .bottom-card h3 {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+
+        .role-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .role-card {
+            border-radius: 18px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1.5px solid var(--border);
+            background: #fafafa;
+        }
+
+        .role-card:active {
+            transform: scale(0.98);
+            background: #f1f5f9;
+        }
+
+        .rc-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Theme colors for role cards */
+        .rc-driver .rc-icon { color: var(--green-600); border: 1px solid rgba(5, 150, 105, 0.1); }
+        .rc-officer .rc-icon { color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.1); }
+
+        .rc-text {
+            flex: 1;
+        }
+
+        .rc-text h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.2rem;
+        }
+
+        .rc-text p {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .rc-arrow {
+            color: #cbd5e1;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .role-card:hover .rc-arrow {
+            color: var(--text);
+            transform: translateX(3px);
+        }
+
+        /* Footer */
+        .auth-footer {
+            padding: 1.5rem 1.2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--muted);
+            background: #fff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .auth-footer a {
+            color: var(--text);
+            font-weight: 700;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="status-icons">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="hero">
+            <div class="logo-wrap"><i class="fa-solid fa-shield-halved"></i></div>
+            <h1>IVM<span>S</span></h1>
+            <p>Pakistan's AI-Powered Vehicle Monitoring System</p>
+            <div class="badge-row">
+                <div class="badge"><i class="fa-solid fa-location-dot"></i> Live GPS</div>
+                <div class="badge"><i class="fa-solid fa-eye"></i> AI Monitor</div>
+                <div class="badge"><i class="fa-solid fa-bolt"></i> Instant SOS</div>
+            </div>
+        </div>
+
+        <div class="bottom-card">
+            <h3>Select Your Role</h3>
+            <div class="role-cards">
+                <div class="role-card rc-driver" onclick="window.location.href='driver_login.html'">
+                    <div class="rc-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                    <div class="rc-text">
+                        <h4>Driver</h4>
+                        <p>Track your journey & safety score</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right rc-arrow"></i>
+                </div>
+                <div class="role-card rc-officer" onclick="window.location.href='officer_login.html'">
+                    <div class="rc-icon"><i class="fa-solid fa-user-shield"></i></div>
+                    <div class="rc-text">
+                        <h4>NH&amp;MP Officer</h4>
+                        <p>Monitor zones & issue e-challans</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right rc-arrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            Secured by NH&amp;MP IT Division<br>
+            <br>
+            <a href="#" onclick="alert('Link placeholder.')">Privacy Policy</a> &nbsp;·&nbsp; <a href="#" onclick="alert('Link placeholder.')">Terms of Service</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS HQ – Incident Review</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --surface: #fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--blue-900);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.4rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .sb-title {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-sub {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-sec {
+            padding: .4rem 1rem .2rem;
+            font-size: .62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.2rem;
+            color: rgba(255, 255, 255, .6);
+            font-size: .84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            margin: .1rem .6rem;
+            border-radius: 9px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: .88rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: .65rem;
+            font-weight: 800;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .sb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-uname {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sb-email {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: .8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tb-left h1 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .tb-left p {
+            font-size: .78rem;
+            color: var(--muted);
+        }
+
+        .content {
+            padding: 1.4rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            height: calc(100vh - 75px); /* approximate height */
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafcff;
+        }
+
+        .card-header h3 {
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        /* Incident List */
+        .incident-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .incident-item {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .incident-item:hover {
+            background: var(--bg);
+        }
+
+        .incident-item.active {
+            background: rgba(0, 61, 130, 0.05);
+            border-left: 3px solid var(--blue-600);
+        }
+
+        .ii-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: .4rem;
+        }
+
+        .ii-head h4 {
+            font-size: .85rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .ii-time {
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        .ii-body {
+            font-size: .75rem;
+            color: var(--muted);
+        }
+
+        .badge {
+            padding: .15rem .4rem;
+            border-radius: 10px;
+            font-size: .65rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: .4rem;
+        }
+
+        .badge.bg-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .badge.bg-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .badge.bg-info { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+
+        /* Incident Details */
+        .details-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .detail-group {
+            flex: 1;
+        }
+
+        .detail-label {
+            font-size: .7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: .2rem;
+        }
+
+        .detail-value {
+            font-size: .9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .evidence-box {
+            background: var(--bg);
+            border: 1px dashed var(--muted);
+            border-radius: 8px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--muted);
+            font-size: .9rem;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: .6rem 1.2rem;
+            border-radius: 8px;
+            font-size: .85rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-success {
+            background: var(--green-600);
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="sb-title">IVMS HQ</div>
+                    <div class="sb-sub">Command Centre</div>
+                </div>
+            </div>
+            <div class="sb-nav">
+                <div class="nav-sec">Operations</div>
+                <div class="nav-item" onclick="window.location.href='hq_dashboard.html'"><i
+                        class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="nav-item active" onclick="window.location.href='hq_incident_review.html'"><i
+                        class="fa-solid fa-magnifying-glass-chart"></i> Incident Review <span class="nav-badge">3</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_echallan_management.html'"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> e-Challan Management <span class="nav-badge">5</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_broadcasts.html'"><i
+                        class="fa-solid fa-bullhorn"></i> Broadcasts</div>
+                <div class="nav-item" onclick="window.location.href='hq_fleet_database.html'"><i
+                        class="fa-solid fa-truck-fast"></i> Fleet Database</div>
+                <div class="nav-sec">Reports</div>
+                <div class="nav-item" onclick="window.location.href='hq_analytics.html'"><i
+                        class="fa-solid fa-chart-column"></i> Analytics</div>
+                <div class="nav-sec">Management</div>
+                <div class="nav-item" onclick="window.location.href='hq_driver_management.html'"><i class="fa-solid fa-id-badge"></i> Driver Accounts</div>
+                <div class="nav-item" onclick="window.location.href='hq_officer_management.html'"><i
+                        class="fa-solid fa-user-shield"></i> Officer Management</div>
+                <div class="nav-sec">System</div>
+                <div class="nav-item" onclick="window.location.href='hq_settings.html'"><i
+                        class="fa-solid fa-sliders"></i> System Settings</div>
+            </div>
+            <div class="sb-footer">
+                <div class="sb-user">
+                    <div class="sb-avatar">AN</div>
+                    <div>
+                        <div class="sb-uname">Admin Nawaz</div>
+                        <div class="sb-email">admin@nhmp.gov.pk</div>
+                    </div><i class="fa-solid fa-right-from-bracket"
+                        style="margin-left:auto;color:rgba(255,255,255,.3);cursor:pointer;"
+                        onclick="window.location.href='../auth/admin_login.html'"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="tb-left">
+                    <h1><i class="fa-solid fa-magnifying-glass-chart" style="color:var(--blue-600)"></i> Incident Review</h1>
+                    <p>Review officer evidence and validate incidents for e-Challan generation</p>
+                </div>
+            </div>
+            
+            <div class="content">
+                <!-- Queue -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-list"></i> Pending Reviews</h3>
+                    </div>
+                    <div class="incident-list">
+                        <div class="incident-item active">
+                            <div class="ii-head">
+                                <h4>Overspeeding Report</h4>
+                                <span class="ii-time">10 mins ago</span>
+                            </div>
+                            <div class="ii-body">
+                                Vehicle: ABC-123 | Faisal Movers<br>
+                                Reported by: Officer Ali Raza
+                            </div>
+                            <span class="badge bg-warning">Speed Violation</span>
+                        </div>
+                        <div class="incident-item">
+                            <div class="ii-head">
+                                <h4>Route Deviation</h4>
+                                <span class="ii-time">35 mins ago</span>
+                            </div>
+                            <div class="ii-body">
+                                Vehicle: XYZ-789 | Daewoo Express<br>
+                                Reported by: Officer Ahmed
+                            </div>
+                            <span class="badge bg-info">Geofence Alert</span>
+                        </div>
+                        <div class="incident-item">
+                            <div class="ii-head">
+                                <h4>AI Drowsiness Alert</h4>
+                                <span class="ii-time">1 hr ago</span>
+                            </div>
+                            <div class="ii-body">
+                                Vehicle: LMN-456 | Bilal Travels<br>
+                                AI System Auto-Flagged
+                            </div>
+                            <span class="badge bg-danger">Critical Safety</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Panel -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-file-shield"></i> Incident Details: #INC-8922</h3>
+                    </div>
+                    <div class="details-body">
+                        <div class="detail-row">
+                            <div class="detail-group">
+                                <div class="detail-label">Vehicle Info</div>
+                                <div class="detail-value">ABC-123 (Faisal Movers)</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="detail-label">Driver</div>
+                                <div class="detail-value">Muhammad Usman (ID: DR-992)</div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-group">
+                                <div class="detail-label">Location / Time</div>
+                                <div class="detail-value">M2 Southbound KM 210 | 14:32 PM</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="detail-label">Violation Type</div>
+                                <div class="detail-value" style="color: var(--warning)">Overspeeding (135 km/h)</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-label" style="margin-top: 1rem;">Evidence Uploaded</div>
+                        <div class="evidence-box">
+                            <div style="text-align: center;">
+                                <i class="fa-solid fa-image" style="font-size: 2rem; margin-bottom: .5rem; color: var(--blue-600)"></i>
+                                <p>[Photo/Video Evidence Placeholder]</p>
+                                <p style="font-size: .75rem; margin-top: .5rem">GPS Tagged: 32.932, 72.842</p>
+                            </div>
+                        </div>
+
+                        <div class="detail-label">Officer Remarks</div>
+                        <div style="padding: 1rem; background: var(--bg); border-radius: 8px; font-size: .85rem; color: var(--text);">
+                            "Vehicle intercepted at KM 210. Driver admitted to speeding to make up for lost time. Visual confirmation of dashboard speed history."
+                        </div>
+
+                        <div class="action-bar">
+                            <button class="btn btn-danger" onclick="alert('Incident rejected.')"><i class="fa-solid fa-xmark"></i> Reject & Dismiss</button>
+                            <button class="btn btn-success" onclick="alert('Incident validated. e-Challan queued.')"><i class="fa-solid fa-check-double"></i> Validate & Issue e-Challan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

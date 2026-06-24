@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IVMS Officer – Incidents</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --green-400: #34d399;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f1f5f9;
+            --surface: #fff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --muted: #94a3b8;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+
+        .app-shell {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            height: 44px;
+            background: var(--blue-900);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .status-bar .time {
+            font-size: .82rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            color: #fff;
+            font-size: .8rem;
+        }
+
+        @keyframes gpulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 3px rgba(52, 211, 153, .3)
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(52, 211, 153, .1)
+            }
+        }
+
+        @keyframes rpulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 3px rgba(239, 68, 68, .3)
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(239, 68, 68, .1)
+            }
+        }
+
+        /* Top nav */
+        .top-nav {
+            background: linear-gradient(135deg, var(--blue-900), var(--blue-800));
+            padding: 1rem 1.2rem 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .tn-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .9rem;
+        }
+
+        .officer-row {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .officer-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: .9rem;
+            color: #fff;
+            border: 2px solid var(--gold);
+        }
+
+        .officer-name {
+            color: rgba(255, 255, 255, .7);
+            font-size: .75rem;
+        }
+
+        .officer-name strong {
+            display: block;
+            color: #fff;
+            font-size: .9rem;
+            font-weight: 800;
+        }
+
+        .duty-pill {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            background: rgba(16, 185, 129, .15);
+            border: 1px solid rgba(16, 185, 129, .3);
+            border-radius: 20px;
+            padding: .35rem .8rem;
+            font-size: .73rem;
+            font-weight: 700;
+            color: var(--green-400);
+        }
+
+        .duty-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green-400);
+            border-radius: 50%;
+            animation: gpulse 1.5s infinite;
+        }
+
+        /* Stats strip */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: .5rem;
+        }
+
+        .stat-bubble {
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 11px;
+            padding: .6rem .3rem;
+            text-align: center;
+        }
+
+        .sb-val {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .sb-lbl {
+            font-size: .6rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .6);
+        }
+
+        /* scroll content */
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1rem 90px;
+            display: flex;
+            flex-direction: column;
+            gap: .9rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .scroll-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .section-title {
+            font-size: .75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            color: var(--muted);
+        }
+
+        /* incident cards */
+        .inc-card {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+        }
+
+        .inc-card.critical {
+            border-left: 4px solid var(--danger);
+        }
+
+        .inc-card.warning-type {
+            border-left: 4px solid var(--warning);
+        }
+
+        .inc-head {
+            padding: .9rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .inc-ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+        .ico-red {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .ico-orange {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+        }
+
+        .inc-info {
+            flex: 1;
+        }
+
+        .inc-info h4 {
+            font-size: .86rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: .1rem;
+        }
+
+        .inc-info p {
+            font-size: .72rem;
+            color: var(--muted);
+        }
+
+        .inc-badge {
+            font-size: .68rem;
+            font-weight: 800;
+            padding: .25rem .6rem;
+            border-radius: 20px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .b-new {
+            background: var(--danger);
+            color: #fff;
+            animation: pulse-badge 1.5s infinite;
+        }
+
+        @keyframes pulse-badge {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .7
+            }
+        }
+
+        .b-assigned {
+            background: rgba(245, 158, 11, .12);
+            color: var(--warning);
+        }
+
+        .inc-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .id-item {
+            padding: .55rem .9rem;
+            border-right: 1px solid var(--border);
+        }
+
+        .id-item:nth-child(even) {
+            border-right: none;
+        }
+
+        .id-item label {
+            display: block;
+            font-size: .62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--muted);
+            margin-bottom: .1rem;
+        }
+
+        .id-item span {
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .inc-actions {
+            padding: .8rem 1rem;
+            display: flex;
+            gap: .5rem;
+        }
+
+        .ia-btn {
+            flex: 1;
+            padding: .6rem .4rem;
+            border: none;
+            border-radius: 10px;
+            font-size: .74rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .3rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .ia-accept {
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+            color: #fff;
+        }
+
+        .ia-nav {
+            background: rgba(59, 130, 246, .1);
+            color: var(--info);
+            border: 1.5px solid rgba(59, 130, 246, .2);
+        }
+
+        .ia-report {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+            border: 1.5px solid rgba(16, 185, 129, .2);
+        }
+
+        /* resolved status card */
+        .resolved-card {
+            background: rgba(16, 185, 129, .07);
+            border: 1.5px solid rgba(16, 185, 129, .2);
+            border-radius: 14px;
+            padding: .9rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .rc-ico {
+            width: 38px;
+            height: 38px;
+            background: var(--green-600);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .rc-info h4 {
+            font-size: .84rem;
+            font-weight: 800;
+            color: var(--green-700);
+        }
+
+        .rc-info p {
+            font-size: .72rem;
+            color: var(--muted);
+        }
+
+        /* mini feed */
+        .feed-card {
+            background: var(--surface);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .feed-head {
+            padding: .8rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .feed-head h3 {
+            font-size: .85rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .feed-head a {
+            font-size: .75rem;
+            color: var(--blue-600);
+            font-weight: 700;
+        }
+
+        .feed-item {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: .75rem 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .fi-ico {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            flex-shrink: 0;
+        }
+
+        .fi-info h4 {
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .fi-info p {
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        .fi-time {
+            font-size: .68rem;
+            color: var(--muted);
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            z-index: 100;
+            padding: .4rem 0 calc(.4rem + env(safe-area-inset-bottom));
+        }
+
+        .bn-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .2rem;
+            padding: .5rem;
+            cursor: pointer;
+        }
+
+        .bn-item i {
+            font-size: 1.1rem;
+            color: var(--muted);
+        }
+
+        .bn-item span {
+            font-size: .65rem;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .bn-item.active i,
+        .bn-item.active span {
+            color: var(--blue-600);
+        }
+
+        .bn-center {
+            border-radius: 50%;
+            background: var(--gold);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -18px;
+            box-shadow: 0 4px 14px rgba(251, 191, 36, .45);
+            border: 3px solid var(--bg);
+        }
+
+        .bn-center i {
+            color: var(--blue-900);
+            font-size: 1.2rem;
+        }
+
+        .notif-dot {
+            background: var(--danger);
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            border: 1.5px solid var(--surface);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell">
+        <div class="status-bar"><span class="time">9:41 AM</span>
+            <div class="status-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i
+                    class="fa-solid fa-battery-full"></i></div>
+        </div>
+
+        <!-- Top nav -->
+        <div class="top-nav">
+            <div class="tn-top">
+                <div class="officer-row">
+                    <div class="officer-avatar">AR</div>
+                    <div class="officer-name">Zone M2 Central<strong>SPO Ahmed Raza</strong></div>
+                </div>
+                <div class="duty-pill">
+                    <div class="duty-dot"></div>On Duty
+                </div>
+            </div>
+            <div class="stats-strip">
+                <div class="stat-bubble">
+                    <div class="sb-val" style="color:var(--danger)">2</div>
+                    <div class="sb-lbl">Active</div>
+                </div>
+                <div class="stat-bubble">
+                    <div class="sb-val">7</div>
+                    <div class="sb-lbl">Resolved</div>
+                </div>
+                <div class="stat-bubble">
+                    <div class="sb-val">3</div>
+                    <div class="sb-lbl">Challans</div>
+                </div>
+                <div class="stat-bubble">
+                    <div class="sb-val">5h 22m</div>
+                    <div class="sb-lbl">Shift</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-content">
+            <!-- Critical incident -->
+            <div class="section-title">🔴 Critical — Immediate Response</div>
+            <div class="inc-card critical">
+                <div class="inc-head">
+                    <div class="inc-ico ico-red"><i class="fa-solid fa-car-burst"></i></div>
+                    <div class="inc-info">
+                        <h4>AI Crash Detection</h4>
+                        <p>#INC-992 · Daewoo Express · ABC-123</p>
+                    </div>
+                    <div class="inc-badge b-new">NEW</div>
+                </div>
+                <div class="inc-details">
+                    <div class="id-item"><label>Location</label><span style="color:var(--danger)">M2 KM 224</span></div>
+                    <div class="id-item"><label>ETA to You</label><span>1.8 km · 3 min</span></div>
+                    <div class="id-item"><label>Trigger</label><span>-4g + Impact Sound</span></div>
+                    <div class="id-item"><label>Passengers</label><span>~42 on board</span></div>
+                </div>
+                <div class="inc-actions">
+                    <button class="ia-btn ia-accept" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-check"></i> Accept</button>
+                    <button class="ia-btn ia-nav" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-location-arrow"></i> Navigate</button>
+                    <button class="ia-btn ia-report" onclick="window.location.href='officer_field_report.html'"><i
+                            class="fa-solid fa-file-pen"></i> Report</button>
+                </div>
+            </div>
+
+            <!-- Warning incident -->
+            <div class="section-title" style="margin-top:-.2rem;">🟡 Assigned — Interception</div>
+            <div class="inc-card warning-type">
+                <div class="inc-head">
+                    <div class="inc-ico ico-orange"><i class="fa-solid fa-gauge-high"></i></div>
+                    <div class="inc-info">
+                        <h4>Chronic Overspeeding</h4>
+                        <p>#VIO-145 · Faisal Movers · XYZ-987</p>
+                    </div>
+                    <div class="inc-badge b-assigned">Assigned</div>
+                </div>
+                <div class="inc-details">
+                    <div class="id-item"><label>Speed</label><span style="color:var(--danger)">135 km/h</span></div>
+                    <div class="id-item"><label>Direction</label><span>Southbound KM 210</span></div>
+                    <div class="id-item"><label>Driver Profile</label><span style="color:var(--warning)">3 prior
+                            violations</span></div>
+                    <div class="id-item"><label>Approaching</label><span>Checkpoint Delta</span></div>
+                </div>
+                <div class="inc-actions">
+                    <button class="ia-btn ia-accept" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-hand"></i> Intercept</button>
+                    <button class="ia-btn ia-nav" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-location-arrow"></i> Navigate</button>
+                    <button class="ia-btn"
+                        style="background:rgba(245,158,11,.1);color:var(--warning);border:1.5px solid rgba(245,158,11,.2);flex:1;display:flex;align-items:center;justify-content:center;gap:.3rem;border-radius:10px;font-size:.74rem;font-weight:800;cursor:pointer;" onclick="alert('This action will be fully functional in the backend implementation.')"><i
+                            class="fa-solid fa-file-invoice-dollar"></i> e-Challan</button>
+                </div>
+            </div>
+
+            <!-- Resolved -->
+            <div class="resolved-card">
+                <div class="rc-ico"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="rc-info">
+                    <h4>Last incident resolved · 35 min ago</h4>
+                    <p>#INC-980 · Breakdown · DEF-901 · KM-198</p>
+                </div>
+            </div>
+
+            <!-- Activity feed -->
+            <div class="section-title">Shift Activity</div>
+            <div class="feed-card">
+                <div class="feed-head">
+                    <h3>Recent Events</h3><a href="#" onclick="alert('Link placeholder. Content will be added later.')">See All</a>
+                </div>
+                <div class="feed-item">
+                    <div class="fi-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                            class="fa-solid fa-car-burst"></i></div>
+                    <div class="fi-info">
+                        <h4>Crash alert received</h4>
+                        <p>ABC-123 · KM 224</p>
+                    </div>
+                    <div class="fi-time">Just now</div>
+                </div>
+                <div class="feed-item">
+                    <div class="fi-ico" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                            class="fa-solid fa-file-invoice"></i></div>
+                    <div class="fi-info">
+                        <h4>e-Challan issued</h4>
+                        <p>LMN-456 · Overspeeding</p>
+                    </div>
+                    <div class="fi-time">22 min ago</div>
+                </div>
+                <div class="feed-item">
+                    <div class="fi-ico" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                            class="fa-solid fa-circle-check"></i></div>
+                    <div class="fi-info">
+                        <h4>Incident closed</h4>
+                        <p>DEF-901 · Breakdown</p>
+                    </div>
+                    <div class="fi-time">35 min ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+            <div class="bn-item active" onclick="window.location.href='officer_dashboard.html'"><i
+                    class="fa-solid fa-tower-broadcast"></i><span>Incidents</span></div>
+            <div class="bn-item" onclick="window.location.href='officer_field_report.html'"><i
+                    class="fa-solid fa-clipboard-list"></i><span>Reports</span></div>
+            <div class="bn-item" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;"
+                onclick="document.getElementById('challanModal').style.display='flex'">
+                <div class="bn-center"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                <span style="font-size:.65rem;font-weight:700;color:var(--text);margin-top:.2rem;">Challan</span>
+            </div>
+            <div class="bn-item" onclick="window.location.href='officer_map.html'"><i
+                    class="fa-solid fa-map-location-dot"></i><span>Map</span></div>
+            <div class="bn-item" onclick="window.location.href='officer_profile.html'"><i
+                    class="fa-regular fa-user"></i><span>Profile</span></div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Challan Modal -->
+    <div class="modal-overlay" id="challanModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-end; justify-content: center;">
+        <div class="modal-content"
+            style="background: var(--surface); width: 100%; max-width: 430px; border-radius: 20px 20px 0 0; padding: 2rem; animation: slideUp 0.3s ease-out;">
+            <div
+                style="width: 50px; height: 5px; background: var(--border); border-radius: 10px; margin: 0 auto 1.5rem;">
+            </div>
+            <h2
+                style="font-size: 1.2rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center;">
+                Issue e-Challan</h2>
+
+            <button onclick="alert('Opening Scanner...');"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: none; background: rgba(59,130,246,0.1); color: var(--info); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-bottom: 1rem;">
+                <i class="fa-solid fa-qrcode" style="font-size: 1.2rem;"></i> Scan License / ID
+            </button>
+
+            <button onclick="alert('Opening Manual Entry...');"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: 1.5px solid var(--border); background: transparent; color: var(--text); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem;">
+                <i class="fa-regular fa-keyboard" style="font-size: 1.2rem;"></i> Manual Entry
+            </button>
+
+            <button onclick="document.getElementById('challanModal').style.display='none'"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: none; background: var(--bg); color: var(--text); font-weight: 700; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+    <style>
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</body>
+
+</html>

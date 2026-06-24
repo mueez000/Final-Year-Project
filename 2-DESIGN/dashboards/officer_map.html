@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IVMS Officer – Patrol Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --b9: #001830;
+            --b8: #002147;
+            --b6: #003d82;
+            --g6: #059669;
+            --g5: #10b981;
+            --g4: #34d399;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text: #1e293b;
+            --muted: #94a3b8;
+            --border: #e2e8f0;
+            --bg: #f1f5f9;
+            --surface: #fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+
+        .app {
+            max-width: 430px;
+            margin: 0 auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            height: 44px;
+            background: var(--b9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .status-bar .time {
+            font-size: .82rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: .5rem;
+            color: #fff;
+            font-size: .8rem;
+        }
+
+        /* top bar */
+        .top-bar {
+            background: var(--b9);
+            padding: .7rem 1rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .back-btn {
+            width: 34px;
+            height: 34px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: .9rem;
+            border: none;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .tb-title {
+            color: #fff;
+            font-size: .95rem;
+            font-weight: 800;
+            flex: 1;
+        }
+
+        .tb-sub {
+            color: rgba(255, 255, 255, .55);
+            font-size: .7rem;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 9px;
+            padding: .4rem .75rem;
+            color: #fff;
+            font-size: .75rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* map fill */
+        .map-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* floating elements */
+        .map-legend {
+            position: absolute;
+            top: .8rem;
+            right: .8rem;
+            background: rgba(10, 20, 40, .85);
+            border-radius: 12px;
+            padding: .7rem .9rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .leg-item {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .72rem;
+            color: rgba(255, 255, 255, .85);
+            margin-bottom: .4rem;
+        }
+
+        .leg-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .leg-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* bottom sheet */
+        .bottom-sheet {
+            background: var(--surface);
+            border-radius: 18px 18px 0 0;
+            padding: .9rem 1rem;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, .12);
+            flex-shrink: 0;
+        }
+
+        .sheet-handle {
+            width: 36px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto .9rem;
+        }
+
+        .sheet-title {
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            color: var(--muted);
+            margin-bottom: .7rem;
+        }
+
+        .vehicle-scroll {
+            display: flex;
+            gap: .7rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: .2rem 0;
+        }
+
+        .vehicle-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .v-chip {
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: .65rem .8rem;
+            flex-shrink: 0;
+            min-width: 130px;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .v-chip.alert-chip {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, .05);
+        }
+
+        .v-chip.active-chip {
+            border-color: var(--b6);
+            background: rgba(0, 61, 130, .05);
+        }
+
+        .v-chip:active {
+            transform: scale(.97);
+        }
+
+        .vc-reg {
+            font-size: .82rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: .15rem;
+        }
+
+        .vc-name {
+            font-size: .7rem;
+            color: var(--muted);
+            margin-bottom: .4rem;
+        }
+
+        .vc-row {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .vc-speed {
+            font-size: .72rem;
+            font-weight: 700;
+        }
+
+        .vc-badge {
+            font-size: .65rem;
+            font-weight: 700;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+
+        .b-over {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .b-ok {
+            background: rgba(5, 150, 105, .1);
+            color: var(--g6);
+        }
+
+        .b-watch {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+        }
+
+        /* my loc btn */
+        .loc-btn {
+            position: absolute;
+            bottom: 12rem;
+            right: .8rem;
+            width: 42px;
+            height: 42px;
+            background: var(--surface);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--b6);
+        }
+
+        .zoom-wrap {
+            position: absolute;
+            bottom: 14.5rem;
+            right: .8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--surface);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+            overflow: hidden;
+        }
+
+        .zm-btn {
+            width: 42px;
+            height: 36px;
+            background: var(--surface);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .zm-btn:first-child {
+            border-bottom: 1px solid var(--border);
+        }
+
+        @keyframes gpulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .5
+            }
+        }
+
+        /* bottom nav */
+        .bottom-nav {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-shrink: 0;
+            padding: .4rem 0 calc(.4rem + env(safe-area-inset-bottom));
+        }
+
+        .bn-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .2rem;
+            padding: .5rem;
+            cursor: pointer;
+        }
+
+        .bn-item i {
+            font-size: 1.1rem;
+            color: var(--muted);
+        }
+
+        .bn-item span {
+            font-size: .65rem;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .bn-item.active i,
+        .bn-item.active span {
+            color: var(--b6);
+        }
+
+        .bn-center {
+            border-radius: 50%;
+            background: var(--gold);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -18px;
+            box-shadow: 0 4px 14px rgba(251, 191, 36, .4);
+            border: 3px solid var(--bg);
+        }
+
+        .bn-center i {
+            color: var(--b9);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <div class="status-bar"><span class="time">9:41 AM</span>
+            <div class="status-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i
+                    class="fa-solid fa-battery-full"></i></div>
+        </div>
+
+        <div class="top-bar">
+            <button class="back-btn" onclick="window.location.href='officer_dashboard.html'"><i
+                    class="fa-solid fa-arrow-left"></i></button>
+            <div style="flex:1">
+                <div class="tb-title">Live Patrol Map</div>
+                <div class="tb-sub">Zone M2 KM 131–200 · 12 vehicles tracked</div>
+            </div>
+            <div class="filter-btn"><i class="fa-solid fa-filter"></i> Filter</div>
+        </div>
+
+        <!-- Full-screen SVG Map -->
+        <div class="map-container">
+            <svg class="map-svg" viewBox="0 0 430 440" xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid slice">
+                <!-- dark map bg -->
+                <rect width="430" height="440" fill="#0d1b2a" />
+                <!-- terrain patches -->
+                <ellipse cx="340" cy="80" rx="130" ry="90" fill="#111f30" opacity=".9" />
+                <ellipse cx="60" cy="320" rx="110" ry="80" fill="#0f2919" opacity=".7" />
+                <ellipse cx="380" cy="380" rx="100" ry="80" fill="#0f2919" opacity=".7" />
+                <!-- M2 road main -->
+                <path d="M10 420 Q80 350 150 280 Q220 210 280 140 Q330 80 420 20" stroke="#374151" stroke-width="30"
+                    fill="none" stroke-linecap="round" />
+                <!-- road center line -->
+                <path d="M10 420 Q80 350 150 280 Q220 210 280 140 Q330 80 420 20" stroke="#4b5563" stroke-width=".7"
+                    stroke-dasharray="12 8" fill="none" />
+                <!-- side road 1 -->
+                <path d="M180 260 Q200 280 240 310 Q270 330 290 360" stroke="#1f2f40" stroke-width="14" fill="none" />
+                <!-- side road 2 -->
+                <path d="M310 120 Q330 140 360 165 Q390 190 420 195" stroke="#1f2f40" stroke-width="14" fill="none" />
+
+                <!-- KM markers -->
+                <text x="28" y="415" fill="rgba(255,255,255,.35)" font-size="8" font-family="Inter" font-weight="700">KM
+                    200</text>
+                <text x="160" y="270" fill="rgba(255,255,255,.35)" font-size="8" font-family="Inter"
+                    font-weight="700">KM 165</text>
+                <text x="285" y="135" fill="rgba(255,255,255,.35)" font-size="8" font-family="Inter"
+                    font-weight="700">KM 135</text>
+                <text x="395" y="16" fill="rgba(255,255,255,.35)" font-size="8" font-family="Inter" font-weight="700">KM
+                    131</text>
+
+                <!-- Speeding vehicle (red) -->
+                <circle cx="100" cy="370" r="10" fill="#ef4444" />
+                <circle cx="100" cy="370" r="18" fill="none" stroke="#ef4444" stroke-width="1.5" opacity=".5"
+                    style="animation:gpulse 1.2s infinite" />
+                <text x="100" y="373" text-anchor="middle" fill="#fff" font-size="6" font-family="Inter"
+                    font-weight="700">RWP-1234</text>
+
+                <!-- AI alert vehicle (orange) -->
+                <circle cx="200" cy="255" r="10" fill="#f59e0b" />
+                <circle cx="200" cy="255" r="18" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity=".5" />
+                <text x="200" y="258" text-anchor="middle" fill="#fff" font-size="6" font-family="Inter"
+                    font-weight="700">LHR-0572</text>
+
+                <!-- Normal vehicle 1 -->
+                <circle cx="260" cy="170" r="8" fill="#10b981" />
+                <text x="260" y="173" text-anchor="middle" fill="#fff" font-size="5.5" font-family="Inter"
+                    font-weight="700">ISB-4421</text>
+
+                <!-- Normal vehicle 2 -->
+                <circle cx="325" cy="95" r="8" fill="#10b981" />
+                <text x="325" y="98" text-anchor="middle" fill="#fff" font-size="5.5" font-family="Inter"
+                    font-weight="700">SHK-2907</text>
+
+                <!-- My position (officer) -->
+                <circle cx="155" cy="295" r="11" fill="#003d82" />
+                <circle cx="155" cy="295" r="20" fill="none" stroke="#60a5fa" stroke-width="1.5" opacity=".6" />
+                <text x="155" y="298.5" text-anchor="middle" fill="#fff" font-size="7" font-family="Inter"
+                    font-weight="900">ME</text>
+
+                <!-- Direction heading arc for officer -->
+                <path d="M155 275 L148 260 L162 260 Z" fill="#60a5fa" opacity=".8" />
+            </svg>
+
+            <!-- Legend -->
+            <div class="map-legend">
+                <div class="leg-item">
+                    <div class="leg-dot" style="background:var(--danger)"></div> Speeding
+                </div>
+                <div class="leg-item">
+                    <div class="leg-dot" style="background:var(--warning)"></div> AI Alert
+                </div>
+                <div class="leg-item">
+                    <div class="leg-dot" style="background:var(--g5)"></div> Normal
+                </div>
+                <div class="leg-item">
+                    <div class="leg-dot" style="background:var(--b6)"></div> Your Post
+                </div>
+            </div>
+
+            <!-- Zoom controls -->
+            <div class="zoom-wrap" style="bottom:19.5rem;">
+                <button class="zm-btn" onclick="alert('This action will be fully functional in the backend implementation.')">+</button>
+                <button class="zm-btn" onclick="alert('This action will be fully functional in the backend implementation.')">−</button>
+            </div>
+            <button class="loc-btn" style="bottom:18.5rem;" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-location-crosshairs"></i></button>
+        </div>
+
+        <!-- Bottom Sheet -->
+        <div class="bottom-sheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title">Vehicles in Zone — Tap to View</div>
+            <div class="vehicle-scroll">
+                <div class="v-chip alert-chip">
+                    <div class="vc-reg">RWP-1234</div>
+                    <div class="vc-name">Faisal Movers · KM 194</div>
+                    <div class="vc-row"><span class="vc-speed" style="color:var(--danger)">128 km/h</span><span
+                            class="vc-badge b-over">Overspeed</span></div>
+                </div>
+                <div class="v-chip alert-chip">
+                    <div class="vc-reg">LHR-0572</div>
+                    <div class="vc-name">Niazi Express · KM 180</div>
+                    <div class="vc-row"><span class="vc-speed" style="color:var(--warning)">102 km/h</span><span
+                            class="vc-badge b-watch">AI Alert</span></div>
+                </div>
+                <div class="v-chip active-chip">
+                    <div class="vc-reg">ISB-4421</div>
+                    <div class="vc-name">Daewoo · KM 165</div>
+                    <div class="vc-row"><span class="vc-speed" style="color:var(--g6)">96 km/h</span><span
+                            class="vc-badge b-ok">Normal</span></div>
+                </div>
+                <div class="v-chip">
+                    <div class="vc-reg">SHK-2907</div>
+                    <div class="vc-name">Kohistan · KM 135</div>
+                    <div class="vc-row"><span class="vc-speed" style="color:var(--g6)">88 km/h</span><span
+                            class="vc-badge b-ok">Normal</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="bn-item" onclick="window.location.href='officer_dashboard.html'"><i
+                    class="fa-solid fa-tower-broadcast"></i><span>Incidents</span></div>
+            <div class="bn-item" onclick="window.location.href='officer_field_report.html'"><i
+                    class="fa-solid fa-clipboard-list"></i><span>Reports</span></div>
+            <div class="bn-item" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;"
+                onclick="document.getElementById('challanModal').style.display='flex'">
+                <div class="bn-center"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                <span style="font-size:.65rem;font-weight:700;color:var(--text);margin-top:.2rem;">Challan</span>
+            </div>
+            <div class="bn-item active"><i class="fa-solid fa-map-location-dot"></i><span>Map</span></div>
+            <div class="bn-item" onclick="window.location.href='officer_profile.html'"><i
+                    class="fa-regular fa-user"></i><span>Profile</span></div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Challan Modal -->
+    <div class="modal-overlay" id="challanModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-end; justify-content: center;">
+        <div class="modal-content"
+            style="background: var(--surface); width: 100%; max-width: 430px; border-radius: 20px 20px 0 0; padding: 2rem; animation: slideUp 0.3s ease-out;">
+            <div
+                style="width: 50px; height: 5px; background: var(--border); border-radius: 10px; margin: 0 auto 1.5rem;">
+            </div>
+            <h2
+                style="font-size: 1.2rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center;">
+                Issue e-Challan</h2>
+
+            <button onclick="alert('Opening Scanner...');"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: none; background: rgba(59,130,246,0.1); color: var(--info); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-bottom: 1rem;">
+                <i class="fa-solid fa-qrcode" style="font-size: 1.2rem;"></i> Scan License / ID
+            </button>
+
+            <button onclick="alert('Opening Manual Entry...');"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: 1.5px solid var(--border); background: transparent; color: var(--text); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem;">
+                <i class="fa-regular fa-keyboard" style="font-size: 1.2rem;"></i> Manual Entry
+            </button>
+
+            <button onclick="document.getElementById('challanModal').style.display='none'"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: none; background: var(--bg); color: var(--text); font-weight: 700; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+    <style>
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</body>
+
+</html>

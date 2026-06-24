@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IVMS Driver – e-Challans</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --green-400: #34d399;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f1f5f9;
+            --surface: #fff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --muted: #94a3b8;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+
+        .app-shell {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .status-bar {
+            height: 44px;
+            background: var(--blue-800);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .status-bar .time {
+            font-size: .82rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            color: #fff;
+            font-size: .8rem;
+        }
+
+        .top-nav {
+            background: var(--blue-800);
+            padding: .9rem 1.2rem 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .tn-row {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            margin-bottom: .9rem;
+        }
+
+        .back-btn {
+            width: 34px;
+            height: 34px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: .9rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .page-title-nav h2 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .page-title-nav p {
+            font-size: .72rem;
+            color: rgba(255, 255, 255, .65);
+        }
+
+        /* summary cards horizontal scroll */
+        .summary-scroll {
+            display: flex;
+            gap: .7rem;
+            overflow-x: auto;
+            padding: .2rem 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .summary-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sum-card {
+            background: rgba(255, 255, 255, .12);
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 13px;
+            padding: .8rem;
+            flex-shrink: 0;
+            width: 105px;
+            text-align: center;
+        }
+
+        .sum-val {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .sum-lbl {
+            font-size: .65rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .65);
+            margin-top: .15rem;
+        }
+
+        /* scroll content */
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1rem 90px;
+            display: flex;
+            flex-direction: column;
+            gap: .9rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .scroll-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* pending banner */
+        .pending-banner {
+            background: linear-gradient(135deg, #7f1d1d, var(--danger));
+            border-radius: 16px;
+            padding: 1.1rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, .3);
+        }
+
+        .pb-ico {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, .15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .pb-text h4 {
+            font-size: .9rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: .2rem;
+        }
+
+        .pb-text p {
+            font-size: .73rem;
+            color: rgba(255, 255, 255, .8);
+        }
+
+        .pb-btn {
+            margin-left: auto;
+            background: rgba(255, 255, 255, .2);
+            border: 1.5px solid rgba(255, 255, 255, .3);
+            color: #fff;
+            font-size: .79rem;
+            font-weight: 800;
+            padding: .5rem .8rem;
+            border-radius: 9px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* filter pills */
+        .filter-row {
+            display: flex;
+            gap: .5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-pill {
+            padding: .45rem 1rem;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            font-size: .76rem;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .filter-pill.active {
+            background: var(--blue-800);
+            border-color: var(--blue-800);
+            color: #fff;
+        }
+
+        /* challan card */
+        .challan-card {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .challan-card.pending {
+            border-left: 4px solid var(--danger);
+        }
+
+        .challan-card.paid {
+            border-left: 4px solid var(--green-600);
+        }
+
+        .ch-head {
+            padding: .85rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .85rem;
+        }
+
+        .ch-ico {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .ch-info h4 {
+            font-size: .85rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: .1rem;
+        }
+
+        .ch-info p {
+            font-size: .72rem;
+            color: var(--muted);
+        }
+
+        .ch-badge {
+            margin-left: auto;
+            font-size: .7rem;
+            font-weight: 700;
+            padding: .25rem .6rem;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+
+        .b-pending {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .b-paid {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        .ch-body {
+            padding: .7rem 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .35rem;
+            border-top: 1px solid var(--border);
+            background: #fafcff;
+        }
+
+        .ch-detail {
+            font-size: .75rem;
+            color: var(--muted);
+        }
+
+        .ch-detail strong {
+            display: block;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .ch-foot {
+            padding: .7rem 1rem;
+            display: flex;
+            gap: .5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .mini-btn {
+            flex: 1;
+            padding: .55rem;
+            border-radius: 9px;
+            border: none;
+            font-size: .78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .4rem;
+        }
+
+        .mb-pay {
+            background: linear-gradient(135deg, var(--green-700), var(--green-600));
+            color: #fff;
+        }
+
+        .mb-view {
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+        }
+
+        /* bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            z-index: 100;
+            padding: .4rem 0 calc(.4rem + env(safe-area-inset-bottom));
+        }
+
+        .bn-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .2rem;
+            padding: .5rem;
+            cursor: pointer;
+        }
+
+        .bn-item i {
+            font-size: 1.15rem;
+            color: var(--muted);
+        }
+
+        .bn-item span {
+            font-size: .65rem;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .bn-item.active i,
+        .bn-item.active span {
+            color: var(--green-600);
+        }
+
+        .bn-center {
+            border-radius: 50%;
+            background: var(--green-600);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -18px;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, .45);
+            border: 3px solid var(--bg);
+        }
+
+        .bn-center i {
+            color: #fff;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell">
+        <div class="status-bar"><span class="time">9:41 AM</span>
+            <div class="status-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i
+                    class="fa-solid fa-battery-full"></i></div>
+        </div>
+        <div class="top-nav">
+            <div class="tn-row">
+                <button class="back-btn" onclick="window.location.href='driver_dashboard.html'"><i
+                        class="fa-solid fa-arrow-left"></i></button>
+                <div class="page-title-nav">
+                    <h2>e-Challans</h2>
+                    <p>Your violation & payment history</p>
+                </div>
+            </div>
+            <div class="summary-scroll">
+                <div class="sum-card">
+                    <div class="sum-val" style="color:var(--danger)">1</div>
+                    <div class="sum-lbl">Pending</div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-val" style="color:var(--gold)">Rs. 5,000</div>
+                    <div class="sum-lbl">Due</div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-val">7</div>
+                    <div class="sum-lbl">Total</div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-val" style="color:var(--green-400)">6</div>
+                    <div class="sum-lbl">Cleared</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-content">
+            <!-- Pending Banner -->
+            <div class="pending-banner">
+                <div class="pb-ico"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="pb-text">
+                    <h4>1 Unpaid Challan</h4>
+                    <p>Rs. 5,000 due · Pay before 20 Mar 2026</p>
+                </div>
+                <button class="pb-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-credit-card"></i> Pay Now</button>
+            </div>
+
+            <!-- Filter -->
+            <div class="filter-row">
+                <div class="filter-pill active">All</div>
+                <div class="filter-pill">Pending</div>
+                <div class="filter-pill">Paid</div>
+                <div class="filter-pill">Disputed</div>
+                <div class="filter-pill">2026</div>
+            </div>
+
+            <!-- Challan cards -->
+            <div class="challan-card pending">
+                <div class="ch-head">
+                    <div class="ch-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                            class="fa-solid fa-gauge-high"></i></div>
+                    <div class="ch-info">
+                        <h4>Overspeeding</h4>
+                        <p>#C-2026-03191 · 03 Mar 2026</p>
+                    </div>
+                    <span class="ch-badge b-pending">Unpaid</span>
+                </div>
+                <div class="ch-body">
+                    <div class="ch-detail"><strong>125 km/h</strong>In 100 zone</div>
+                    <div class="ch-detail"><strong>M2 KM-190</strong>Southbound</div>
+                    <div class="ch-detail"><strong>Rs. 5,000</strong>Fine amount</div>
+                    <div class="ch-detail"><strong>20 Mar 2026</strong>Due date</div>
+                </div>
+                <div class="ch-foot">
+                    <button class="mini-btn mb-pay" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-credit-card"></i> Pay Now</button>
+                    <button class="mini-btn mb-view" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-file-invoice"></i> Details</button>
+                </div>
+            </div>
+
+            <div class="challan-card paid">
+                <div class="ch-head">
+                    <div class="ch-ico" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                            class="fa-solid fa-gauge-high"></i></div>
+                    <div class="ch-info">
+                        <h4>Overspeeding</h4>
+                        <p>#C-2026-02145 · 18 Feb 2026</p>
+                    </div>
+                    <span class="ch-badge b-paid">Paid</span>
+                </div>
+                <div class="ch-body">
+                    <div class="ch-detail"><strong>118 km/h</strong>In 100 zone</div>
+                    <div class="ch-detail"><strong>M2 KM-240</strong>Northbound</div>
+                    <div class="ch-detail"><strong>Rs. 3,000</strong>Fine amount</div>
+                    <div class="ch-detail"><strong>22 Feb 2026</strong>Paid on</div>
+                </div>
+                <div class="ch-foot">
+                    <button class="mini-btn mb-view" style="flex:1" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-receipt"></i> View
+                        Receipt</button>
+                </div>
+            </div>
+
+            <div class="challan-card paid">
+                <div class="ch-head">
+                    <div class="ch-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                            class="fa-solid fa-bed"></i></div>
+                    <div class="ch-info">
+                        <h4>Drowsiness Alert</h4>
+                        <p>#C-2026-01088 · 22 Jan 2026</p>
+                    </div>
+                    <span class="ch-badge b-paid">Paid</span>
+                </div>
+                <div class="ch-body">
+                    <div class="ch-detail"><strong>Stage 2</strong>AI detected</div>
+                    <div class="ch-detail"><strong>M2 KM-155</strong>Southbound</div>
+                    <div class="ch-detail"><strong>Rs. 2,500</strong>Fine amount</div>
+                    <div class="ch-detail"><strong>26 Jan 2026</strong>Paid on</div>
+                </div>
+                <div class="ch-foot">
+                    <button class="mini-btn mb-view" style="flex:1" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-receipt"></i> View
+                        Receipt</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="bn-item" onclick="window.location.href='driver_dashboard.html'"><i
+                    class="fa-solid fa-house"></i><span>Home</span></div>
+            <div class="bn-item active" onclick="window.location.href='driver_violations.html'"><i
+                    class="fa-solid fa-file-invoice-dollar"></i><span>Challans</span></div>
+            <div class="bn-item" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;"
+                onclick="document.getElementById('sosModal').style.display='flex'">
+                <div class="bn-center"><i class="fa-solid fa-truck-medical"></i></div>
+                <span style="font-size:.65rem;font-weight:700;color:var(--text);margin-top:.2rem;">SOS</span>
+            </div>
+            <div class="bn-item" onclick="window.location.href='driver_safety_profile.html'"><i
+                    class="fa-solid fa-chart-line"></i><span>Safety</span></div>
+            <div class="bn-item" onclick="window.location.href='driver_profile.html'"><i
+                    class="fa-regular fa-user"></i><span>Profile</span></div>
+        </div>
+    </div>
+    </div>
+
+    <!-- SOS Modal -->
+    <div class="modal-overlay" id="sosModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-end; justify-content: center;">
+        <div class="modal-content"
+            style="background: var(--surface); width: 100%; max-width: 430px; border-radius: 20px 20px 0 0; padding: 2rem; text-align: center; animation: slideUp 0.3s ease-out;">
+            <div
+                style="width: 50px; height: 5px; background: var(--border); border-radius: 10px; margin: 0 auto 1.5rem;">
+            </div>
+            <div
+                style="width: 80px; height: 80px; background: rgba(239,68,68,0.1); color: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1rem;">
+                <i class="fa-solid fa-truck-medical"></i>
+            </div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text); margin-bottom: 0.5rem;">Emergency SOS
+            </h2>
+            <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem;">You are about to send an emergency
+                alert with your live location to the nearest NH&MP unit.</p>
+            <div style="display: flex; gap: 1rem;">
+                <button onclick="document.getElementById('sosModal').style.display='none'"
+                    style="flex: 1; padding: 1rem; border-radius: 12px; border: none; background: var(--bg); color: var(--text); font-weight: 700; cursor: pointer;">Cancel</button>
+                <button
+                    onclick="alert('SOS Alert Sent! Help is on the way.'); document.getElementById('sosModal').style.display='none'"
+                    style="flex: 1; padding: 1rem; border-radius: 12px; border: none; background: var(--danger); color: white; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i
+                        class="fa-solid fa-triangle-exclamation"></i> Send Alert</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IVMS Officer – Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --b9: #001830;
+            --b8: #002147;
+            --b6: #003d82;
+            --g6: #059669;
+            --g5: #10b981;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --text: #1e293b;
+            --muted: #94a3b8;
+            --border: #e2e8f0;
+            --bg: #f1f5f9;
+            --surface: #fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+
+        .app {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            height: 44px;
+            background: var(--b9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .status-bar .time {
+            font-size: .82rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: .5rem;
+            color: #fff;
+            font-size: .8rem;
+        }
+
+        /* hero */
+        .profile-hero {
+            background: linear-gradient(160deg, var(--b9), var(--b8) 50%, var(--b6));
+            padding: 1.4rem 1.2rem 3.5rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .profile-hero::before {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .04);
+            top: -80px;
+            right: -60px;
+        }
+
+        .ph-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ph-btn {
+            width: 34px;
+            height: 34px;
+            background: rgba(255, 255, 255, .12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: .85rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .avatar-wrap {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+
+        .avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--b6), var(--g6));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            border: 3px solid rgba(255, 255, 255, .25);
+            margin: 0 auto .8rem;
+        }
+
+        .badge-shield {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .65rem;
+            color: var(--b9);
+            border: 2px solid #fff;
+        }
+
+        .ph-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ph-sub {
+            font-size: .78rem;
+            color: rgba(255, 255, 255, .6);
+            margin-top: .2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ph-pills {
+            display: flex;
+            justify-content: center;
+            gap: .5rem;
+            margin-top: .8rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .ph-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(251, 191, 36, .25);
+            color: rgba(255, 255, 255, .85);
+            padding: .3rem .7rem;
+            border-radius: 20px;
+            font-size: .7rem;
+            font-weight: 700;
+        }
+
+        .ph-pill i {
+            color: var(--gold);
+            font-size: .65rem;
+        }
+
+        /* stats row */
+        .stats-row {
+            display: flex;
+            background: var(--surface);
+            border-radius: 16px;
+            margin: -.8rem 1rem 0;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .1);
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        .srow-item {
+            flex: 1;
+            padding: .9rem .5rem;
+            text-align: center;
+            border-right: 1px solid var(--border);
+        }
+
+        .srow-item:last-child {
+            border-right: none;
+        }
+
+        .sr-val {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        .sr-lbl {
+            font-size: .62rem;
+            font-weight: 700;
+            color: var(--muted);
+            margin-top: .1rem;
+        }
+
+        /* scroll */
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1rem 90px;
+            display: flex;
+            flex-direction: column;
+            gap: .9rem;
+            -webkit-overflow-scrolling: touch;
+            margin-top: .5rem;
+        }
+
+        .scroll-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .section-title {
+            font-size: .73rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            color: var(--muted);
+        }
+
+        /* info / settings card */
+        .info-card,
+        .settings-card {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .info-row,
+        .set-row {
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+            padding: .85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .info-row:last-child,
+        .set-row:last-child {
+            border-bottom: none;
+        }
+
+        .ir-ico,
+        .set-ico {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .88rem;
+            flex-shrink: 0;
+        }
+
+        .ir-label,
+        .set-sub {
+            font-size: .71rem;
+            color: var(--muted);
+        }
+
+        .ir-value,
+        .set-label {
+            font-size: .87rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .ir-edit {
+            margin-left: auto;
+            font-size: .78rem;
+            color: var(--b6);
+            font-weight: 700;
+        }
+
+        .set-arrow {
+            margin-left: auto;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        /* shift history */
+        .shift-card {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+        }
+
+        .shift-head {
+            padding: .8rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .shift-head h3 {
+            font-size: .85rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .shift-head a {
+            font-size: .75rem;
+            color: var(--b6);
+            font-weight: 700;
+        }
+
+        .shift-row {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: .75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .shift-row:last-child {
+            border-bottom: none;
+        }
+
+        .sr-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .sr-info h4 {
+            font-size: .81rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .sr-info p {
+            font-size: .7rem;
+            color: var(--muted);
+        }
+
+        .sr-badge {
+            margin-left: auto;
+            font-size: .68rem;
+            font-weight: 700;
+            padding: .2rem .55rem;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .b-ok {
+            background: rgba(5, 150, 105, .1);
+            color: var(--g6);
+        }
+
+        .b-inc {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        /* toggle */
+        .toggle {
+            width: 38px;
+            height: 22px;
+            background: #ccc;
+            border-radius: 11px;
+            cursor: pointer;
+            transition: .2s;
+            position: relative;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .toggle.on {
+            background: var(--b6);
+        }
+
+        .toggle::after {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: .2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+        }
+
+        .toggle.on::after {
+            left: 18px;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: .9rem;
+            background: rgba(239, 68, 68, .06);
+            border: 1.5px solid rgba(239, 68, 68, .2);
+            border-radius: 14px;
+            color: var(--danger);
+            font-size: .9rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            z-index: 100;
+            padding: .4rem 0 calc(.4rem + env(safe-area-inset-bottom));
+        }
+
+        .bn-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .2rem;
+            padding: .5rem;
+            cursor: pointer;
+        }
+
+        .bn-item i {
+            font-size: 1.1rem;
+            color: var(--muted);
+        }
+
+        .bn-item span {
+            font-size: .65rem;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .bn-item.active i,
+        .bn-item.active span {
+            color: var(--b6);
+        }
+
+        .bn-center {
+            border-radius: 50%;
+            background: var(--gold);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -18px;
+            box-shadow: 0 4px 14px rgba(251, 191, 36, .4);
+            border: 3px solid var(--bg);
+        }
+
+        .bn-center i {
+            color: var(--b9);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <div class="status-bar"><span class="time">9:41 AM</span>
+            <div class="status-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i
+                    class="fa-solid fa-battery-full"></i></div>
+        </div>
+
+        <div class="profile-hero">
+            <div class="ph-actions">
+                <button class="ph-btn" onclick="window.location.href='officer_dashboard.html'"><i
+                        class="fa-solid fa-arrow-left"></i></button>
+                <button class="ph-btn" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            </div>
+            <div class="avatar-wrap">
+                <div class="avatar">AR</div>
+                <div class="badge-shield"><i class="fa-solid fa-shield-halved"></i></div>
+            </div>
+            <div class="ph-name">SPO Ahmed Raza</div>
+            <div class="ph-sub">NHMP-OFC-1042 · Zone M2 Central · Sub-Inspector</div>
+            <div class="ph-pills">
+                <div class="ph-pill"><i class="fa-solid fa-shield-halved"></i> On Duty</div>
+                <div class="ph-pill"><i class="fa-solid fa-star"></i> 7 Resolved Today</div>
+                <div class="ph-pill"><i class="fa-solid fa-circle-check"></i> Verified</div>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="srow-item">
+                <div class="sr-val">7</div>
+                <div class="sr-lbl">Resolved</div>
+            </div>
+            <div class="srow-item">
+                <div class="sr-val">3</div>
+                <div class="sr-lbl">Challans</div>
+            </div>
+            <div class="srow-item">
+                <div class="sr-val">5h 22m</div>
+                <div class="sr-lbl">On Shift</div>
+            </div>
+            <div class="srow-item">
+                <div class="sr-val" style="color:var(--g6)">98%</div>
+                <div class="sr-lbl">Response</div>
+            </div>
+        </div>
+
+        <div class="scroll-content">
+            <div class="section-title">Officer Information</div>
+            <div class="info-card">
+                <div class="info-row">
+                    <div class="ir-ico" style="background:rgba(251,191,36,.12);color:var(--gold)"><i
+                            class="fa-solid fa-id-badge"></i></div>
+                    <div>
+                        <div class="ir-label">Badge / Service ID</div>
+                        <div class="ir-value">NHMP-OFC-1042</div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="ir-ico" style="background:rgba(0,61,130,.1);color:var(--b6)"><i
+                            class="fa-solid fa-road"></i></div>
+                    <div>
+                        <div class="ir-label">Posting Zone</div>
+                        <div class="ir-value">M2 KM 131–200 (Salt Range)</div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="ir-ico" style="background:rgba(5,150,105,.1);color:var(--g6)"><i
+                            class="fa-solid fa-phone"></i></div>
+                    <div>
+                        <div class="ir-label">Official Phone</div>
+                        <div class="ir-value">0300-1234567</div>
+                    </div><span class="ir-edit">Edit</span>
+                </div>
+                <div class="info-row">
+                    <div class="ir-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                            class="fa-solid fa-user-tie"></i></div>
+                    <div>
+                        <div class="ir-label">Supervisor / SP</div>
+                        <div class="ir-value">SP Muhammad Akram</div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="ir-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                            class="fa-solid fa-car-side"></i></div>
+                    <div>
+                        <div class="ir-label">Patrol Vehicle</div>
+                        <div class="ir-value">NHMP-M2-042</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">Shift History (This Week)</div>
+            <div class="shift-card">
+                <div class="shift-head">
+                    <h3>Recent Shifts</h3><a href="#" onclick="alert('Link placeholder. Content will be added later.')">See All</a>
+                </div>
+                <div class="shift-row">
+                    <div class="sr-dot" style="background:var(--g6)"></div>
+                    <div class="sr-info">
+                        <h4>05 Mar · Morning Shift · 6h 10m</h4>
+                        <p>4 incidents · 2 challans issued</p>
+                    </div>
+                    <div class="sr-badge b-ok">Completed</div>
+                </div>
+                <div class="shift-row">
+                    <div class="sr-dot" style="background:var(--danger)"></div>
+                    <div class="sr-info">
+                        <h4>04 Mar · Night Shift · 8h 02m</h4>
+                        <p>2 incidents · Crash response</p>
+                    </div>
+                    <div class="sr-badge b-inc">1 Escalation</div>
+                </div>
+                <div class="shift-row">
+                    <div class="sr-dot" style="background:var(--g6)"></div>
+                    <div class="sr-info">
+                        <h4>03 Mar · Afternoon · 6h 30m</h4>
+                        <p>5 incidents · 3 challans issued</p>
+                    </div>
+                    <div class="sr-badge b-ok">Completed</div>
+                </div>
+            </div>
+
+            <div class="section-title">App Settings</div>
+            <div class="settings-card">
+                <div class="set-row">
+                    <div class="set-ico" style="background:rgba(0,61,130,.1);color:var(--b6)"><i
+                            class="fa-solid fa-bell"></i></div>
+                    <div>
+                        <div class="set-label">Incident Alerts</div>
+                        <div class="set-sub">Push notifications for new incidents</div>
+                    </div>
+                    <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="set-row">
+                    <div class="set-ico" style="background:rgba(5,150,105,.1);color:var(--g6)"><i
+                            class="fa-solid fa-location-dot"></i></div>
+                    <div>
+                        <div class="set-label">Live Location Sharing</div>
+                        <div class="set-sub">Required during active duty</div>
+                    </div>
+                    <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="set-row">
+                    <div class="set-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                            class="fa-solid fa-volume-high"></i></div>
+                    <div>
+                        <div class="set-label">Alert Sound</div>
+                        <div class="set-sub">Loud alert on incoming incident</div>
+                    </div>
+                    <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="set-row">
+                    <div class="set-ico" style="background:rgba(139,92,246,.1);color:#8b5cf6"><i
+                            class="fa-solid fa-file-shield"></i></div>
+                    <div class="set-label">Privacy & Data Policy</div><span class="set-arrow"><i
+                            class="fa-solid fa-chevron-right"></i></span>
+                </div>
+            </div>
+
+            <button class="logout-btn" onclick="window.location.href='../auth/officer_login.html'"><i
+                    class="fa-solid fa-right-from-bracket"></i> End Duty & Sign Out</button>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="bn-item" onclick="window.location.href='officer_dashboard.html'"><i
+                    class="fa-solid fa-tower-broadcast"></i><span>Incidents</span></div>
+            <div class="bn-item" onclick="window.location.href='officer_field_report.html'"><i
+                    class="fa-solid fa-clipboard-list"></i><span>Reports</span></div>
+            <div class="bn-item" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;"
+                onclick="document.getElementById('challanModal').style.display='flex'">
+                <div class="bn-center"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                <span style="font-size:.65rem;font-weight:700;color:var(--text);margin-top:.2rem;">Challan</span>
+            </div>
+            <div class="bn-item" onclick="window.location.href='officer_map.html'"><i
+                    class="fa-solid fa-map-location-dot"></i><span>Map</span></div>
+            <div class="bn-item active"><i class="fa-regular fa-user"></i><span>Profile</span></div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Challan Modal -->
+    <div class="modal-overlay" id="challanModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-end; justify-content: center;">
+        <div class="modal-content"
+            style="background: var(--surface); width: 100%; max-width: 430px; border-radius: 20px 20px 0 0; padding: 2rem; animation: slideUp 0.3s ease-out;">
+            <div
+                style="width: 50px; height: 5px; background: var(--border); border-radius: 10px; margin: 0 auto 1.5rem;">
+            </div>
+            <h2
+                style="font-size: 1.2rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center;">
+                Issue e-Challan</h2>
+
+            <button onclick="alert('Opening Scanner...');"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: none; background: rgba(59,130,246,0.1); color: var(--info); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-bottom: 1rem;">
+                <i class="fa-solid fa-qrcode" style="font-size: 1.2rem;"></i> Scan License / ID
+            </button>
+
+            <button onclick="alert('Opening Manual Entry...');"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: 1.5px solid var(--border); background: transparent; color: var(--text); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem;">
+                <i class="fa-regular fa-keyboard" style="font-size: 1.2rem;"></i> Manual Entry
+            </button>
+
+            <button onclick="document.getElementById('challanModal').style.display='none'"
+                style="width: 100%; padding: 1rem; border-radius: 12px; border: none; background: var(--bg); color: var(--text); font-weight: 700; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+    <style>
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</body>
+
+</html>

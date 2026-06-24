@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS – Admin Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy-950: #000d1a;
+            --navy-900: #001226;
+            --navy-800: #001830;
+            --navy-700: #002147;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --surface: #fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+
+        .split-layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* Left Panel - Branding */
+        .left-panel {
+            display: none;
+            flex: 1;
+            background: linear-gradient(145deg, var(--navy-950), var(--navy-800));
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+            color: #fff;
+            padding: 6rem 4rem 4rem 4rem;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .left-panel::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Opera */
+        }
+
+        @media (min-width: 900px) {
+            .left-panel {
+                display: flex;
+            }
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.08) 0%, transparent 60%);
+            top: -200px;
+            left: -200px;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23ffffff" fill-opacity="0.03" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="3"/%3E%3Ccircle cx="13" cy="13" r="3"/%3E%3C/g%3E%3C/svg%3E');
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+        }
+
+        .brand-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .brand-logo i {
+            font-size: 2.2rem;
+            color: var(--gold);
+        }
+
+        .brand-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .brand-title span {
+            color: var(--gold);
+        }
+
+        .brand-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 3rem;
+        }
+
+        .info-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        .step-text h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .step-text p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+
+        /* Right Panel - Form */
+        .right-panel {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+            background: var(--bg);
+            position: relative;
+        }
+
+        @media (max-width: 899px) {
+            .right-panel {
+                padding: 2rem 1rem;
+            }
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            z-index: 10;
+        }
+
+        .back-link:hover {
+            color: var(--navy-700);
+        }
+
+        @media (max-width: 899px) {
+            .back-link {
+                position: relative;
+                top: 0;
+                left: 0;
+                align-self: flex-start;
+                margin-bottom: 2rem;
+                margin-left: 1rem;
+            }
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0,0,0,0.02);
+            margin: auto; /* Centers in available space */
+        }
+
+        @media (max-width: 899px) {
+            .form-wrapper {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--navy-950);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .form-header p {
+            font-size: 0.95rem;
+            color: var(--muted);
+        }
+
+        .warn-banner {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .warn-banner i {
+            color: var(--warning);
+            margin-top: 0.15rem;
+            font-size: 1.1rem;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 2.5rem;
+            background: #fafafa;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .fs-head {
+            padding: 1rem 1.5rem;
+            background: rgba(0, 33, 71, 0.02);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--navy-950);
+        }
+
+        .fs-head i {
+            color: var(--navy-700);
+        }
+
+        .fs-body {
+            padding: 1.5rem;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fg {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .fg:last-child {
+            margin-bottom: 0;
+        }
+
+        .fg label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .fg small {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .iw {
+            position: relative;
+        }
+
+        .iw i.fi {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 1rem;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .iw input,
+        .iw select {
+            width: 100%;
+            padding: 0.85rem 1.2rem 0.85rem 3rem;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: #fff;
+            transition: all 0.2s;
+            appearance: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .iw input:focus,
+        .iw select:focus {
+            outline: none;
+            border-color: var(--navy-700);
+            box-shadow: 0 0 0 4px rgba(0, 33, 71, 0.08);
+        }
+
+        .iw input:focus + i.fi,
+        .iw select:focus + i.fi,
+        .iw input:not(:placeholder-shown) ~ i.fi {
+            color: var(--navy-700);
+        }
+
+        .eye {
+            position: absolute;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Access Level Buttons */
+        .access-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.3rem;
+        }
+
+        .access-btn {
+            flex: 1;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 0.8rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            background: #fff;
+            transition: 0.2s;
+        }
+
+        .access-btn i {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .access-btn span {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .access-btn:hover {
+            border-color: var(--navy-700);
+        }
+
+        .access-btn.active {
+            border-color: var(--navy-700);
+            background: rgba(0, 33, 71, 0.04);
+        }
+
+        .access-btn.active i,
+        .access-btn.active span {
+            color: var(--navy-700);
+        }
+
+        /* Password Strength */
+        .st-track {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .st-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: 0.4s;
+            width: 0;
+        }
+
+        /* MFA Options */
+        .mfa-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            background: #fff;
+            transition: 0.2s;
+        }
+
+        .mfa-option:hover {
+            background: #fafafa;
+        }
+
+        .mfa-option:last-child {
+            border-bottom: none;
+        }
+
+        .mfa-ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: var(--bg);
+            flex-shrink: 0;
+        }
+
+        .mfa-text h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.1rem;
+        }
+
+        .mfa-text p {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .radio-dot {
+            margin-left: auto;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+
+        .mfa-option.selected .radio-dot {
+            border-color: var(--navy-700);
+            background: var(--navy-700);
+            box-shadow: inset 0 0 0 3px #fff;
+        }
+
+        /* Checkboxes */
+        .check-row {
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text);
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .check-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .check-row input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--navy-700);
+            margin-top: 0.15rem;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        /* Actions */
+        .action-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--muted);
+            color: var(--text);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+            color: #fff;
+            border: none;
+            box-shadow: 0 8px 20px rgba(0, 33, 71, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 33, 71, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .login-link a {
+            color: var(--navy-700);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="split-layout">
+        <!-- Left Panel: Branding & Info -->
+        <div class="left-panel">
+            <div class="brand-content">
+                <a href="#" class="brand-logo">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    NH&MP IVMS
+                </a>
+                <h1 class="brand-title">Admin<br><span>Registration</span></h1>
+                <p class="brand-subtitle">
+                    Request elevated access to the Intelligent Vehicle Management System. All registrations require approval from the IT Division.
+                </p>
+                
+                <div class="info-steps">
+                    <div class="step-item">
+                        <div class="step-icon"><i class="fa-solid fa-file-pen"></i></div>
+                        <div class="step-text">
+                            <h4>1. Submit Details</h4>
+                            <p>Provide your official credentials, HQ location, and requested authorization level.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-icon"><i class="fa-solid fa-shield-check"></i></div>
+                        <div class="step-text">
+                            <h4>2. IT Verification</h4>
+                            <p>The IT Division Head manually verifies your details against the central personnel registry.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-icon"><i class="fa-solid fa-envelope-circle-check"></i></div>
+                        <div class="step-text">
+                            <h4>3. Account Activation</h4>
+                            <p>Upon approval (2–3 working days), you will receive an activation link to your official email.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Form -->
+        <div class="right-panel">
+            <a href="admin_login.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+            
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <h2>Request Admin Access</h2>
+                    <p>Complete the form to initiate the approval workflow</p>
+                </div>
+
+                <div class="warn-banner">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Approval Required</strong><br>
+                        Admin accounts are reviewed by the NH&MP IT Division Head within 2–3 working days before activation. False requests may lead to disciplinary action.
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <div class="fs-head"><i class="fa-solid fa-user"></i> Personal Information</div>
+                    <div class="fs-body">
+                        <div class="two-col">
+                            <div class="fg">
+                                <label>First Name</label>
+                                <div class="iw">
+                                    <i class="fa-regular fa-user fi"></i>
+                                    <input type="text" placeholder="Asif">
+                                </div>
+                            </div>
+                            <div class="fg">
+                                <label>Last Name</label>
+                                <div class="iw">
+                                    <i class="fa-regular fa-user fi"></i>
+                                    <input type="text" placeholder="Nawaz">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fg">
+                            <label>Official Email</label>
+                            <div class="iw">
+                                <i class="fa-regular fa-envelope fi"></i>
+                                <input type="email" placeholder="admin@nhmp.gov.pk">
+                            </div>
+                            <small>Must be your assigned @nhmp.gov.pk address</small>
+                        </div>
+                        <div class="two-col">
+                            <div class="fg">
+                                <label>CNIC</label>
+                                <div class="iw">
+                                    <i class="fa-regular fa-id-card fi"></i>
+                                    <input type="text" placeholder="37405-xxxxxxx-x">
+                                </div>
+                            </div>
+                            <div class="fg">
+                                <label>Official Phone</label>
+                                <div class="iw">
+                                    <i class="fa-solid fa-phone fi"></i>
+                                    <input type="tel" placeholder="0300-xxxxxxx">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Credentials -->
+                <div class="form-section">
+                    <div class="fs-head"><i class="fa-solid fa-building"></i> Admin Credentials</div>
+                    <div class="fs-body">
+                        <div class="two-col">
+                            <div class="fg">
+                                <label>Employee / Staff ID</label>
+                                <div class="iw">
+                                    <i class="fa-solid fa-id-badge fi"></i>
+                                    <input type="text" placeholder="NHMP-ADMIN-0091">
+                                </div>
+                            </div>
+                            <div class="fg">
+                                <label>Department</label>
+                                <div class="iw">
+                                    <i class="fa-solid fa-sitemap fi"></i>
+                                    <select>
+                                        <option disabled selected>Select department</option>
+                                        <option>IT Division</option>
+                                        <option>Operations HQ</option>
+                                        <option>Enforcement</option>
+                                        <option>Traffic Mgmt</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fg">
+                            <label>HQ Location</label>
+                            <div class="iw">
+                                <i class="fa-solid fa-location-dot fi"></i>
+                                <select>
+                                    <option disabled selected>Select HQ post</option>
+                                    <option>M2 North HQ – Islamabad</option>
+                                    <option>M2 Central HQ – Lahore</option>
+                                    <option>General HQ – Rawalpindi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fg">
+                            <label>Authorization Code</label>
+                            <div class="iw">
+                                <i class="fa-solid fa-key fi"></i>
+                                <input type="text" placeholder="Issued by IT Head">
+                            </div>
+                            <small>Obtain this code from your department's IT division head</small>
+                        </div>
+                        <div class="fg">
+                            <label>Requested Access Level</label>
+                            <div class="access-row">
+                                <div class="access-btn" onclick="sa(this)">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <span>View Only</span>
+                                </div>
+                                <div class="access-btn active" onclick="sa(this)">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <span>Operational</span>
+                                </div>
+                                <div class="access-btn" onclick="sa(this)">
+                                    <i class="fa-solid fa-crown"></i>
+                                    <span>Full Admin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security & 2FA -->
+                <div class="form-section">
+                    <div class="fs-head"><i class="fa-solid fa-lock"></i> Security & 2FA</div>
+                    <div class="fs-body">
+                        <div class="two-col" style="margin-bottom: 1.5rem;">
+                            <div class="fg">
+                                <label>Master Password</label>
+                                <div class="iw">
+                                    <i class="fa-solid fa-lock fi"></i>
+                                    <input type="password" id="p1" placeholder="••••••••" oninput="cs(this.value)">
+                                    <button class="eye" onclick="tp('p1','e1')"><i id="e1" class="fa-regular fa-eye"></i></button>
+                                </div>
+                                <div class="st-track">
+                                    <div class="st-fill" id="sf"></div>
+                                </div>
+                            </div>
+                            <div class="fg">
+                                <label>Confirm Password</label>
+                                <div class="iw">
+                                    <i class="fa-solid fa-lock fi"></i>
+                                    <input type="password" id="p2" placeholder="••••••••">
+                                    <button class="eye" onclick="tp('p2','e2')"><i id="e2" class="fa-regular fa-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 0.5rem;">
+                            Select 2FA Method (Mandatory)
+                        </div>
+                    </div>
+                    
+                    <div class="mfa-option selected" onclick="sm(this)">
+                        <div class="mfa-ico"><i class="fa-brands fa-google" style="color: #ea4335"></i></div>
+                        <div class="mfa-text">
+                            <h4>Google Authenticator</h4>
+                            <p>Time-based OTP app (Recommended)</p>
+                        </div>
+                        <div class="radio-dot"></div>
+                    </div>
+                    <div class="mfa-option" onclick="sm(this)">
+                        <div class="mfa-ico"><i class="fa-regular fa-message" style="color: #059669"></i></div>
+                        <div class="mfa-text">
+                            <h4>SMS OTP</h4>
+                            <p>Code sent to registered phone</p>
+                        </div>
+                        <div class="radio-dot"></div>
+                    </div>
+                    <div class="mfa-option" onclick="sm(this)">
+                        <div class="mfa-ico"><i class="fa-solid fa-key" style="color: #003d82"></i></div>
+                        <div class="mfa-text">
+                            <h4>Hardware Key</h4>
+                            <p>FIDO2 / YubiKey device</p>
+                        </div>
+                        <div class="radio-dot"></div>
+                    </div>
+                </div>
+
+                <!-- Agreement -->
+                <div class="form-section">
+                    <div class="fs-head"><i class="fa-solid fa-file-signature"></i> Agreement & Consent</div>
+                    <div class="fs-body">
+                        <label class="check-row">
+                            <input type="checkbox"> 
+                            <span>I agree to NH&MP IT Security Policy, Data Governance & Admin Code of Conduct.</span>
+                        </label>
+                        <label class="check-row">
+                            <input type="checkbox"> 
+                            <span>I acknowledge all admin actions in the Command Centre are permanently logged and fully auditable by the IT Division.</span>
+                        </label>
+                        <label class="check-row">
+                            <input type="checkbox"> 
+                            <span>I declare that all credentials and authorization details provided are accurate and officially sanctioned.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <a href="admin_login.html" class="btn btn-outline">Cancel</a>
+                    <a href="../dashboards/hq_dashboard.html" class="btn btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Request
+                    </a>
+                </div>
+
+                <div class="login-link">
+                    Already have an approved account? <a href="admin_login.html">Sign in here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Access Level Selection
+        function sa(el) { 
+            document.querySelectorAll('.access-btn').forEach(b => b.classList.remove('active')); 
+            el.classList.add('active'); 
+        }
+        
+        // MFA Selection
+        function sm(el) { 
+            document.querySelectorAll('.mfa-option').forEach(b => b.classList.remove('selected')); 
+            el.classList.add('selected'); 
+        }
+        
+        // Toggle Password Visibility
+        function tp(id, ico) { 
+            const i = document.getElementById(id); 
+            const e = document.getElementById(ico); 
+            if(i.type === 'password') {
+                i.type = 'text';
+                e.className = 'fa-regular fa-eye-slash';
+                e.style.color = 'var(--navy-700)';
+            } else {
+                i.type = 'password';
+                e.className = 'fa-regular fa-eye';
+                e.style.color = 'var(--muted)';
+            }
+        }
+        
+        // Password Strength Indicator
+        function cs(v) { 
+            const f = document.getElementById('sf'); 
+            let s = 0; 
+            if (v.length >= 8) s++; 
+            if (/[A-Z]/.test(v)) s++; 
+            if (/[0-9]/.test(v)) s++; 
+            if (/[^A-Za-z0-9]/.test(v)) s++; 
+            
+            const colors = ['', '#ef4444', '#f59e0b', '#3b82f6', '#10b981']; 
+            f.style.width = (s * 25) + '%'; 
+            f.style.background = colors[s] || 'transparent'; 
+        }
+    </script>
+</body>
+</html>

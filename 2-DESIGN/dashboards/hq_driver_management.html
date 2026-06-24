@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS HQ – Driver Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue-900: #001830;
+            --blue-800: #002147;
+            --blue-600: #003d82;
+            --green-700: #047857;
+            --green-600: #059669;
+            --green-500: #10b981;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --surface: #fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--blue-900);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.4rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .sb-title {
+            font-size: .95rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-sub {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+            overflow-y: auto;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-sec {
+            padding: .4rem 1rem .2rem;
+            font-size: .62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.2rem;
+            color: rgba(255, 255, 255, .6);
+            font-size: .84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            margin: .1rem .6rem;
+            border-radius: 9px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, .07);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: .88rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: .65rem;
+            font-weight: 800;
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .sb-footer {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .sb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sb-uname {
+            font-size: .8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sb-email {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: .8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tb-left h1 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .tb-left p {
+            font-size: .78rem;
+            color: var(--muted);
+        }
+
+        .tb-actions {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .tb-btn {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .5rem 1rem;
+            border-radius: 9px;
+            font-size: .8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tb-btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+        }
+
+        .tb-btn-primary {
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-600));
+            color: #fff;
+        }
+
+        .content {
+            padding: 1.4rem 1.5rem;
+            flex: 1;
+        }
+
+        /* stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: .95rem 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+        }
+
+        .sc-ico {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .sc-val {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        .sc-lbl {
+            font-size: .72rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        /* filter/search bar */
+        .filter-bar {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 1rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            flex-wrap: wrap;
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: .9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: .85rem;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: .6rem 1rem .6rem 2.5rem;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: .85rem;
+            color: var(--text);
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-wrap input:focus {
+            outline: none;
+            border-color: var(--blue-600);
+            background: #fff;
+        }
+
+        .filter-select {
+            padding: .6rem .9rem;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: .82rem;
+            color: var(--text);
+            background: var(--surface);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* table card */
+        .table-card {
+            background: var(--surface);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+        }
+
+        .table-head {
+            padding: .9rem 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-head h3 {
+            font-size: .9rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: .65rem 1.1rem;
+            text-align: left;
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--muted);
+            background: var(--bg);
+        }
+
+        td {
+            padding: .75rem 1.1rem;
+            font-size: .83rem;
+            color: var(--text);
+            border-top: 1px solid var(--border);
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            font-size: .7rem;
+            font-weight: 700;
+            padding: .22rem .6rem;
+            border-radius: 20px;
+        }
+
+        .bg-green {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green-600);
+        }
+
+        .bg-red {
+            background: rgba(239, 68, 68, .1);
+            color: var(--danger);
+        }
+
+        .bg-orange {
+            background: rgba(245, 158, 11, .1);
+            color: var(--warning);
+        }
+
+        .bg-blue {
+            background: rgba(59, 130, 246, .1);
+            color: var(--info);
+        }
+
+        .score-bar {
+            height: 5px;
+            border-radius: 3px;
+            background: var(--border);
+            min-width: 55px;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            padding: .25rem .65rem;
+            font-size: .74rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--muted);
+            font-family: 'Inter', sans-serif;
+            transition: .15s;
+        }
+
+        .action-btn:hover {
+            background: var(--bg);
+        }
+
+        /* driver detail modal style panel */
+        .driver-card {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .dc-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .72rem;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <div class="sb-brand">
+                <div class="sb-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="sb-title">IVMS HQ</div>
+                    <div class="sb-sub">Command Centre</div>
+                </div>
+            </div>
+            <div class="sb-nav">
+                <div class="nav-sec">Operations</div>
+                <div class="nav-item" onclick="window.location.href='hq_dashboard.html'"><i
+                        class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="nav-item" onclick="window.location.href='hq_incident_review.html'"><i
+                        class="fa-solid fa-magnifying-glass-chart"></i> Incident Review <span class="nav-badge">3</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_echallan_management.html'"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> e-Challan Management <span class="nav-badge">5</span></div>
+                <div class="nav-item" onclick="window.location.href='hq_broadcasts.html'"><i
+                        class="fa-solid fa-bullhorn"></i> Broadcasts</div>
+                <div class="nav-item" onclick="window.location.href='hq_fleet_database.html'"><i
+                        class="fa-solid fa-truck-fast"></i> Fleet Database</div>
+                <div class="nav-sec">Reports</div>
+                <div class="nav-item" onclick="window.location.href='hq_analytics.html'"><i
+                        class="fa-solid fa-chart-column"></i> Analytics</div>
+                <div class="nav-sec">Management</div>
+                <div class="nav-item" onclick="window.location.href='hq_driver_management.html'"><i class="fa-solid fa-id-badge"></i> Driver Accounts</div>
+                <div class="nav-item" onclick="window.location.href='hq_officer_management.html'"><i
+                        class="fa-solid fa-user-shield"></i> Officer Management</div>
+                <div class="nav-sec">System</div>
+                <div class="nav-item" onclick="window.location.href='hq_settings.html'"><i
+                        class="fa-solid fa-sliders"></i> System Settings</div>
+            </div>
+            <div class="sb-footer">
+                <div class="sb-user">
+                    <div class="sb-avatar">AN</div>
+                    <div>
+                        <div class="sb-uname">Admin Nawaz</div>
+                        <div class="sb-email">admin@nhmp.gov.pk</div>
+                    </div><i class="fa-solid fa-right-from-bracket"
+                        style="margin-left:auto;color:rgba(255,255,255,.3);cursor:pointer;"
+                        onclick="window.location.href='../auth/admin_login.html'"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="tb-left">
+                    <h1><i class="fa-solid fa-id-badge" style="color:var(--green-600)"></i> Driver Account Management
+                    </h1>
+                    <p>Manage registered driver accounts, licenses, and permit status</p>
+                </div>
+                <div class="tb-actions">
+                    <button class="tb-btn tb-btn-outline" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-file-import"></i> Import CSV</button>
+                    <button class="tb-btn tb-btn-primary" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-user-check"></i> Approve Driver</button>
+                </div>
+            </div>
+            <div class="content">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="sc-ico" style="background:rgba(59,130,246,.1);color:var(--info)"><i
+                                class="fa-solid fa-users"></i></div>
+                        <div>
+                            <div class="sc-val">1,847</div>
+                            <div class="sc-lbl">Total Registered</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-ico" style="background:rgba(16,185,129,.1);color:var(--green-600)"><i
+                                class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <div class="sc-val">1,702</div>
+                            <div class="sc-lbl">Active & Verified</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-ico" style="background:rgba(239,68,68,.1);color:var(--danger)"><i
+                                class="fa-solid fa-ban"></i></div>
+                        <div>
+                            <div class="sc-val">48</div>
+                            <div class="sc-lbl">Suspended</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-ico" style="background:rgba(245,158,11,.1);color:var(--warning)"><i
+                                class="fa-solid fa-clock"></i></div>
+                        <div>
+                            <div class="sc-val">97</div>
+                            <div class="sc-lbl">Pending Review</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input type="text"
+                            placeholder="Search by name, CNIC, license, vehicle..."></div>
+                    <select class="filter-select">
+                        <option>All Status</option>
+                        <option>Active</option>
+                        <option>Suspended</option>
+                        <option>Pending</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>All Companies</option>
+                        <option>Faisal Movers</option>
+                        <option>Daewoo Express</option>
+                        <option>Niazi Express</option>
+                        <option>Kohistan Travels</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>All Scores</option>
+                        <option>Excellent (90+)</option>
+                        <option>Good (70–89)</option>
+                        <option>At Risk (&lt;70)</option>
+                    </select>
+                    <button class="tb-btn tb-btn-outline" onclick="alert('This action will be fully functional in the backend implementation.')"><i class="fa-solid fa-filter"></i> Apply</button>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-head">
+                        <h3>Registered Drivers <span style="color:var(--muted);font-size:.78rem;font-weight:600;">(1,847
+                                total · 1–20 shown)</span></h3>
+                        <div style="display:flex;gap:.5rem;">
+                            <button class="tb-btn tb-btn-outline" style="font-size:.74rem;padding:.38rem .7rem;" onclick="alert('This action will be fully functional in the backend implementation.')">←
+                                Prev</button>
+                            <button class="tb-btn tb-btn-outline" style="font-size:.74rem;padding:.38rem .7rem;" onclick="alert('This action will be fully functional in the backend implementation.')">Next
+                                →</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Driver</th>
+                                <th>License / CNIC</th>
+                                <th>Vehicle</th>
+                                <th>Company</th>
+                                <th>Safety Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="driver-card">
+                                        <div class="dc-avatar"
+                                            style="background:linear-gradient(135deg,#047857,#10b981)">AH</div>
+                                        <div><strong>Ali Hassan</strong><br><span
+                                                style="font-size:.72rem;color:var(--muted)">SP-23421</span></div>
+                                    </div>
+                                </td>
+                                <td>DL-RWP-123456<br><span
+                                        style="font-size:.72rem;color:var(--muted)">37405-1234567-1</span></td>
+                                <td>RWP-1234 · Bus</td>
+                                <td>Faisal Movers</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:.5rem"><span
+                                            style="font-weight:800;color:var(--green-600)">82</span>
+                                        <div class="score-bar">
+                                            <div class="score-fill" style="width:82%;background:var(--green-600)"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-green">Active</span></td>
+                                <td>
+                                    <div style="display:flex;gap:.4rem;"><button class="action-btn" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='driver_profile.html'">View</button><button
+                                            class="action-btn" style="color:var(--warning);" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="if(confirm('Suspend this driver account? They will not be able to log in.')) alert('Driver account suspended. A notification has been sent to the driver.')">Suspend</button></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="driver-card">
+                                        <div class="dc-avatar"
+                                            style="background:linear-gradient(135deg,#1d4ed8,#60a5fa)">TK</div>
+                                        <div><strong>Tariq Khan</strong><br><span
+                                                style="font-size:.72rem;color:var(--muted)">SP-19882</span></div>
+                                    </div>
+                                </td>
+                                <td>DL-LHR-089412<br><span
+                                        style="font-size:.72rem;color:var(--muted)">35201-9876543-2</span></td>
+                                <td>LHR-8812 · Hino</td>
+                                <td>Niazi Express</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:.5rem"><span
+                                            style="font-weight:800;color:var(--danger)">38</span>
+                                        <div class="score-bar">
+                                            <div class="score-fill" style="width:38%;background:var(--danger)"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-red">High Risk</span></td>
+                                <td>
+                                    <div style="display:flex;gap:.4rem;"><button class="action-btn" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='driver_profile.html'">View</button><button
+                                            class="action-btn"
+                                            style="color:var(--danger);border-color:rgba(239,68,68,.3);" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="if(confirm('Suspend this driver account? They will not be able to log in.')) alert('Driver account suspended. A notification has been sent to the driver.')">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="driver-card">
+                                        <div class="dc-avatar"
+                                            style="background:linear-gradient(135deg,#d97706,#fbbf24)">FM</div>
+                                        <div><strong>Farhan Malik</strong><br><span
+                                                style="font-size:.72rem;color:var(--muted)">SP-22104</span></div>
+                                    </div>
+                                </td>
+                                <td>DL-ISB-223819<br><span
+                                        style="font-size:.72rem;color:var(--muted)">38403-5551234-3</span></td>
+                                <td>ISB-4491 · Bus</td>
+                                <td>Daewoo Express</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:.5rem"><span
+                                            style="font-weight:800;color:var(--warning)">61</span>
+                                        <div class="score-bar">
+                                            <div class="score-fill" style="width:61%;background:var(--warning)"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-orange">Warning</span></td>
+                                <td>
+                                    <div style="display:flex;gap:.4rem;"><button class="action-btn" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='driver_profile.html'">View</button><button
+                                            class="action-btn" style="color:var(--warning);" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="if(confirm('Suspend this driver account? They will not be able to log in.')) alert('Driver account suspended. A notification has been sent to the driver.')">Suspend</button></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="driver-card">
+                                        <div class="dc-avatar"
+                                            style="background:linear-gradient(135deg,#6d28d9,#a78bfa)">SB</div>
+                                        <div><strong>Shahid Bashir</strong><br><span
+                                                style="font-size:.72rem;color:var(--muted)">SP-31102</span></div>
+                                    </div>
+                                </td>
+                                <td>DL-SHK-332214<br><span
+                                        style="font-size:.72rem;color:var(--muted)">34501-7778899-1</span></td>
+                                <td>SHK-7762 · Coach</td>
+                                <td>Bilal Travels</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:.5rem"><span
+                                            style="font-weight:800;color:var(--info)">74</span>
+                                        <div class="score-bar">
+                                            <div class="score-fill" style="width:74%;background:var(--info)"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-blue">Monitor</span></td>
+                                <td>
+                                    <div style="display:flex;gap:.4rem;"><button class="action-btn" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="window.location.href='driver_profile.html'">View</button><button
+                                            class="action-btn" onclick="alert('This action will be fully functional in the backend implementation.')" onclick="if(confirm('Suspend this driver account? They will not be able to log in.')) alert('Driver account suspended. A notification has been sent to the driver.')">Suspend</button></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
