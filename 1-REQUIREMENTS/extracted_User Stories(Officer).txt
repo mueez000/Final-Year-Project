@@ -1,0 +1,128 @@
+﻿User Stories
+2 Officer User Stories (Mobile Application Mode)
+2.1 US#1: Officer - Secure Role-Based Login
+Story:
+As an officer, I want to securely log in to the IVMS mobile application using my officer credentials, so that I can access real-time incidents and respond to events.
+Trigger:
+When the officer opens the IVMS app and selects â€œOfficer Modeâ€, the system shall display the role-based login screen.
+Description:
+This functionality provides role-based access for NH&amp;MP field officers within the same Flutter app.
+Acceptance Criteria:
+The system shall support separate login flow for Officer credentials (distinct from Driver).
+The system shall validate officer ID + password or biometric.
+Upon successful login, the system shall load the officer dashboard with live incident map.
+The system shall restrict access to driver features and enforce role-based permissions.
+2.2 US#2: Officer - View Real-Time Incidents and SOS/Crash Alerts on Map Interface
+Story:
+As an officer, I want to view real-time incidents and SOS/crash alerts on a map interface, so that I can quickly locate and respond to emergencies.
+Trigger:
+When the officer opens the dashboard after login.
+Description:
+Live map shows all active incidents.
+Acceptance Criteria:
+The system shall display an interactive map with pins for all active SOS/crash incidents.
+The system shall show vehicle details, location, and severity on tap.
+The system shall auto-refresh every 5 seconds.
+2.3 US#3: Officer - Receive High-Priority Push Notifications for SOS and Crash Events
+Story:
+As an officer, I want to receive high-priority push notifications for SOS and crash events, so that I am immediately notified even when the app is in background.
+Trigger:
+When any SOS or crash is detected.
+Description:
+Instant alerts for rapid response.
+Acceptance Criteria:
+The system shall send high-priority push notifications with sound and vibration.
+The system shall include incident location and severity in the notification.
+2.4 US#4: Officer - Accept Incident and Update Status
+Story:
+As an officer, I want to accept an incident and update its status (Acknowledged â†’ 
+En
+ Route â†’ Resolved), so that HQ and other officers know the response progress.
+Trigger:
+When the officer taps an incident on the map.
+Description:
+Workflow for incident management.
+Acceptance Criteria:
+The system shall display status buttons: Acknowledge, 
+En
+ Route, Resolved.
+The system shall update status in real-time on the shared dashboard.
+The system shall notify HQ of every status change.
+2.5 US#5: Officer - Navigate to Incident Location Using Integrated Maps
+Story:
+As an officer, I want to navigate to the incident location using integrated maps, so that I can reach the scene quickly.
+Trigger:
+When the officer selects â€œNavigateâ€ on an incident.
+Description:
+Seamless map integration
+.
+Acceptance Criteria:
+The system shall
+ open Google Maps 
+with turn-by-turn directions.
+The system shall show estimated time of arrival.
+2.6 US#6: Officer - Upload Geo-Tagged Photos and Videos as Incident Evidence
+Story:
+As an officer, I want to upload geo-tagged photos and videos as incident evidence, so that HQ can review accurate on-site documentation.
+Trigger:
+When the officer selects â€œAdd Evidenceâ€ on an incident.
+Description:
+Evidence collection at the scene.
+Acceptance Criteria:
+The system shall automatically tag uploads with GPS coordinates and timestamp.
+The system shall support photo and video upload (max 50 MB).
+The system shall sync evidence to Firebase instantly.
+2.7 US#7: Officer - Submit Detailed Field Reports and Incident Observations
+Story:
+As an officer, I want to submit detailed field reports and incident observations, so that complete records are maintained for investigation and analytics.
+Trigger:
+When the officer selects â€œSubmit Reportâ€ after updating status.
+Description:
+Structured reporting.
+Acceptance Criteria:
+The system shall provide a form with fields for observations, vehicle condition, weather, etc.
+The system shall allow attachment of previously uploaded evidence.
+2.8 US#8: Officer - Report Roadblocks, Fog, Hazards, or Broken-Down Vehicles
+Story:
+As an officer, I want to report roadblocks, fog, hazards, or broken-down vehicles, so that other officers and drivers can be warned.
+Trigger:
+When the officer selects â€œReport Hazardâ€ from the menu.
+Description:
+Proactive hazard reporting
+.
+Acceptance Criteria:
+The system shall allow selection of hazard type and location.
+The system shall broadcast the report to nearby drivers and officers.
+2.9 US#9: Officer - Receive Headquarters Broadcast Messages
+Story:
+As an officer, I want to receive headquarters broadcast messages, so that I stay updated on operational instructions.
+Trigger:
+When HQ sends a broadcast.
+Description:
+One-way communication from HQ.
+Acceptance Criteria:
+The system shall deliver messages via push and in-app inbox.
+2.10 US#10: Officer - View Assigned Patrol Area and Live Incident 
+Heatmap
+Story:
+As an officer, I want to view my assigned patrol area and live incident 
+heatmap
+, so that I can prioritize high-risk zones.
+Trigger:
+When the officer opens the â€œPatrolâ€ tab.
+Description:
+Visual operational awareness.
+Acceptance Criteria:
+The system shall highlight the assigned patrol area on the map.
+The system shall overlay a color-coded incident 
+heatmap
+.
+2.11 US#11: Officer - Log Out
+Story:
+As an officer, I want to log out securely, so that my session ends and sensitive data is cleared.
+Trigger:
+When the officer selects â€œLog Outâ€ from the menu.
+Description:
+Secure session termination.
+Acceptance Criteria:
+The system shall clear all cached data and redirect to login screen.

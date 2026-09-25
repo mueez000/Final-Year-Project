@@ -1,0 +1,233 @@
+﻿User Stories
+3 Headquarters Monitoring Dashboard User Stories (IT Center / Super Admin)
+3.1 US#1: HQ Admin - Secure Web-Based Login
+Story:
+As an HQ admin, I want to securely log in to the centralized IVMS web dashboard, so that I can monitor all buses, incidents, and analytics.
+Trigger:
+After entering credentials on the web login page, the system shall authenticate and redirect to the dashboard.
+Description:
+This functionality provides secure access for NH&amp;MP IT Center staff to the centralized monitoring platform.
+Acceptance Criteria:
+The system shall support web-based login with Admin/HQ credentials (Firebase Authentication).
+The system shall display an interactive map with all registered commercial buses in real-time.
+The system shall show live incident dashboard with SOS and crash alerts.
+The system shall allow configuration of speed zones, hazard zones, and AI parameters.
+3.2 US#2: HQ Admin - Real-Time Monitoring of All Registered Commercial Buses on Interactive Map
+Story:
+As an HQ admin, I want real-time monitoring of all registered commercial buses on an interactive map, so that I have complete visibility of the fleet.
+Trigger:
+When the admin opens the dashboard.
+Description:
+Live fleet tracking.
+Acceptance Criteria:
+The system shall show all active buses with current location, speed, and status.
+The system shall allow zooming, filtering by route, and clicking for details.
+3.3 US#3: HQ Admin - View Live Incident Dashboard with SOS and Crash Alerts
+Story:
+As an HQ admin, I want to view a live incident dashboard with SOS and crash alerts, so that I can oversee all emergencies centrally.
+Trigger:
+When any incident occurs.
+Description:
+Centralized incident overview.
+Acceptance Criteria:
+The system shall display a real-time list and map of all active incidents.
+The system shall show severity, location, and current officer response status.
+3.4 US#4: HQ Admin - Review and Validate Officer-Submitted Evidence
+Story:
+As an HQ admin, I want to review and validate officer-submitted evidence (photos/videos), so that I can verify incident reports.
+Trigger:
+When an officer submits evidence.
+Description:
+Quality control of field data.
+Acceptance Criteria:
+The system shall display all uploaded media with geo-tags and timestamps.
+The system shall allow approval or rejection with comments.
+3.5 US#5: HQ Admin - Track Officer Activity and Incident Response Status
+Story:
+As an HQ admin, I want to track officer activity and incident response status, so that I can monitor response efficiency.
+Trigger:
+When viewing the â€œOfficer Activityâ€ tab.
+Description:
+Performance oversight.
+Acceptance Criteria:
+The system shall show officer locations, current status, and response times.
+3.6 US#6: HQ Admin - Access System Analytics, 
+Heatmaps
+, Violation Trends, and Risk Pattern Visualization
+Story:
+As an HQ admin, I want to access system analytics, 
+heatmaps
+, violation trends, and risk pattern visualization, so that I can make data-driven decisions.
+Trigger:
+When the admin navigates to the â€œAnalyticsâ€ section.
+Description:
+Comprehensive reporting.
+Acceptance Criteria:
+The system shall provide interactive dashboards with graphs, 
+heatmaps
+, and trend charts.
+The system shall allow filtering by date, route, or driver.
+3.7 US#7: HQ Admin - Configure Speed Zones, Hazard Zones, Operational Thresholds, and AI Model Parameters
+Story:
+As an HQ admin, I want to configure speed zones, hazard zones, operational thresholds, and AI model parameters, so that the system remains accurate and adaptable.
+Trigger:
+When the admin accesses the â€œConfigurationâ€ panel.
+Description:
+System administration.
+Acceptance Criteria:
+The system shall provide forms to add/edit zones and thresholds.
+The system shall allow adjustment of AI sensitivity levels.
+3.8 US#8: HQ Admin - Broadcast Operational and Safety Notifications to Drivers and Officers
+Story:
+A
+s an HQ admin, I want to broadcast operational and safety notifications to drivers and officers, so that important information reaches all users instantly.
+Trigger:
+When the admin selects â€œBroadcast Messageâ€.
+Description:
+M
+ass communication.
+Acceptance Criteria:
+The system shall allow targeting by role, route, or all users.
+The system shall log all broadcasts for audit.
+3.9 US#9: HQ Admin - Manage Incident Archives and Historical Data
+Story:
+As an HQ admin, I want to manage incident archives and historical data, so that past incidents can be reviewed for investigations or reporting.
+Trigger:
+When the admin navigates to the â€œArchivesâ€ section.
+Description:
+Data retention and retrieval.
+Acceptance Criteria:
+The system shall allow search and export of historical incidents.
+3.10 US#10: HQ Admin - Oversee E-Challan Generation and Violation Reports
+Story:
+As an HQ admin, I want to oversee e-challan generation and violation reports, so that enforcement is consistent and auditable.
+Trigger:
+When violations are logged or manually reviewed.
+Description:
+Automated enforcement oversight.
+Acceptance Criteria:
+The system shall display pending and issued e-challans.
+The system shall allow manual approval or cancellation.
+3.11 US#11: HQ Admin - Account Settings (Notification Preferences, Password Change)
+Story:
+As an HQ admin, I want to manage my account settings (notification preferences, password change), so that I can personalize my experience and maintain security.
+Trigger:
+When the admin clicks the profile icon.
+Description:
+User account management.
+Acceptance Criteria:
+The system shall allow password change and notification toggle.
+3.12
+ US#12
+: HQ Admin - View Officers (Officer Management Dashboard)
+Story:
+As an HQ admin, I want to view the complete list of all NH&amp;MP officers along with their current duties, patrol areas, activity status, and performance metrics, so that I can efficiently manage officer deployment and ensure proper coverage across the motorway
+.
+Trigger:
+When the HQ admin clicks the â€œOfficersâ€ tab from the sidebar or dashboard menu, the system shall redirect the admin to the Officers Management page.
+Description:
+This functionality helps the HQ admin to view all registered officers of NH&amp;MP across all locations/zones, track their assigned duties, current patrol status, and performance so they can make informed decisions about resource allocation and duty management.
+Acceptance Criteria:
+The system shall display the â€œOfficersâ€ page upon clicking the â€œOfficersâ€ tab from the sidebar.
+The system shall display the â€œTotal Number of Officersâ€ on the top.
+The system shall display the list of all officers along with the following parameters:
+Officer Name
+Officer Profile Picture (or default User Profile Icon if not uploaded)
+Officer ID / Badge Number
+Rank / Designation
+Assigned Patrol Area / Zone (e.g., M-2 Salt Range Sector)
+Current Duty Status (On Patrol, On Leave, Responding to Incident, Offline)
+Last Active Time
+Performance Score / Response Time Average (last 30 days)
+Number of Incidents Handled (current month)
+The system shall display the â€œUser Profile Iconâ€ if any officer has not uploaded their profile picture.
+By default, the system shall display all officers of all locations/zones.
+The system shall allow the admin to filter officers by Patrol Area, Rank, Duty Status, or Performance Score.
+When the admin clicks any filter, the system shall instantly update the list with matching officers only.
+The system shall display an â€œAdd New Officerâ€ button at the top right of the page.
+3.13
+ US#13
+: HQ Admin - Add New Officer
+Story:
+As an HQ admin, I want to add a new officer to the system so that I can assign them duties, patrol areas, and grant access to the mobile application.
+Trigger:
+W
+hen the HQ admin clicks the â€œAdd New Officerâ€ button from the Officers page, the system shall open the Add Officer pop-up.
+Description:
+This functionality allows the HQ admin to register a new NH&amp;MP officer, assign initial duties/patrol area, and enable their mobile app access in one streamlined process.
+Acceptance Criteria:
+The system shall open a modal pop-up titled â€œAdd New Officerâ€ with the following mandatory fields:
+Full Name (Type: Alphanumeric, required)
+Officer ID / Badge Number (Type: Alphanumeric, unique, required)
+CNIC Number (Type: Numeric, 13 digits with dashes, required)
+Rank / Designation (Dropdown: Constable, Sub-Inspector, Inspector, etc.)
+Phone Number (Type: Numeric, 11 digits, required)
+Email (optional)
+Assigned Patrol Area / Zone (Dropdown with all defined zones)
+Temporary Password (auto-generated or manually set)
+The system shall validate uniqueness of Officer ID and CNIC.
+The system shall automatically create officer credentials and send login details via SMS/Email.
+The system shall display â€œOfficer successfully added and notifiedâ€ confirmation message.
+After successful addition, the new officer shall appear in the Officers list with status â€œOfflineâ€ until first login.
+3.14 US#14
+: HQ Admin - Assign / Edit Officer Duties and Patrol Areas
+Story:
+As an HQ admin, I want to assign or edit an officerâ€™s duties and patrol areas, so that I can dynamically manage officer deployment according to operational needs and incident hotspots.
+Trigger:
+When the HQ admin clicks the â€œAssign Dutyâ€ or â€œEditâ€ icon next to any officer in the Officers list, the system shall open the duty assignment pop-up.
+Description:
+This functionality enables the HQ admin to assign specific patrol duties, shift timings, and zones to officers and update them in real-time.
+Acceptance Criteria:
+â€¢ The system shall display a pop-up with the selected officerâ€™s details pre-filled.
+â€¢ The system shall allow selection of:
+Patrol Area / Zone (multi-select if required)
+Shift Timing (Start Time, End Time with calendar and time picker)
+Duty Type (Patrol, Incident Response, Checkpoint, Rest)
+Additional Notes (optional)
+â€¢ The system shall validate that End Time is after Start Time.
+â€¢ The system shall display â€œDuty Assigned Successfullyâ€ and immediately update the officerâ€™s status and map view.
+â€¢ The system shall send a push notification to the officerâ€™s mobile app with the new duty details.
+â€¢ The system shall maintain a complete audit log of all duty changes.
+3.15 US#15
+: HQ Admin - View Officer Performance &amp; Duty History
+Story:
+As an HQ admin, I want to view detailed performance reports and duty history of any officer, so that I can evaluate efficiency and make data-driven decisions for promotions or re-assignments.
+Trigger:
+When the HQ admin clicks the â€œPerformanceâ€ or â€œView Detailsâ€ icon next to any officer.
+Description:
+This functionality provides comprehensive analytics for individual officers.
+Acceptance Criteria:
+â€¢ The system shall open a detailed officer profile page or modal.
+â€¢ The system shall display:
+Overall Performance Score
+Response Time Statistics
+Incidents Handled (with breakdown)
+Duty History (calendar view with past assignments)
+Violation/Complaint Records (if any)
+â€¢ The system shall allow filtering duty history by date range.
+â€¢ The system shall allow export of the report as PDF.
+3.16 US#16
+: HQ Admin - Deactivate / Remove Officer
+Story:
+As an HQ admin, I want to deactivate or permanently remove an officer from the system, so that I can revoke access when required (transfer, retirement, disciplinary action).
+Trigger:
+When the HQ admin clicks the â€œDeactivateâ€ or â€œRemoveâ€ option next to any officer.
+Description:
+This functionality ensures secure 
+offboarding
+ of officers.
+Acceptance Criteria:
+The system shall display a confirmation pop-up: â€œAre you sure you want to deactivate this officer?â€ with Yes/No options.
+On â€œYesâ€, the system shall immediately revoke login access and mark the officer as â€œInactiveâ€.
+The system shall notify the officer via push/SMS that their access has been revoked.
+The system shall preserve all historical data for audit but prevent future logins.
+3.17 US#17
+: HQ Admin - Log Out
+Story:
+As an HQ admin, I want to log out securely, so that my session ends.
+Trigger:
+When the admin selects â€œLog Outâ€.
+Description:
+Secure session termination.
+Acceptance Criteria:
+â€¢ The system shall clear session and redirect to login page.
