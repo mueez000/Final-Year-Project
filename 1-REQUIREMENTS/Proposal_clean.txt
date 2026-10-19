@@ -1,0 +1,482 @@
+﻿
+AI-POWERED INTELLIGENT VEHICLE MONITORING SYSTEM FOR NH&MP
+
+Project Proposal
+MUHAMMAD ALI HASSAN KHAN-SP23674
+MUEEZ AHMAD-SP23653
+FAIZAN AHMER-FL21472
+
+Supervised By
+Dr. Zohaib Ahmed
+
+Submitted for the partial fulfillment of BS Software Engineering degree to the Faculty of Engineering & Computer Science 
+
+NATIONAL UNIVERSITY OF MODERN LANGUAGES
+ ISLAMABAD
+
+ABSTRACT
+
+Pakistan’s motorway network has significantly enhanced intercity travel, strengthening connectivity and driving economic growth. The M2 Motorway, linking Islamabad and Lahore, serves as a vital corridor for buses and vans. However, recurring safety challenges persist, particularly in high-risk zones such as the Salt Range, where more than 350 accidents have occurred since 1997, claiming over 200 lives. A recent example includes the 2025 Balkassar bus crash, caused by brake failure, which resulted in nine fatalities. The convoy system at Kallar Kahar, introduced to curb overspeeding in the Salt Range following these accidents, ensures safer travel but often causes delays, as passengers must wait for convoys to assemble, leading to significant time wastage.
+To tackle this issue, we’re working with the National Highways and Motorway Police (NH&MP) to create an AI-based Intelligent Vehicle Monitoring System (IVMS) for the M2. The system will require bus and van drivers to operate a cross-platform mobile application that will capture real-time driving and location data. Leveraging artificial intelligence, it will monitor speed compliance, generate hazard alerts, issue automated e-challans, and detect crashes through sensor and audio analysis. Integrated profiling of drivers, vehicles, and transport companies will support NH&MP analytics, while alerts will be automatically routed to the nearest patrol officers for rapid response.
+
+The system will be built using Flutter for cross-platform efficiency, Firebase for scalable backend services, and ML Kit with TensorFlow Lite for on-device machine learning. The initial launch will focus on the M2, Drivers will receive performance profiles and safety ratings, creating a useful dataset for future policies and road safety improvements. The long-term goal is to expand IVMS across the country, reducing accidents, improving driver responsibility, and making long-distance travel safer for everyone.
+
+
+
+
+Table of Contents
+ TOC \o "1-3" \h \z \u Chapter 1. Introduction PAGEREF _Toc227337439 \h 5
+1.1 Introduction PAGEREF _Toc227337440 \h 5
+1.2 Problem Statement PAGEREF _Toc227337441 \h 5
+1.3 Aims and Objectives PAGEREF _Toc227337442 \h 6
+1.4 Proposed System PAGEREF _Toc227337443 \h 7
+1.4.1 Driver Mobile Application PAGEREF _Toc227337444 \h 7
+1.4.2 Officer Mobile Application Interface PAGEREF _Toc227337445 \h 7
+1.4.3 Centralized Dashboard (Headquarters) PAGEREF _Toc227337446 \h 7
+1.4.4 AI-Based Monitoring and Enforcement PAGEREF _Toc227337447 \h 7
+1.4.5 Incident Detection and Emergency Response PAGEREF _Toc227337448 \h 8
+1.4.6 Profiling and Analytics System PAGEREF _Toc227337449 \h 8
+1.5 Scope of Study PAGEREF _Toc227337450 \h 8
+1.6 Methodology PAGEREF _Toc227337451 \h 9
+1.7 Tools and Technology PAGEREF _Toc227337452 \h 9
+1.8 Feasibility Study PAGEREF _Toc227337453 \h 10
+1.8.1 Risk Analysis PAGEREF _Toc227337454 \h 10
+1.9 Deliverables PAGEREF _Toc227337455 \h 11
+1.10 Hardware and Software Resources Requirement PAGEREF _Toc227337456 \h 11
+1.11 Applications PAGEREF _Toc227337457 \h 12
+1.12 Milestones PAGEREF _Toc227337458 \h 13
+1.13 Work Breakdown Structure PAGEREF _Toc227337459 \h 13
+1.14 Gantt Chart PAGEREF _Toc227337460 \h 14
+Chapter 2. Existing Systems PAGEREF _Toc227337461 \h 15
+2.1 Introduction PAGEREF _Toc227337462 \h 15
+2.2 Existing Systems PAGEREF _Toc227337463 \h 16
+2.2.1 Manual Speed Monitoring PAGEREF _Toc227337464 \h 16
+2.2.2 Convoy System PAGEREF _Toc227337465 \h 17
+2.2.3 Manual Incident Reporting PAGEREF _Toc227337466 \h 18
+2.2.4 Automatic Speed Camera System PAGEREF _Toc227337467 \h 18
+2.3 Comparison of Existing Systems and Proposed System PAGEREF _Toc227337468 \h 20
+2.4 Summary PAGEREF _Toc227337469 \h 21
+References PAGEREF _Toc227337470 \h 22
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Chapter 1. Introduction
+
+1.1 Introduction
+The M2 Motorway, a critical infrastructure link between Islamabad and Lahore, has transformed Pakistan’s intercity transportation by reducing travel times and enabling efficient movement of passengers and goods. As one of the country’s busiest routes, it accommodates large volumes of buses and vans daily.
+Despite its importance, safety issues persist due to diverse terrain, frequent speed violations, and delayed incident response. The Salt Range remains one of the most hazardous segments. Since 1997, its 10-kilometer downhill stretch has witnessed more than 350 accidents and over 200 fatalities. The 2025 Balkassar crash, caused by brake failure, further highlighted the urgent need for advanced safety interventions.
+This proposal presents the development of an AI-powered Intelligent Vehicle Monitoring System (IVMS) in collaboration with NH&MP. Initially targeting buses and vans on the M2, the system is designed for eventual nationwide deployment. By combining real-time monitoring, AI-driven enforcement, and centralized profiling, IVMS aims to reduce accidents, enhance accountability, and modernize Pakistan’s motorway safety infrastructure.
+
+1.2 Problem Statement
+The current motorway monitoring system relies heavily on manual methods such as speed guns, driver reporting, and physical vehicle interception.
+Major problems include:
+Lack of real-time monitoring 
+Delayed emergency response 
+Traffic congestion due to manual stopping 
+Inefficient convoy system 
+No centralized analytics 
+Easy rule evasion by drivers 
+Even recent technologies like automatic speed cameras still depend on manual enforcement, making the system inefficient.
+1.3 Aims and Objectives
+The main aim of this project is to develop a comprehensive AI-based Intelligent Vehicle Monitoring System (IVMS) that modernizes motorway safety and enforcement through intelligent automation.
+Objectives:
+Develop a user-friendly cross-platform mobile application for both drivers (for compliance and alerts) and NH&MP officers (for real-time monitoring and response).
+Design and implement a centralized web-based dashboard for NH&MP headquarters to enable holistic oversight, analytics, and reporting.
+Implement AI-based speed monitoring using GPS data, sensor fusion, and on-device machine learning.
+Generate automated electronic challans (e-challans) for traffic violations with minimal human intervention.
+Detect accidents in real-time using smartphone sensors (accelerometer, gyroscope) and audio analysis for crash sounds.
+Provide instant real-time alerts and notifications to nearby NH&MP officers and control rooms.
+Replace the traditional convoy system in hazardous zones like the Salt Range with a smart, AI-driven virtual enforcement mechanism.
+Build a robust driver and vehicle profiling system using historical data to identify high-risk patterns and support predictive safety measures.
+
+
+
+
+
+
+1.4 Proposed System
+The proposed Intelligent Vehicle Monitoring System (IVMS) is an AI-powered solution designed to automate motorway monitoring, enforcement, and incident management. It integrates a driver mobile application, officer interface, and a centralized dashboard to ensure real-time monitoring and intelligent decision-making.
+
+1.4.1 Driver Mobile Application
+A cross-platform app (available for Android and iOS) that runs in the background or foreground. It collects real-time data including GPS location, speed, accelerometer readings, and other sensor inputs. The app provides drivers with safety alerts, speed limit warnings, hazardous zone notifications (e.g., Salt Range), and compliance feedback while ensuring data privacy.
+
+1.4.2 Officer Mobile Application Interface
+A dedicated mobile/web interface for motorway patrol officers. It delivers real-time violation alerts, vehicle tracking on a map, incident locations, and tools for quick response coordination, reducing reliance on radio communication.
+
+1.4.3 Centralized Dashboard (Headquarters)
+A secure web-based analytics platform for NH&MP headquarters. It offers live monitoring of all vehicles on M2, violation trends, heatmaps of accident-prone areas, performance reports, and AI-generated insights for resource allocation and policy decisions.
+
+1.4.4 AI-Based Monitoring and Enforcement
+Utilizes on-device AI (TensorFlow Lite) combined with cloud processing to detect overspeeding, harsh braking, lane deviation patterns, and other violations. The system automatically generates and issues e-challans linked to vehicle registration and driver profiles.
+
+1.4.5 Incident Detection and Emergency Response
+Employs smartphone sensors and audio analysis to detect sudden deceleration, impact, or crash sounds. Upon detection, the system automatically triggers an SOS alert with precise GPS location, vehicle details, and severity estimation to the nearest officers and emergency services, enabling faster response times.
+
+
+1.4.6 Profiling and Analytics System
+The system maintains profiles of drivers, vehicles, and transport companies.
+It stores violation history, performance data, and safety ratings, which helps in identifying high-risk drivers and improving overall traffic management.
+
+1.5 Scope of Study
+Inclusions:
+Design and development of driver and officer mobile applications. 
+Implementation of the centralized headquarters dashboard. 
+AI models for speed monitoring, violation detection, and accident identification. 
+Integration of real-time alerts, e-challan generation, and basic profiling. 
+Simulation and testing on sample M2 route data.
+Excluded:
+Physical hardware installation on vehicles or roadside infrastructure. 
+Nationwide deployment across all Pakistani motorways. 
+Integration with existing NH&MP legacy systems beyond API-level connectivity (assumed for future phases). 
+Full-scale legal and regulatory framework finalization (recommendations only).
+
+
+
+1.6 Methodology
+The project will follow the Waterfall methodology, a linear and sequential approach suitable for well-defined requirements. 
+Phases include:
+Requirements Gathering: Collect inputs from NH&MP and stakeholders (October 2025).
+System Design: Architect app, AI models, and dashboard (November-December 2025).
+Implementation: Develop and code modules (January-May 2026).
+Testing: Unit, integration, and field tests (June-August 2026).
+Deployment: Pilot launch on Salt Range (September 2026).
+Maintenance: Post-launch support and iterations (October-November 2026).
+
+1.7 Tools and Technology
+Frontend & Cross-Platform Development: Flutter (for both driver and officer apps). 
+Native Development (if needed): Java / Kotlin for Android-specific optimizations. 
+Backend & Real-time Database: Firebase (Authentication, Firestore, Cloud Functions, Storage). 
+AI & Machine Learning: TensorFlow Lite for on-device inference (speed estimation, crash detection). 
+Mapping & Location Services: Google Maps API / Flutter Maps for real-time tracking and route visualization. 
+Additional Tools: Android Studio, Xcode, Git for version control, and Postman for API testing.
+
+
+
+
+1.8 Feasibility Study
+Technical Feasibility: Highly feasible with mature technologies like Flutter and TensorFlow Lite. On-device AI reduces dependency on constant internet. 
+Economic Feasibility: Cost-effective as it leverages existing smartphones carried by drivers and officers, minimizing new hardware needs. Development costs are moderate compared to potential savings in accident reduction and enforcement efficiency. 
+Operational Feasibility: Supported by NH&MP collaboration; user-friendly interfaces will encourage adoption. 
+Legal & Ethical Feasibility: Compliant with data protection principles; features will include user consent, anonymization where possible, and alignment with Pakistan’s traffic laws.
+
+
+1.8.1 Risk Analysis
+Connectivity Issues: Intermittent mobile network coverage in remote sections (mitigated by offline mode and local AI processing). 
+Data Privacy Concerns: Risk of sensitive location/speed data misuse (addressed via encryption, consent mechanisms, and compliance with relevant laws). 
+AI Errors (False Positives/Negatives): Possible inaccuracies in detection (mitigated by model training on Pakistani driving data and human oversight fallback). 
+User Resistance: Drivers or officers may resist new technology (addressed through awareness campaigns and pilot testing).
+
+
+
+
+
+
+1.9 Deliverables
+Fully functional Driver and Officer Mobile Applications. 
+Centralized Headquarters Dashboard with analytics. 
+Trained AI models for monitoring and incident detection. 
+Complete project documentation, including user manuals, technical specifications, and research report. 
+Testing reports and deployment guidelines.
+
+1.10 Hardware and Software Resources Requirement
+Sofware:
+Tools and Technology
+	Rationale
+	
+Android Studio
+	To develop android applications 
+	
+Flutter 
+	Flutter framework for cross-platform app development.
+	
+X-Code
+	For IOS App deployment and testing.
+	
+Dart
+	For Back End
+	
+Google Maps/ Maps Libre
+	For Geo Locations and Routing
+	
+SQLite
+	For database
+	
+Firebase
+	For  real-time database
+	
+Tensor Flow Lite / Firebase ML Kit
+	ML Kit and TensorFlow Lite for on-device machine learning (speed analysis, sound detection).
+	
+
+
+
+
+
+
+Hardware:
+Hardware
+	Requirement
+	
+CPU
+	Intel Core i5 or higher
+	
+Ram
+	8 GB or higher
+	
+Storage
+	70 GB or higher
+	
+Windows Device & Mac Supported Devices
+	For Hybrid development with flutter.
+	
+Mobile Devices
+	Standard smartphones (Android/iOS) with GPS, microphones, and sensors for testing purposes.
+	
+
+
+1.11 Applications
+Enhanced road safety through proactive monitoring and rapid response. 
+Improved traffic flow and reduced congestion on M2. 
+Data-driven decision making for NH&MP resource management. 
+Potential for integration into broader smart city and emergency management systems. 
+Contribution to national road safety goals aligned with WHO and Pakistan’s road safety strategies.
+
+
+
+
+
+
+
+1.12 Milestones
+Milestone 1: Requirements Finalization (End of October 2025) Complete stakeholder consultations and document specifications.
+
+Milestone 2: Design Completion (End of December 2025) Finalize system architecture, UI/UX, and AI models.
+
+Milestone 3: Development Phase End (End of May 2026) Deliver functional app, dashboard, and integrated modules.
+
+Milestone 4: Testing Completion (End of August 2026) Pass all tests, including simulations and field trials.
+
+Milestone 5: Pilot Launch (End of September 2026) Deploy on Salt Range with initial user onboarding.
+
+Milestone 6: Evaluation and Handover (End of November 2026) Assess performance, provide documentation, and plan extensions.
+
+1.13 Work Breakdown Structure
+Planning Phase: Literature review, stakeholder meetings, requirement documentation. 
+Design Phase: UI/UX, database schema, AI model architecture, security design. 
+Development Phase: Mobile apps, backend services, AI integration, dashboard. 
+Testing Phase: Functional, performance, security, and field testing. 
+Deployment Phase: Pilot rollout, training, and handover to NH&MP.
+
+
+
+
+
+1.14 Gantt Chart
+Processes
+	Sep - Oct 2025
+	Nov - Dec 2025
+	Jan to May 2026
+	Jun - Aug 2026
+	Sep - 2026
+	Oct – Nov 2026
+	
+Problem Identification
+	552457493000
+	
+Requirement Gathering 
+	3873515367000
+	
+Proposal Writing
+	4572016827500
+	
+Proposal Presentation
+	4825917653000
+	
+System Design
+	5524516764000
+	
+Implementation
+	87439513017500
+	
+Testing
+	25501606667500
+	
+Delivery & Deployment
+	34270956667500
+	
+Report Writing
+	5600709207500
+	
+
+
+
+
+
+
+
+
+
+
+
+Chapter 2. Existing Systems
+
+2.1 Introduction
+The monitoring and enforcement systems currently operational on Pakistan’s motorways, particularly the M2 (Islamabad-Lahore Motorway), are a mix of traditional manual methods and limited semi-automated technologies. While these systems have contributed to some improvement in road discipline since the establishment of the National Highways & Motorway Police (NH&MP) in 2001, they remain largely reactive, labor-intensive, and insufficient to address the growing traffic volume and unique geographical challenges of the motorway.
+The M2, spanning 375 km, is one of the busiest and most economically significant routes in the country. However, sections such as the Salt Range (near Kallar Kahar) continue to be notorious black spots due to steep gradients (6–8%), sharp curves, and high risk of brake failure. Historical data indicates that since the motorway’s inauguration in 1997, the Salt Range has witnessed over 350 accidents resulting in more than 200 fatalities, with approximately 90% of these incidents linked to brake failures in heavy vehicles. Recent studies analyzing 10+ years of NH&MP data on M2 have identified multiple black spots, including locations at 195 km, 223–229 km, 234 km, and 283 km, where careless driving, dozing at the wheel, tyre bursts, and mechanical faults (especially brake failure) account for over 80% of accidents. Drowsy driving alone contributes to around 33% of incidents in certain analyses.
+Existing systems struggle with limited coverage, delayed response, high dependency on human resources, and inability to provide proactive, data-driven interventions. This chapter critically examines the major existing systems, their features, operational mechanisms, and inherent limitations, setting the stage for the proposed AI-powered Intelligent Vehicle Monitoring System (IVMS).
+
+
+
+
+2.2 Existing Systems
+2.2.1 Manual Speed Monitoring
+Features:
+This is the most traditional and widely practiced method on the M2. NH&MP officers use handheld radar speed guns or laser-based devices to measure vehicle speeds during patrols. Violations lead to on-spot issuance of physical challans (tickets), verbal warnings, or immediate fines. Officers also conduct random vehicle checks for documents, mechanical fitness, and driver condition. Recent enforcement campaigns have focused on newly revised speed limits (e.g., cars/LTVs reduced to 100 km/h on motorways from previous higher limits as part of fuel conservation measures). Patrol vehicles (SUVs, cars, and motorbikes) are deployed at strategic points, and mobile teams respond to reported violations.
+Limitations:
+Limited Coverage and Scalability: Officers can only monitor small sections of the 375 km route at any given time, leaving large stretches unmonitored. 
+High Evasion Potential: Drivers can easily slow down upon spotting patrol vehicles or use dashcams/apps to avoid detection. 
+Human Dependency and Errors: Enforcement relies entirely on officer presence, judgment, and availability, which is affected by shift timings, fatigue, and resource constraints. Manual recording increases the risk of errors or corruption. 
+Inefficiency: The process is time-consuming, often causing secondary traffic disruptions when vehicles are stopped on the shoulder. 
+Lack of Analytics: No centralized real-time data for trend analysis or predictive policing. Studies show that careless driving (23–25%) and dozing (21–23%) remain leading causes, which manual monitoring fails to prevent proactively.
+
+
+
+
+2.2.2 Convoy System
+Features:
+Implemented primarily in the high-risk Salt Range section for heavy transport vehicles (HTVs), buses, and passenger service vehicles (PSVs). Vehicles are grouped into escorted convoys led or supervised by NH&MP patrol vehicles. Strict speed control (often reduced to 30–40 km/h in downhill sections) is enforced to minimize brake overheating and failure on steep 7%+ gradients. The system includes 24/7 ambulance and fire tender support, trained first responders, and coordination with Frontier Works Organization (FWO) for road maintenance. This approach aims to prioritize human lives by controlling vehicle flow through dangerous terrain with sharp turns and poor visibility in adverse weather.
+Limitations:
+Significant Time Delays: Convoy formation and controlled movement increase journey time substantially, causing frustration among commuters and economic losses for freight operators.
+Traffic Bottlenecks and Congestion: Long queues form, especially during peak hours or Eid travel, forcing lighter vehicles to overtake dangerously or use the wrong lane.
+Limited Scalability: Not feasible for the entire motorway or high daily traffic volumes. It addresses symptoms (speed on slopes) rather than root causes like poor vehicle maintenance or driver fatigue.
+Inefficiency in Modern Context: With increasing traffic, the system creates artificial congestion and does not utilize technology for individualized monitoring. Recent incidents and public complaints highlight that while it reduces some accidents, it remains outdated and disruptive.
+
+
+
+
+
+2.2.3 Manual Incident Reporting
+Features:
+Accidents or breakdowns are reported primarily through phone calls to the NH&MP helpline (130) or the national emergency number 15 (Rescue 1122). Witnesses or involved parties provide location details (often approximate), after which the nearest patrol team is dispatched. Officers then conduct on-site investigation, first aid, traffic diversion, and FIR registration. Some integration with rescue services exists for medical evacuation.
+Limitations:
+Delayed Response: Response times can range from 20 to 60+ minutes depending on patrol availability, traffic conditions, and accurate location reporting. In remote or low-visibility areas of the Salt Range, delays are even longer. 
+Inaccuracy and Dependency on Human Initiative: Location information is often vague (“near Kallar Kahar”), leading to wasted time. Many minor incidents go unreported until they escalate. 
+Reactive Nature: The system only activates after an accident occurs; there is no proactive detection or early warning. 
+Data Inconsistencies: Under-reporting is common, as highlighted by WHO estimates (around 28,000 road fatalities nationally in 2021) versus lower official figures. This hampers accurate analytics and preventive planning.
+
+2.2.4 Automatic Speed Camera System
+Features: 
+NH&MP has deployed fixed and mobile automatic speed cameras, including Average Speed Enforcement (ASE) systems over road segments. These cameras capture images or videos of vehicles exceeding limits, record number plates (with growing use of Automatic Number Plate Recognition – ANPR), and support evidence for challans. Some integration with e-challan systems exists for issuing digital fines. The system has been expanded on major motorways, and AI-based monitoring pilots are being discussed for M1 and M2. Cameras also help in general surveillance and toll-related monitoring via M-Tag (RFID-based electronic toll collection).
+Limitations:
+Incomplete Automation: While detection is automatic, verification, stopping of vehicles, and fine collection often still require manual intervention, leading to traffic congestion when officers intercept violators. 
+Limited Coverage: Cameras are not installed ubiquitously across all 375 km; gaps exist, especially in curved or remote Salt Range sections. 
+Evasion Tactics: Drivers use techniques such as plate covers, following closely behind other vehicles, or temporary number plate changes. 
+No Integrated Features: Current systems lack real-time alerts to officers, automatic accident detection, or driver profiling. They do not address non-speed violations like drowsy driving or mechanical issues effectively. 
+Traffic Impact: Manual follow-up actions disrupt flow, and false readings due to weather or technical glitches can occur. Recent reports indicate that while speed cameras have helped reduce some accidents (up to 50% in enforced zones in certain claims), overall enforcement efficiency remains low due to these gaps.
+
+
+
+
+
+
+
+
+
+
+
+
+
+2.3 Comparison of Existing Systems and Proposed System
+Aspect
+	Existing Systems
+	Proposed IVMS (AI-Powered)
+	
+Monitoring
+	Mostly manual patrols + limited fixed cameras
+	Real-time AI-based (on-device + cloud) with GPS/sensor fusion
+	
+Enforcement
+	Manual challans, on-spot stopping, physical tickets
+	Fully automated e-challans with minimal human intervention
+	
+Response Time
+	Slow (phone-based reporting, patrol dispatch)
+	Instant real-time alerts and automatic SOS
+	
+Traffic Impact
+	High (stopping vehicles, convoy-induced congestion)
+	Low (non-intrusive, background monitoring)
+	
+Accident Detection
+	Reactive (after occurrence)
+	Proactive using smartphone sensors, accelerometer, audio analysis
+	
+Data Analytics
+	Limited or manual logs
+	Centralized dashboard with AI insights, heatmaps, profiling
+	
+Coverage & Scalability
+	Limited by manpower and camera placement
+	High (leverages widespread smartphone usage)
+	
+Evasion Potential
+	High (human-dependent gaps)
+	Significantly reduced through continuous tracking
+	
+Handling Hazardous Zones (e.g., Salt Range)
+	Convoy system (disruptive)
+	Smart virtual enforcement with speed/gradient alerts
+	
+
+
+
+
+2.4 Summary
+The existing systems on the M2 Motorway. Manual speed monitoring, the convoy system in the Salt Range, manual incident reporting, and automatic speed cameras, represent a foundational but outdated framework for road safety and enforcement. While they have reduced some violations through increased patrols and camera deployment, they suffer from critical shortcomings: heavy reliance on human resources, delayed and reactive responses, limited geographical coverage, high potential for evasion, and inability to leverage modern data analytics or artificial intelligence.
+Particularly in high-risk areas like the Salt Range, where steep gradients and driver fatigue cause the majority of fatal accidents, these systems fail to provide proactive, scalable, and efficient solutions. National statistics reveal persistent gaps between reported and actual road crash impacts, underscoring the urgent need for modernization.
+The proposed AI-powered Intelligent Vehicle Monitoring System (IVMS) addresses these deficiencies by shifting to an automated, smartphone-centric, and intelligent ecosystem. It promises real-time monitoring, instant alerts, automated enforcement, and predictive capabilities, ultimately enhancing safety, reducing congestion, and supporting NH&MP’s mission more effectively.
+
+
+
+
+
+
+
+
+
+
+
+References
+National Highways & Motorway Police (NH&MP). (2024-2025). Year Book 2024-25. https://nhmp.gov.pk/storage/yearbooks/YEAR%20BOOK%202024-25.pdf 
+National Highways & Motorway Police (NH&MP). (2023-2024). Year Book 2023-24. https://nhmp.gov.pk/storage/yearbooks/Year%20Book%202023-24.pdf 
+World Health Organization (WHO). (2023). Global Status Report on Road Safety 2023 – Pakistan Country Profile. https://cdn.who.int/media/docs/default-source/country-profiles/road-safety/road-safety-2023-pak.pdf 
+Asian Transport Observatory. (2025). Pakistan Road Safety Profile 2025. https://asiantransportobservatory.org/documents/394/Pakistan_road_safety_profile_2025.pdf?download=1 
+Shah, S. A. R., & Khattak, A. (2013). Road Traffic Accident Analysis of Motorways in Pakistan. International Journal of Engineering Research & Technology (IJERT), 2(11). https://www.ijert.org/research/road-traffic-accident-analysis-of-motorways-in-pakistan-IJERTV2IS111222.pdf 
+Hussain, M., et al. (2021). Accident Analysis and Identification of Black Spots on the Motorways in Pakistan. Civil Engineering Journal. (Available on ResearchGate) 
+CAREC Program & Asian Development Bank. (2025). Pakistan Road Crash Data Review and Reporting: Status and Recommendations. https://www.carecprogram.org/uploads/PAK-Road-Crash-Data-Review_MAR2025_web.pdf 
+TensorFlow Lite Official Documentation. https://www.tensorflow.org/lite 
+Firebase Official Documentation (Google). https://firebase.google.com/docs 
+Google Maps Platform API Documentation. https://developers.google.com/maps/documentation 
+Government of Pakistan. (2018). Pakistan National Road Safety Strategy 2018-2030. National Transport Research Centre (NTRC). 
+NH&MP Official Website & Press Releases on Salt Range Convoy System and Enforcement (2023-2025).
+
+

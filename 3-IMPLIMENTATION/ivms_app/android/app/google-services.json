@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1069692206596",
+    "firebase_url": "https://ivms-system-default-rtdb.firebaseio.com",
+    "project_id": "ivms-system",
+    "storage_bucket": "ivms-system.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069692206596:android:9f83a756753e724260ff51",
+        "android_client_info": {
+          "package_name": "com.ivms.app.ivms_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXMaGV-Kd7fUvgPum16Lo4XV2Cj-fMWPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

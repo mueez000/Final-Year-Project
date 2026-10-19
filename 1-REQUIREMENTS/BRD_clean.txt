@@ -1,0 +1,394 @@
+﻿
+AI-POWERED INTELLIGENT VEHICLE MONITORING SYSTEM FOR NH&MP
+
+Business Requirements Document
+MUHAMMAD ALI HASSAN KHAN-SP23674
+MUEEZ AHMAD-SP23653
+FAIZAN AHMER-FL21472
+
+Supervised By
+Dr. Zohaib Ahmed
+
+Submitted for the partial fulfillment of BS Software Engineering degree to the Faculty of Engineering & Computer Science 
+
+NATIONAL UNIVERSITY OF MODERN LANGUAGES
+ ISLAMABAD
+
+
+Executive Summary
+The AI-Powered Intelligent Vehicle Monitoring System (IVMS) is an innovative mobile and web-based platform developed in collaboration with the National Highways and Motorway Police (NH&MP) to enhance road safety on Pakistan’s motorways, with initial focus on the M-2 corridor (particularly the high-risk Salt Range).
+IVMS requires commercial passenger bus and van drivers to operate a cross-platform Flutter mobile application that captures real-time driving and location data. With the help of AI Algorithms the system monitors speed compliance, detects drowsiness/fatigue via the mobile camera, automatically identifies crashes through sensor and audio analysis, and generates e-challans. Officers receive high-priority alerts and manage incidents in the field using the same app in Officer Mode. Headquarters (IT Center) gains a centralized web dashboard for live fleet monitoring, analytics, and configuration.
+The platform facilitates seamless communication between drivers, officers, and HQ, enabling rapid incident response, proactive hazard reporting, and data-driven safety improvements. Drivers receive performance profiles and safety scores, while HQ can broadcast notifications and analyze violation trends.
+IVMS aims to replace inefficient manual and convoy-based monitoring, reduce accidents, eliminate rule evasion, minimize traffic congestion, and create a scalable national safety ecosystem. Built with Flutter, Firebase, and ML Kit, the system ensures offline resilience, real-time synchronization, and privacy-compliant data handling.
+Table of Contents
+ TOC \o "1-3" \h \z \u 1 Introduction PAGEREF _Toc230169757 \h 6
+1.1Business Objectives PAGEREF _Toc230169758 \h 6
+1.2 Intended Stakeholders/Audience PAGEREF _Toc230169759 \h 6
+2 Project Background PAGEREF _Toc230169760 \h 7
+3 System Scope PAGEREF _Toc230169761 \h 7
+3.1 In-scope PAGEREF _Toc230169762 \h 7
+3.2 Out of scope (Phase 1) PAGEREF _Toc230169763 \h 9
+4 Product Features PAGEREF _Toc230169764 \h 11
+4.1 Driver Features PAGEREF _Toc230169765 \h 11
+4.2 Officer Features (Mobile Application Mode) PAGEREF _Toc230169766 \h 15
+4.3 Super Admin (IT Center/ Headquarters) Features PAGEREF _Toc230169767 \h 17
+4.4 Advanced features and integrations PAGEREF _Toc230169768 \h 21
+4.5 Feature Trees PAGEREF _Toc230169769 \h 23
+4.5.1 Driver PAGEREF _Toc230169770 \h 23
+4.5.2 Officer PAGEREF _Toc230169771 \h 23
+4.5.3 Super Admin PAGEREF _Toc230169772 \h 23
+5 Business Requirements PAGEREF _Toc230169773 \h 24
+6 Process Flows PAGEREF _Toc230169774 \h 25
+6.1 Driver PAGEREF _Toc230169775 \h 25
+6.1.1 Secure registration and login PAGEREF _Toc230169776 \h 25
+6.1.2 Activate continuous real-time monitoring mode PAGEREF _Toc230169777 \h 25
+6.1.3 Grant consent for data collection PAGEREF _Toc230169778 \h 25
+6.1.4 Receive real-time speed violation warnings PAGEREF _Toc230169779 \h 25
+6.1.5 AI-based drowsiness and fatigue detection PAGEREF _Toc230169780 \h 25
+6.1.6 Automatic crash detection and SOS alert PAGEREF _Toc230169781 \h 25
+6.1.7 View personal violation history and safety score PAGEREF _Toc230169782 \h 26
+6.1.8 Log out / exit monitoring mode PAGEREF _Toc230169783 \h 26
+6.2 Officer Process Flows PAGEREF _Toc230169784 \h 26
+6.2.1 Secure role-based login PAGEREF _Toc230169785 \h 26
+6.2.2 View real-time incidents and SOS/crash alerts on map interface PAGEREF _Toc230169786 \h 26
+6.2.3 Receive high-priority push notifications for SOS and crash events PAGEREF _Toc230169787 \h 26
+6.2.4 Accept incident and update status PAGEREF _Toc230169788 \h 26
+6.2.5 Navigate to incident location using integrated maps PAGEREF _Toc230169789 \h 26
+6.2.6 Upload geo-tagged photos and videos as incident evidence PAGEREF _Toc230169790 \h 26
+6.2.7 Submit detailed field reports and incident observations PAGEREF _Toc230169791 \h 27
+6.2.8 Report roadblocks, fog, hazards, or broken-down vehicles PAGEREF _Toc230169792 \h 27
+6.2.9 Receive headquarters broadcast messages PAGEREF _Toc230169793 \h 27
+6.2.10 View assigned patrol area and live incident heatmap PAGEREF _Toc230169794 \h 27
+6.2.11 Log out PAGEREF _Toc230169795 \h 27
+6.3 Super Admin PAGEREF _Toc230169796 \h 27
+6.3.1 Secure web-based login PAGEREF _Toc230169797 \h 27
+6.3.2 Real-time monitoring of all registered commercial buses on interactive map PAGEREF _Toc230169798 \h 27
+6.3.3 View live incident dashboard with SOS and crash alerts PAGEREF _Toc230169799 \h 27
+6.3.4 Review and validate officer-submitted evidence PAGEREF _Toc230169800 \h 28
+6.3.5 Track officer activity and incident response status PAGEREF _Toc230169801 \h 28
+6.3.6 Access system analytics, heatmaps, violation trends, and risk pattern visualization PAGEREF _Toc230169802 \h 28
+6.3.7 Configure speed zones, hazard zones, operational thresholds, and AI model parameters PAGEREF _Toc230169803 \h 28
+6.3.8 Broadcast operational and safety notifications to drivers and officers PAGEREF _Toc230169804 \h 28
+6.3.9 Manage incident archives and historical data PAGEREF _Toc230169805 \h 28
+6.3.10 Log out PAGEREF _Toc230169806 \h 28
+7 High level DFD PAGEREF _Toc230169807 \h 29
+8 Design Constraints PAGEREF _Toc230169808 \h 29
+9 Assumptions and Dependencies PAGEREF _Toc230169809 \h 29
+9.1 Assumptions PAGEREF _Toc230169810 \h 29
+9.2 Dependencies PAGEREF _Toc230169811 \h 30
+10 Risk Analysis PAGEREF _Toc230169812 \h 30
+
+1 Introduction
+This document provides a comprehensive Business Requirements specification for the AI-Powered Intelligent Vehicle Monitoring System (IVMS) in accordance with IEEE standards for requirements specification. It serves as the definitive reference for all functional capabilities of the system.
+Business Objectives
+Enhance motorway safety for commercial passenger buses on high-risk corridors (initially M-2).
+Provide real-time AI-driven monitoring of speed, drowsiness, fatigue, and crashes.
+Enable instant SOS alerts and automated e-challan generation.
+Improve incident response time through officer mobile integration and HQ dashboard.
+Create centralized profiling and analytics for drivers, vehicles, and transport companies.
+Reduce reliance on manual monitoring, convoys, and physical interceptions.
+Build a scalable, data-driven platform for nationwide expansion and policy support.
+
+1.2 Intended Stakeholders/Audience
+NH&MP Headquarters IT Center (Super Admin)
+NH&MP Field Officers
+Commercial Passenger Bus Drivers
+Product Owner / Project Sponsor (NH&MP)
+Business Analyst
+Development Team
+Quality Assurance / Testing Team
+2 Project BackgroundPakistan’s motorway network, particularly the M-2 linking Islamabad and Lahore, has significantly enhanced intercity travel. However, the Salt Range section has witnessed over 350 accidents since 1997, claiming more than 200 lives. Recent incidents, such as the 2025 Balkassar bus crash caused by brake failure, highlight ongoing safety challenges.
+The existing convoy system at Kallar Kahar reduces overspeeding but causes significant delays. Manual speed monitoring and incident reporting are inefficient and allow easy rule evasion. IVMS addresses these gaps by introducing AI-powered, real-time monitoring tailored for commercial buses and vans on the M-2, with future nationwide scalability.
+3 System Scope
+3.1 In-scope
+The scope of the IVMS system encompasses the design, development, implementation, and pilot deployment of a comprehensive AI-powered vehicle monitoring ecosystem targeting commercial passenger buses and vans on the M2 Motorway. The following components and functionalities are explicitly included within the project scope:
+Driver Mobile Application (Cross-Platform): A Flutter-based mobile application for Android that runs on smartphones carried by commercial bus and van drivers. The app collects real-time telemetry data including GPS location, speed, accelerometer readings, gyroscope data, camera feed, and microphone input. It provides real-time speed violation warnings with configurable tolerance rules, AI-based drowsiness and fatigue detection using AI algorithms, automatic crash detection and auto-generation of SOS alerts, a manual SOS button for emergency override, traffic awareness and route safety notifications with AI-assisted diversion recommendations, personal violation history and safety score visualization, administrative broadcast message reception, offline telemetry and evidence buffering with automatic Firebase synchronization, and secure session management.
+
+Officer Mobile Application Interface: A dedicated interface within the same Flutter application (role-based login) for NH&MP field patrol officers. It provides real-time incident and SOS/crash alerts on an interactive map, high-priority push notifications with sound and vibration, incident acceptance and status update workflows (Acknowledged, En Route, Resolved), integrated navigation to incident locations using Google Maps, geo-tagged photo and video evidence upload (up to 50MB per file), structured field report submission with predefined observation fields, proactive hazard reporting (roadblocks, fog, broken-down vehicles), headquarters broadcast message reception, assigned patrol area visualization with live incident heatmap overlay, and secure logout with data clearing.
+Centralized Headquarters Monitoring Dashboard (Web-Based): A secure, web-based analytics platform for NH&MP IT Center administrators built on Firebase backend services. It provides real-time monitoring of all registered commercial buses on an interactive map with current location, speed, and status; a live incident dashboard displaying all active SOS and crash alerts with severity, location, and officer response status; officer activity and response time tracking; evidence review and validation with approval or rejection workflows; comprehensive system analytics including interactive dashboards with graphs, heatmaps, and trend charts for violations, accidents, and risk patterns; configurable speed zones, hazard zones, operational thresholds, and AI model sensitivity parameters; broadcast messaging capabilities targeting drivers, officers, or both with full audit logging; incident archive management with search and export; e-challan generation oversight with manual approval or cancellation; and account settings management.
+AI and Machine Learning Components: AI models for low-latency, battery-efficient inference. This includes crash detection algorithms combining accelerometer, gyroscope, GPS, and audio signature analysis; drowsiness and fatigue detection analyzing blink rate, head pose, and yawning patterns through the mobile camera; speed violation detection with GPS-based speed estimation and configurable zone-based limits; traffic congestion and hazard pattern analysis; and AI-assisted dynamic route diversion and nearest exit recommendations.
+Backend and Real-Time Infrastructure: Firebase-based backend services including Authentication for secure user management, Firestore for real-time database operations, Cloud Functions for server-side logic, Cloud Storage for evidence and media files, and Firebase Cloud Messaging for push notifications. The backend implements role-based access control, offline data buffering with automatic synchronization, real-time location tracking, and secure data transmission.
+Integration with External Services: Google Maps API / Flutter Maps for real-time vehicle tracking, route visualization, incident location mapping, and navigation; on-device sensor fusion leveraging smartphone GPS, accelerometer, gyroscope, microphone, and camera; and architectural readiness for future M-Tag (RFID electronic toll collection) integration.
+3.2 Out of scope (Phase 1)
+The following items are explicitly excluded from the initial project scope. While some may be considered for future phases, they are not part of the current development, testing, or deployment deliverables:
+Physical Hardware Installation: The project does not include the design, procurement, or installation of any dedicated in-vehicle hardware, roadside sensors, ANPR cameras, or physical infrastructure. IVMS is strictly a smartphone-based solution leveraging devices already carried by drivers and officers.
+Monitoring of Private Vehicles and Motorcycles: The initial scope is limited to commercial passenger buses and vans. Private cars, motorcycles, freight trucks, and other vehicle categories are excluded from Phase 1.
+Integration with External Bus CCTV / RTSP Feeds: The system does not integrate with existing closed-circuit television systems installed on buses or at terminals. Video evidence is limited to officer-uploaded media and driver camera-based drowsiness detection.
+Direct Integration with Insurance Platforms or NADRA: While driver and vehicle profiling data could eventually support insurance or identity verification workflows, direct API integrations with insurance companies, the National Database and Registration Authority (NADRA), or other government databases are excluded from Phase 1.
+Fully Autonomous Predictive Forecasting: While the system collects historical data and provides trend analysis, advanced predictive modeling (e.g., predicting specific accident probabilities days in advance) is excluded. The AI capabilities are focused on real-time detection and immediate response.
+Nationwide Deployment Beyond M2: The initial deployment is strictly limited to the M2 Motorway. Expansion to M1, M3, M4, and other motorways is a long-term goal but not part of the current project deliverables.
+Full-Scale Legal and Regulatory Framework Finalization: While the system generates legally admissible evidence (timestamped, location-signed, hash-verified), the finalization of comprehensive legal frameworks, policy documents, or parliamentary regulations required for nationwide enforcement is outside the project scope. The project will provide recommendations only.
+Integration with Existing NH&MP Legacy Systems Beyond API-Level Connectivity: Direct integration with NH&MP's existing legacy databases, case management systems, or human resource systems is not included, though API-level connectivity for data exchange may be explored as a future enhancement.
+Any other features beyond the mentioned scope are out of scope.
+
+
+
+
+4 Product Features
+This section provides a comprehensive, role-based breakdown of all features available within the IVMS ecosystem. The features are organized by user role Driver, Officer, and Super Admin (IT Center/ Headquarters) with a dedicated section for advanced AI capabilities and system integrations that span across roles.
+4.1 Driver Features
+The Driver Mobile Application provides a comprehensive suite of safety, compliance, and communication features designed specifically for commercial passenger bus and van drivers operating on the M2 Motorway. All features are implemented within a single cross-platform Flutter application that runs on standard Android and iOS smartphones.
+Secure Registration and Login: Drivers can register using their official Driving License Number and CNIC (Computerized National Identity Card), creating a username and password for subsequent authentication. The system validates uniqueness of credentials, enforces password complexity (minimum 8 characters), locks accounts after 5 failed attempts, and supports password reset via secure verification linked to the registered CNIC/License. Upon login, drivers must associate their account with the specific vehicle registration number they are currently driving before monitoring can begin.
+Vehicle Association and Session Management: After login, the driver is prompted to enter the Vehicle Registration Number of the bus or van they are currently operating. This association is mandatory before monitoring mode can be activated. The driver can change the associated vehicle later from the profile/settings screen. The system displays a confirmation message upon successful association and maintains the link between driver, vehicle, and telemetry data for the entire monitoring session.
+
+
+Activate Continuous Real-Time Monitoring Mode: Upon entering the motorway (either manually via a 'Start Monitoring' button or automatically through GPS geofencing detection), the system activates continuous background monitoring. This collects GPS location, speed, accelerometer, gyroscope, camera, and microphone data linked to the associated vehicle. A persistent notification displays 'Monitoring Active' with current speed and safety score. The driver can pause or exit monitoring only after confirming they have left the motorway.
+Explicit Consent for Data Collection: Before any monitoring begins, the system displays a clear consent screen listing all data types being collected (GPS, speed, accelerometer, gyroscope, camera, microphone) with their specific purposes. The driver must actively check 'I consent' and tap 'Continue'. The 'Start Monitoring' button remains disabled until consent is granted. Consent timestamps and driver IDs are stored in Firebase, and drivers can revoke consent later from the profile screen, which immediately stops monitoring.
+Real-Time Speed Violation Warnings: The system continuously compares real-time speed against predefined, zone-based speed limits configurable by HQ. When the vehicle speed exceeds the configured limit for the current road segment (with a configurable tolerance buffer), the system issues immediate visual and audio warnings such as 'Speed Limit Exceeded — Slow Down'. Violations are logged with timestamp, location, speed, and GPS evidence. A running safety score (0-100) is displayed on the home screen, decreasing with each violation. Drivers can view personal violation history with full details.
+AI-Based Drowsiness and Fatigue Detection: Using o AI Models, the system analyzes the mobile camera feed in the background to detect signs of drowsiness and fatigue. The multi-factor analysis includes blink rate monitoring, head pose tracking, and yawning detection. When drowsiness is detected, the system issues progressive alerts: initial visual and audio warnings ('Take a break, You appear drowsy'), escalating to louder alarms if ignored. The system recommends the nearest safe exit or rest area via AI route intelligence. Detection events are logged with evidence for HQ review while maintaining driver privacy through on-device processing.
+Automatic Crash Detection and SOS Alert: The system continuously monitors accelerometer, gyroscope, GPS, and audio signatures for crash indicators such as sudden deceleration, impact patterns, or crash sounds. Upon detection, it automatically generates an SOS alert containing precise GPS location, vehicle details, driver information, and estimated severity. High-priority push notifications are immediately sent to the nearest officers and HQ. The system includes a manual SOS button as backup and continues buffering evidence post-crash until help arrives. A confirmation screen displays after SOS transmission.
+Manual SOS Button for Emergency Situations: A large, prominent red SOS button is always visible on the home screen and in the notification bar. It requires a double-tap confirmation to prevent accidental activation. When triggered, it sends the same SOS payload as automatic detection (location, vehicle details, severity estimation) and notifies nearest officers and HQ immediately. Manual SOS events are logged separately for audit purposes.
+Traffic Awareness, Route Safety Notifications, and AI-Assisted Route Diversion: The system analyzes real-time traffic patterns, road conditions, and hazard reports to provide proactive guidance to drivers. In-app notifications and audio alerts warn of congestion, road closures, hazards, or high-risk zones (e.g., Salt Range steep gradients). AI-recommended diversions are displayed on an integrated map, suggesting nearest safe exits or rest areas. Recommendations update in real-time as conditions change.
+View Personal Violation History and Safety Score: Drivers can access a dedicated 'My Profile' or 'History' tab showing a safety score (0-100) with trend graphs over time. A chronological list displays all violations with full details including date, time, speed, location, and violation type. Data can be filtered by date range, allowing drivers to track performance improvement and identify patterns in their driving behavior.
+Receive Administrative Broadcast Messages and Safety Notifications: All operational and safety announcements from NH&MP headquarters are delivered to drivers via push notifications that display even when the app is in the background. Messages are also stored in an in-app inbox for later reading, ensuring drivers never miss critical updates such as weather warnings, route changes, or policy announcements.
+Offline Telemetry and Evidence Buffering with Automatic Synchronization: When the device loses internet connectivity (common in remote motorway sections), the system buffers all telemetry and evidence data locally on the device. A status indicator displays 'Offline — Data buffering'. As soon as connectivity is restored, the system automatically synchronizes all buffered data to Firebase without driver intervention, ensuring no data is lost during network outages.
+View and Acknowledge System Alerts: A dedicated 'Alerts' tab centralizes all notifications for easy management. Drivers can view the full history of speed warnings, drowsiness alerts, crash detections, broadcast messages, and system notifications. The system requires explicit acknowledgment of each critical alert, ensuring drivers have seen and registered important safety information.
+Log Out / Exit Monitoring Mode: Drivers can securely terminate their session via the 'Log Out' or 'Stop Monitoring' menu option. The system prompts for confirmation before stopping monitoring, clears all temporary session data, dissociates the vehicle, and redirects to the login screen. This ensures clean session termination and data privacy.
+
+
+
+
+4.2 Officer Features (Mobile Application Mode)
+The Officer Interface is implemented as a role-based login within the same cross-platform Flutter application used by drivers. This design choice minimizes deployment complexity while ensuring complete feature separation and strict access control. Officers use distinct credentials and access a completely different dashboard optimized for incident response and patrol management.
+Secure Role-Based Login: Officers log in using dedicated officer credentials (Officer ID / Badge Number and password, with optional biometric authentication if supported by the device). The system validates credentials against the officer database managed by HQ, enforces role-based permissions, restricts access to all driver features, and loads the officer-specific dashboard with live incident map upon successful authentication.
+View Real-Time Incidents and SOS/Crash Alerts on Map Interface:The officer dashboard displays an interactive map showing all active SOS alerts, crash detections, and reported incidents as color-coded pins. Tapping any pin reveals detailed information including vehicle registration number, driver name, precise location coordinates, severity level, time of occurrence, and current response status. The map auto-refreshes every 5 seconds to ensure real-time accuracy.
+Receive High-Priority Push Notifications for SOS and Crash Events:When any SOS or crash is detected within the officer's patrol area or nearby zones, the system sends high-priority push notifications with distinctive sound and vibration patterns that override silent modes. Notifications include incident location, severity, and vehicle details, ensuring officers are immediately aware even when the app is in the background or the device is locked.
+Accept Incident and Update Status: Officers can tap any incident on the map to view details and update its status through a structured workflow: Acknowledged (officer has seen the alert), En Route (officer is traveling to the location), and Resolved (incident has been handled). Each status change is updated in real-time on the shared dashboard and notifies HQ immediately, providing complete visibility into response progress.
+Navigate to Incident Location Using Integrated Maps: When an officer selects 'Navigate' on an incident, the system seamlessly opens Google Maps with turn-by-turn directions from the officer's current location to the incident site. The estimated time of arrival is displayed, helping HQ coordinate multiple responding units and set appropriate expectations.
+Upload Geo-Tagged Photos and Videos as Incident Evidence: At the incident scene, officers can capture and upload photos and videos as documentary evidence. All uploads are automatically tagged with GPS coordinates and timestamps. The system supports both photo and video formats up to 50MB per file. Evidence is synced to Firebase instantly (or buffered offline and auto-synced), ensuring HQ can review on-site documentation in real-time.
+Submit Detailed Field Reports and Incident Observations: After handling an incident, officers submit structured field reports through a form with predefined fields including observations, vehicle condition assessment, weather conditions, road surface status, witness information, and actions taken. Previously uploaded evidence can be attached to the report. These reports become part of the permanent incident record for investigation and analytics.
+Report Roadblocks, Fog, Hazards, or Broken-Down Vehicles: Officers can proactively report hazards through the 'Report Hazard' menu option. The system allows selection of hazard type (roadblock, fog, accident debris, broken-down vehicle, spillage, etc.) and automatic or manual location specification. Reports are broadcast to nearby drivers and other officers, preventing secondary incidents and improving overall situational awareness.
+Receive Headquarters Broadcast Messages: Operational instructions, policy updates, shift changes, and emergency announcements from HQ are delivered via push notifications and stored in an in-app inbox. This one-way communication channel ensures all field personnel remain synchronized with headquarters directives.
+View Assigned Patrol Area and Live Incident Heatmap: The 'Patrol' tab displays the officer's assigned patrol area as a highlighted zone on the map, along with a color-coded incident heatmap overlay showing historical and current incident density. This visual operational awareness helps officers prioritize high-risk zones, adjust patrol patterns, and position themselves optimally for rapid response.
+Log Out: Officers can securely terminate their session via the 'Log Out' menu option. The system clears all cached incident data, map tiles, and temporary files, then redirects to the role selection screen. This ensures sensitive operational data does not remain on the device when the officer is off duty.
+
+4.3 Super Admin (IT Center/ Headquarters) Features
+The Headquarters Monitoring Dashboard is a secure, web-based application designed for NH&MP IT Center administrators and senior leadership. It provides holistic oversight, configuration management, analytics, and administrative control over the entire IVMS ecosystem. The dashboard is built as a responsive web application optimized for desktop use in control room environments.
+Secure Web-Based Login: Administrators access the dashboard through a secure web login page requiring Admin/HQ credentials with Firebase Authentication. Multi-factor authentication may be enforced for senior administrators. The system supports session timeout for security, logs all login attempts, and blocks suspicious activity.
+Real-Time Monitoring of All Registered Commercial Buses on Interactive Map: The main dashboard displays an interactive map showing all active commercial buses currently on the M2 Motorway. Each vehicle is represented by a marker showing current location (updated in real-time), current speed, driver name, vehicle registration number, and operational status (monitoring active, idle, offline). The map supports zooming, panning, filtering by route segment, and clicking any marker for detailed vehicle and driver information.
+View Live Incident Dashboard with SOS and Crash Alerts: A dedicated incident panel displays all active SOS alerts, crash detections, and officer-reported incidents in both list and map views. Each incident card shows severity (critical, high, medium, low), precise location, time of occurrence, involved vehicle and driver, current officer response status, and estimated response time. Color-coding and sorting by severity ensure critical incidents receive immediate attention.
+Review and Validate Officer-Submitted Evidence: When officers upload photos or videos at incident scenes, HQ administrators can review all media with automatic geo-tags and timestamps. The system provides approve/reject workflows with comment fields, ensuring only verified evidence enters the permanent record. This quality control step is essential for maintaining data integrity and legal admissibility.
+Track Officer Activity and Incident Response Status: The 'Officer Activity' tab shows real-time locations of all on-duty officers, their current status (on patrol, responding to incident, en route, offline), assigned patrol areas, and response times for current and historical incidents. Performance metrics include average response time, incidents handled per shift, and resolution rate. This enables HQ to monitor response efficiency and identify officers requiring additional support or training.
+Access System Analytics, Heatmaps, Violation Trends, and Risk Pattern Visualization: The 'Analytics' section provides comprehensive interactive dashboards with multiple visualization types: line and bar charts for violation trends over time, heatmaps showing accident and violation density by location, pie charts for violation type distribution, trend charts for driver safety scores over time, and comparative analytics by route segment, time of day, or transport company. All visualizations support filtering by date range, specific route, driver, vehicle, or transport company. Data can be exported in multiple formats (CSV, PNG, PDF) for reporting and presentations.
+Configure Speed Zones, Hazard Zones, Operational Thresholds, and AI Model Parameters: The 'Configuration' panel allows administrators to define and modify the operational parameters that govern the entire system. This includes adding or editing speed zones with specific limits for different road segments (e.g., 100 km/h for flat sections, 40 km/h for Salt Range downhill), defining hazard zones with special monitoring rules, setting operational thresholds for crash detection sensitivity, drowsiness detection tolerance, and speed violation tolerance buffers, and adjusting AI model parameters such as sensor fusion weights, audio signature matching thresholds, and camera analysis frame rates. Changes take effect immediately across all connected devices.
+Broadcast Operational and Safety Notifications to Drivers and Officers: The 'Broadcast Message' feature enables mass communication from HQ to all system users. Administrators can compose messages, select target audiences (all drivers, all officers, specific patrol areas, or everyone), and send instantly via Firebase Cloud Messaging. All broadcasts are logged with timestamps, sender identity, and recipient counts for audit purposes. Delivery status (sent, delivered, read) is tracked where supported.
+Manage Incident Archives and Historical Data: The 'Archives' section provides long-term storage and retrieval of all resolved incidents. Advanced search capabilities allow filtering by date range, location, incident type, severity, involved vehicle, driver, or officer. Historical data can be exported for external analysis, research, or legal proceedings. The system implements data retention policies configurable by HQ.
+Oversee E-Challan Generation and Violation Reports: The system automatically generates e-challans for confirmed speed violations and other detected offenses. The 'Enforcement' panel displays all pending and issued e-challans with full evidence packages (timestamp, location, speed reading, GPS trace, hash verification). Administrators can manually approve or cancel challans, add notes, and generate violation reports for specific drivers, vehicles, or date ranges. All enforcement actions are permanently logged.
+Account Settings (Notification Preferences, Password Change): Individual administrators can manage their account settings through a profile menu. Options include changing passwords (with complexity enforcement), configuring notification preferences (email, SMS, in-app), selecting default dashboard views, and setting time zone and language preferences.
+Officer Management Dashboard: The 'Officers' tab provides complete lifecycle management for NH&MP field personnel. It displays the total number of officers and a detailed list showing officer name, profile picture or default icon, badge number, rank/designation, assigned patrol area/zone, current duty status (On Patrol, On Leave, Responding to Incident, Offline), last active time, performance score/response time average (last 30 days), and number of incidents handled (current month). Advanced filtering supports searching by patrol area, rank, duty status, or performance score.
+Add New Officer: The 'Add New Officer' button opens a modal with mandatory fields: full name, officer ID/badge number (unique), CNIC (13 digits with dashes), rank/designation (dropdown: Constable, Sub-Inspector, Inspector, etc.), phone number (11 digits), email (optional), assigned patrol area/zone (dropdown), and temporary password (auto-generated or manually set). The system validates uniqueness, automatically creates credentials, and sends login details via SMS/Email. New officers appear in the list with status 'Offline' until first login.
+Assign / Edit Officer Duties and Patrol Areas: Administrators can dynamically manage officer deployment by clicking 'Assign Duty' or 'Edit' next to any officer. The modal allows selection of patrol area/zone (multi-select supported), shift timing (start and end time with calendar/time picker), duty type (Patrol, Incident Response, Checkpoint, Rest), and additional notes. The system validates that end time is after start time, displays 'Duty Assigned Successfully', updates the officer's status and map view immediately, sends a push notification to the officer's mobile app, and maintains a complete audit log of all duty changes.
+
+View Officer Performance and Duty History: Clicking 'Performance' or 'View Details' on any officer opens a comprehensive profile showing overall performance score, response time statistics, incidents handled with type breakdown, duty history in calendar view, and any violation or complaint records. Data can be filtered by date range and exported as PDF for performance reviews, promotion evaluations, or disciplinary proceedings.
+Deactivate / Remove Officer: When officers are transferred, retire, or face disciplinary action, administrators can deactivate or permanently remove them from the system. A confirmation dialog prevents accidental actions. On deactivation, login access is immediately revoked, the officer is marked 'Inactive', a push/SMS notification is sent, and all historical data is preserved for audit while preventing future logins.
+Log Out: Administrators can securely terminate their web session. The system clears all session tokens, redirects to the login page, and logs the logout event for security auditing.
+4.4 Advanced features and integrations
+The IVMS platform incorporates cutting-edge artificial intelligence and machine learning capabilities that differentiate it from traditional monitoring systems. These advanced features operate across the driver app, officer interface, and headquarters dashboard, creating an intelligent, adaptive safety ecosystem.
+AI-Based Incident Detection: The system employs multi-modal sensor fusion for comprehensive incident detection. Crash detection combines accelerometer spike analysis, gyroscope rotation detection, GPS sudden deceleration patterns, and audio signature matching for impact sounds. Drowsiness and fatigue detection uses the mobile camera with TensorFlow Lite / MediaPipe to analyze blink rate (prolonged eye closure), head pose (nodding, tilting), and yawning frequency in real-time. Speed violation detection uses GPS data fused with accelerometer readings to accurately estimate velocity even in poor GPS conditions, with configurable zone-based limits and tolerance rules.
+
+Automated Enforcement: When violations are detected, the system automatically generates electronic challans (e-challans) linked to the driver profile, vehicle registration, and transport company. Each e-challan includes a complete evidence package: timestamp, precise GPS coordinates, speed reading, route segment, duration of violation, and cryptographic hash verification. Evidence signing ensures legal admissibility, reducing the need for manual officer intervention and eliminating opportunities for corruption or dispute.
+Traffic and Route Intelligence: AI algorithms continuously analyze aggregated telemetry data from all active vehicles to identify congestion patterns, road closure impacts, and hazard propagation. When dangerous conditions are detected, the system generates AI-assisted dynamic route diversion recommendations and nearest safe exit suggestions for affected drivers. This proactive guidance helps prevent secondary accidents and reduces congestion in incident zones.
+Technical Integrations and Capabilities: Real-time GPS and sensor fusion telemetry provides accurate location, speed, and motion data. Offline mode with local SQLite buffering and automatic Firebase synchronization ensures continuity during network outages. Role-based authentication and secure access control through Firebase Authentication enforce strict separation between driver, officer, and admin capabilities. The architecture includes readiness for future M-Tag (RFID electronic toll collection) integration, enabling seamless expansion. AI optimization ensures low latency, minimal battery consumption, and privacy-preserving processing that does not require constant cloud connectivity.
+
+
+
+
+4.5 Feature Trees
+4.5.1 Driver
+
+4.5.2 Officer
+
+4.5.3 Super Admin
+
+4.5.4 Advance Ai and Integration
+1447800476250
+
+
+
+
+
+
+
+
+
+
+
+
+
+5 Business Requirements
+
+SR NO.
+	Description
+	
+BRD-1
+	The system shall support secure driver registration using Driving License Number + CNIC and login via username + password / biometric.
+	
+BRD-2
+	The system shall associate each driver session with a specific vehicle registration number before activating monitoring.
+	
+BRD-3
+	he system shall collect real-time telemetry (GPS, speed, accelerometer, gyroscope, camera, microphone) only after explicit driver consent.
+	
+BRD-4
+	The system shall detect speed violations in real-time against configurable zones and issue audio/visual warnings with tolerance.
+	
+BRD-5
+	The system shall perform AI-based drowsiness/fatigue detection using mobile camera (blink rate, head pose, yawning).
+	
+BRD-6
+	The system shall automatically detect crashes via sensor + audio analysis and generate SOS alerts with location.
+	
+BRD-7
+	The system shall allow manual SOS activation and provide nearest-exit recommendations.
+	
+BRD-8
+	The system shall maintain offline telemetry buffering and auto-sync to Firebase upon reconnection.
+	
+BRD-9
+	The system shall support role-based login for officers with restricted access to driver features.
+	
+BRD-10
+	The system shall display real-time incidents and SOS alerts on an interactive map for officers and HQ.
+	
+BRD-11
+	The system shall send high-priority push notifications for SOS/crash events to nearest officers.
+	
+BRD-12
+	The system shall allow officers to update incident status (Acknowledged → En Route → Resolved) in real-time.
+	
+BRD-13
+	The system shall enable geo-tagged photo/video upload as incident evidence.
+	
+BRD-14
+	The system shall support detailed field reporting and hazard reporting by officers.
+	
+BRD-15
+	The system shall provide HQ with real-time fleet monitoring, live incident dashboard, and analytics (heatmaps, trends).
+	
+BRD-16
+	The system shall allow Super Admin to configure speed/hazard zones, AI thresholds, and broadcast notifications.
+	
+BRD-17
+	he system shall maintain historical incident archives and violation reports for audit and analysis.
+	
+BRD-18
+	The system shall enforce data privacy and store consent timestamps.
+	
+BRD-19
+	The system shall generate e-challans with timestamped, location-signed, hash-verified evidence.
+	
+BRD-20
+	The system shall support driver safety scoring and performance profiling.
+	
+6 Process Flows
+6.1 Driver
+6.1.1 Secure registration and login
+
+6.1.2 Activate continuous real-time monitoring mode
+
+6.1.3 Grant consent for data collection
+
+6.1.4 Receive real-time speed violation warnings
+
+6.1.5 AI-based drowsiness and fatigue detection
+
+6.1.6 Automatic crash detection and SOS alert
+
+6.1.7 Manual SOS Flow
+
+
+6.1.8 Offline Sync & Recovery Flow 
+
+6.2 Officer Process Flows
+6.2.1 Secure role-based login
+
+6.2.2 Officer Signup Flow
+
+6.2.2 Incident Response Flow
+
+
+6.2.3 Evidence Upload Flow
+
+6.2.4 Hazard Reporting Flow
+
+6.2.5 Field Report submission Flow
+
+6.3 Super Admin
+6.3.1 Secure web-based login
+
+6.3.2 Web Based Signup Flow
+
+6.3.3 HQ Live Monitoring Flow
+
+6.3.4 E Challan Management Flow
+
+6.3.5 Officer Management Flow
+
+6.3.6 Broadcast Notification Flow
+
+6.3.7 Analytics and Reporting Flow
+
+7 High level DFD
+Level 0
+
+Level 1
+
+Level 2
+
+
+
+
+
+
+
+
+
+8 Design Constraints
+DC.01 Cross-platform mobile development using Flutter. 
+DC.02 Backend services using Firebase. 
+DC.03 Machine learning And AI Models. 
+DC.04 No dedicated in-vehicle hardware (Phase 1). 
+DC.05 Compliance with NH&MP data privacy and security policies.
+9 Assumptions and Dependencies
+9.1 Assumptions
+ASM.01 Drivers have smartphones with working camera, GPS, and internet (intermittent).
+ASM.02 Officers have access to the same Flutter app in Officer Mode.
+ASM.03 HQ has reliable web access.
+ASM.04 AI models perform adequately on mid-range Android devices.
+ASM.05 NH&MP will provide speed zone and hazard data for configuration.
+9.2 Dependencies
+DEP.01 Firebase Authentication and Realtime Database / Firestore.
+DEP.02 Google Maps API for navigation and geofencing
+DEP.03 Device sensors (accelerometer, gyroscope, camera, microphone).
+DEP.04 Push notification service (Firebase Cloud Messaging).
+10 Risk Analysis
+Risk
+	Effects
+	Probability & Impact
+	Solution
+	
+Drivers refuse consent or disable monitoring
+	Reduced coverage, safety gaps
+	Medium / High
+	Mandatory consent for app usage + awareness campaigns
+	
+Poor network coverage on motorways
+	Delayed alerts
+	High / Medium
+	Offline buffering + auto-sync
+	
+AI false positives (drowsiness/crash)
+	Driver annoyance
+	Medium / Medium
+	Configurable sensitivity + multi-factor detection
+	
+Officer response delay
+	Slower incident resolution
+	Low / High
+	High-priority notifications + nearest-officer routing
+	
+Data privacy breach
+	Legal/compliance issues
+	Low / High
+	Firebase security rules + consent logging + encryption
+	

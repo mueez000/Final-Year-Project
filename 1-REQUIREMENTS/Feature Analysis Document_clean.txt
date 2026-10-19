@@ -1,0 +1,133 @@
+﻿
+AI-POWERED INTELLIGENT VEHICLE MONITORING SYSTEM FOR NH&MP
+
+Feature Analysis Document
+
+MUHAMMAD ALI HASSAN KHAN-SP23674
+MUEEZ AHMAD-SP23653
+FAIZAN AHMER-FL21472
+
+Supervised By
+Dr. Zohaib Ahmed
+
+Submitted for the partial fulfillment of BS Software Engineering degree to the Faculty of Engineering & Computer Science 
+
+NATIONAL UNIVERSITY OF MODERN LANGUAGES
+ ISLAMABAD
+Table of Contents
+ TOC \o "1-3" \h \z \u 1 Introduction PAGEREF _Toc228191718 \h 3
+1.1Purpose PAGEREF _Toc228191719 \h 3
+1.2 Intended Stakeholders PAGEREF _Toc228191720 \h 3
+1.3 System Scope PAGEREF _Toc228191721 \h 3
+2 Features PAGEREF _Toc228191722 \h 4
+2.1 Driver Features PAGEREF _Toc228191723 \h 4
+2.2 Officer Features (Mobile Application Mode) PAGEREF _Toc228191724 \h 5
+2.3 Headquarters Monitoring Dashboard Features (IT Center) PAGEREF _Toc228191725 \h 5
+2.4 Advanced AI Features and Integrations PAGEREF _Toc228191726 \h 6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 Introduction
+This document provides a comprehensive Feature Analysis for the AI-Powered Intelligent Vehicle Monitoring System (IVMS) in accordance with IEEE standards for requirements specification. It serves as the definitive reference for all functional capabilities of the system.
+
+Purpose
+The primary objective of this document is to deliver a detailed, role-based breakdown of all features of IVMS. It enables project managers, business analysts, developers, QA teams, and NH&MP stakeholders to clearly understand the system’s functionalities, support development, testing, and future enhancements, and ensure alignment with the goal of enhancing motorway safety for commercial passenger buses on high-risk corridors such as the M-2 (Salt Range).
+
+1.2 Intended Stakeholders
+NH&MP Headquarters IT Center (Super Admin)
+NH&MP Field Officers
+Commercial Passenger Bus Drivers
+Product Owner / Project Sponsor (NH&MP)
+Business Analyst
+Development Team
+Quality Assurance / Testing Team
+
+1.3 System Scope
+In-Scope:
+Driver Mobile Application (Flutter) – real-time monitoring, AI detection, alerts, SOS.
+Officer Mobile Application Mode (role-based login within the same Flutter app).
+Centralized Headquarters Monitoring Dashboard (web-based / Firebase).
+AI-driven crash detection, drowsiness/fatigue detection (mobile camera), speed violation detection, e-challan generation, incident response workflow, offline telemetry buffering, and analytics.
+Out-of-Scope (Phase 1):
+Dedicated in-vehicle hardware or sensors.
+Monitoring of private cars, motorcycles, or freight trucks.
+Integration with external bus CCTV / RTSP feeds.
+Direct integration with insurance platforms or NADRA.
+Fully autonomous predictive forecasting.
+
+2 Features
+2.1 Driver Features
+2.1.1Secure registration and login (phone number + password / biometric)
+2.1.2Activate continuous real-time monitoring mode upon motorway entry
+2.1.3Grant consent for data collection (GPS, speed, accelerometer, gyroscope, camera, microphone)
+2.1.4Receive real-time speed violation warnings with tolerance rules
+2.1.5AI-based drowsiness and fatigue detection using mobile device camera
+2.1.6Automatic crash detection and auto-generation of SOS alert
+2.1.7Manual SOS button for emergency situations
+2.1.8Receive traffic awareness, route safety notifications, and AI-assisted route      diversion / nearest exit recommendations
+2.1.9View personal violation history and safety score
+2.1.10 Receive administrative broadcast messages and safety notifications
+2.1.11 Offline telemetry and evidence buffering with automatic synchronization
+2.1.12 View and acknowledge system alerts
+2.1.13 Log out / exit monitoring mode
+
+
+
+2.2 Officer Features (Mobile Application Mode)
+2.2.1Secure role-based login (Officer credentials)
+2.2.2View real-time incidents and SOS / crash alerts on map interface
+2.2.3Receive high-priority push notifications for SOS and crash events
+2.2.4Accept incident and update status (Acknowledged → En Route → Resolved)
+2.2.5Navigate to incident location using integrated maps
+2.2.6Upload geo-tagged photos and videos as incident evidence
+2.2.7Submit detailed field reports and incident observations
+2.2.8Report roadblocks, fog, hazards, or broken-down vehicles
+2.2.9Receive headquarters broadcast messages
+2.2.10 View assigned patrol area and live incident heatmap
+2.2.11Log out
+
+2.3 Headquarters Monitoring Dashboard Features (IT Center)
+2.3.1Secure web-based login (Admin / HQ credentials)
+2.3.2Real-time monitoring of all registered commercial buses on interactive map
+2.3.3View live incident dashboard with SOS and crash alerts
+2.3.4Review and validate officer-submitted evidence (photos/videos)
+2.3.5Track officer activity and incident response status
+2.3.6Access system analytics, heatmaps, violation trends, and risk pattern visualization
+2.3.7Configure speed zones, hazard zones, operational thresholds, and AI model parameters
+2.3.8Broadcast operational and safety notifications to drivers and officers
+2.3.9Manage incident archives and historical data
+2.3.10Oversee e-challan generation and violation reports
+2.3.11Account settings (notification preferences, password change)
+2.3.12 Officer Management Dashboard
+2.3.13 Logout
+
+2.4 Advanced AI Features and Integrations
+2.4.1AI-Based Incident Detection
+2.4.1.1 Crash detection using accelerometer, gyroscope, GPS, and audio signatures
+2.4.1.2 Drowsiness / fatigue detection via mobile camera (multi-factor: blink rate + head pose)
+2.4.1.3 Speed violation detection and secure digital evidence logging
+2.4.2Automated Enforcement
+2.4.2.1 Automatic e-challan generation for commercial passenger buses
+2.4.2.2 Evidence signing for legal admissibility (timestamp, location, hash verification)
+2.4.3Traffic & Route Intelligence
+2.4.3.1 Traffic congestion and road closure / hazard pattern analysis
+2.4.3.2 AI-assisted dynamic route diversion and nearest exit recommendations
+2.4.4Technical Integrations & Capabilities
+2.4.4.1 Real-time GPS and sensor fusion telemetry
+2.4.4.2 Offline mode with local buffering and auto-sync (Firebase)
+2.4.4.3 Role-based authentication and secure access control (Firebase Authentication)
+2.4.4.4 Architectural readiness for future M-Tag integration
+2.4.4.5 AI optimization (ML,Deep Learning and GenAI) for low latency and battery efficiency

@@ -1,0 +1,28 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Evidence files uploaded by officers
+    match /evidence/{incidentId}/{fileName} {
+      allow read: if isAuthenticated();
+      // Allow officers and admins to upload evidence images (< 15MB)
+      allow write: if isAuthenticated() && 
+                   request.resource.size < 15 * 1024 * 1024 &&
+                   request.resource.contentType.matches('image/.*');
+    }
+    
+    // User profile images
+    match /profiles/{userId}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && 
+                   request.auth.uid == userId &&
+                   request.resource.size < 5 * 1024 * 1024 &&
+                   request.resource.contentType.matches('image/.*');
+    }
+  }
+}

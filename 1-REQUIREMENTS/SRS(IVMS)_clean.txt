@@ -1,0 +1,692 @@
+﻿
+AI-POWERED INTELLIGENT VEHICLE MONITORING SYSTEM FOR NH&MP
+
+Software Requirements Specifications
+MUHAMMAD ALI HASSAN KHAN-SP23674
+MUEEZ AHMAD-SP23653
+FAIZAN AHMER-FL21472
+
+Supervised By
+Dr. Zohaib Ahmed
+
+Submitted for the partial fulfillment of BS Software Engineering degree to the Faculty of Engineering & Computer Science 
+
+NATIONAL UNIVERSITY OF MODERN LANGUAGES
+ ISLAMABAD
+
+Table of Contents
+ TOC \o "1-3" \h \z \u 1 Introduction PAGEREF _Toc230102254 \h 4
+1.1 Purpose PAGEREF _Toc230102255 \h 4
+1.2 Problem Statement PAGEREF _Toc230102256 \h 4
+1.3 Proposed Solution PAGEREF _Toc230102257 \h 4
+1.4Intended Stakeholders PAGEREF _Toc230102258 \h 5
+1.5 System Scope PAGEREF _Toc230102259 \h 5
+1.5.1 In-Scope: PAGEREF _Toc230102260 \h 5
+1.5.2 Out-of-Scope (Phase 1): PAGEREF _Toc230102261 \h 5
+2 Features PAGEREF _Toc230102262 \h 6
+2.1 Driver Features PAGEREF _Toc230102263 \h 6
+2.2 Officer Features (Mobile Application Mode) PAGEREF _Toc230102264 \h 7
+2.3 Headquarters Monitoring Dashboard Features (Super Admin) PAGEREF _Toc230102265 \h 7
+2.4 Advanced AI Features and Integrations PAGEREF _Toc230102266 \h 8
+2.5 Definitions of terms, abbreviations, and acronyms PAGEREF _Toc230102267 \h 8
+3 Overall Description PAGEREF _Toc230102268 \h 9
+3.1 Product Perspective PAGEREF _Toc230102269 \h 9
+3.2 User Classes and Characteristics PAGEREF _Toc230102270 \h 9
+3.3 Operating Environment PAGEREF _Toc230102271 \h 10
+3.4 Assumption and Dependencies PAGEREF _Toc230102272 \h 10
+3.4.1 Assumptions PAGEREF _Toc230102273 \h 10
+3.4.2 Dependencies PAGEREF _Toc230102274 \h 10
+4 Specific Requirements PAGEREF _Toc230102275 \h 11
+4.1 Business Requirements PAGEREF _Toc230102276 \h 11
+4.2 Functional Requirements PAGEREF _Toc230102277 \h 11
+4.2.1 Driver PAGEREF _Toc230102278 \h 11
+4.2.2 Officer PAGEREF _Toc230102279 \h 14
+4.2.3 Super Admin (Headquarter) PAGEREF _Toc230102280 \h 15
+5 Non-Functional Requirements PAGEREF _Toc230102281 \h 17
+5.1 Security PAGEREF _Toc230102282 \h 17
+5.2 Usability PAGEREF _Toc230102283 \h 17
+5.3 Performance PAGEREF _Toc230102284 \h 17
+5.4 Flexibility PAGEREF _Toc230102285 \h 17
+5.5 Responsiveness PAGEREF _Toc230102286 \h 18
+5.6 Availability PAGEREF _Toc230102287 \h 18
+
+
+
+
+Sr. #
+	Version
+	Created By
+	Details/Updates/Modifions
+	
+1.
+	1.0
+	Team IVMS
+	Initial SRS Document (February 2026)
+
+	
+
+
+
+
+
+
+
+
+
+1 Introduction
+1.1 Purpose
+The primary objective of this document is to provide a detailed overview of the features and functional & non-functional requirements for the “AI-Powered Intelligent Vehicle Monitoring System (IVMS)” project. This document is intended to aid project managers, business analysts, developers, QA teams, and NH&MP stakeholders in understanding the system’s functionalities, features, and requirements. It will serve as the foundation for system development, testing, and future enhancements. However, all the written specifications are set out according to the IEEE standards. 
+
+1.2 Problem Statement
+Pakistan’s motorway network, particularly the M-2, faces recurring safety issues especially in the Salt Range where more than 350 accidents have occurred since 1997, claiming over 200 lives. The existing systems (manual speed monitoring, convoy system, manual incident reporting, and limited speed cameras) are inefficient, reactive, labor-intensive, cause traffic congestion, allow easy rule evasion, and lack real-time monitoring, drowsiness detection, automatic crash alerts, and centralized analytics.
+
+1.3 Proposed Solution
+The proposed AI-Powered Intelligent Vehicle Monitoring System (IVMS) is a comprehensive smartphone-based solution using Flutter and Firebase. It enables real-time monitoring of commercial buses and vans, AI-based drowsiness & crash detection, speed violation alerts, automated e-challans, instant SOS, officer response management, and headquarters analytics. The system will significantly improve road safety, reduce response time, and replace the inefficient convoy system with intelligent virtual enforcement.
+
+
+
+
+ Intended Stakeholders
+NH&MP Headquarters IT Center (Super Admin)
+NH&MP Field Officers    
+Commercial Passenger Bus Drivers 
+Product Owner / Project Sponsor (NH&MP)
+Business Analyst
+Development Team
+Quality Assurance / Testing Team
+
+
+1.5 System Scope
+1.5.1 In-Scope:
+Flutter Mobile Application for Drivers and Officers (role-based) 
+Web-based Headquarters Monitoring Dashboard 
+AI models for drowsiness, crash, and speed detection 
+Real-time tracking, alerts, e-challan, offline support, and analytics 
+Officer management and broadcast system
+
+1.5.2 Out-of-Scope (Phase 1):
+Dedicated vehicle hardware/sensors 
+Monitoring of private cars/motorcycles/freight trucks 
+Integration with NADRA or insurance companies 
+Nationwide deployment beyond M-2 pilot
+
+
+
+
+2 Features
+2.1 Driver Features
+2.1.1  Secure registration and login (Driving License + CNIC) 
+2.1.2  Vehicle registration number association 
+2.1.3  Explicit consent for data collection 
+2.1.4  Activate continuous real-time monitoring mode 
+2.1.5  Real-time speed violation warnings 
+2.1.6  AI-based drowsiness and fatigue detection 
+2.1.7  Automatic crash detection and SOS alert 
+2.1.8  Manual SOS button 
+2.1.9  Traffic awareness and AI route diversion recommendations 
+2.1.10  View personal violation history and safety score 
+2.1.11  Receive administrative broadcast messages 
+2.1.12  Offline telemetry buffering with auto-sync 
+2.1.13  View and acknowledge alerts 
+2.1.14  Log out / exit monitoring mode
+
+
+
+
+
+
+
+
+
+2.2 Officer Features (Mobile Application Mode)
+2.2.1  Secure role-based login 
+2.2.2  View real-time incidents on map
+2.2.3  High-priority push notifications 
+2.2.4  Accept and update incident status 
+2.2.5  Navigate to incident location 
+2.2.6  Upload geo-tagged evidence 
+2.2.7  Submit field reports 
+2.2.8  Report hazards 
+2.2.9  Receive broadcast messages 
+2.2.10  View patrol area and heatmap 
+2.2.11  Log out
+
+2.3 Headquarters Monitoring Dashboard Features (Super Admin)
+2.3.1  Secure web login 
+2.3.2  Real-time bus monitoring on map 
+2.3.3  Live incident dashboard 
+2.3.4  Evidence review and validation 
+2.3.5  Officer activity tracking 
+2.3.6  Analytics and heatmaps 
+2.3.7  System configuration 
+2.3.8  Broadcast messages 
+2.3.9  Officer management (Add, Assign, Performance, Deactivate) 
+2.3.10  E-challan oversight 
+2.3.11  Account settings
+
+2.4 Advanced AI Features and Integrations
+2.4.1  AI-Based Incident Detection 
+2.4.2  Automated e-Challan Generation 
+2.4.3  Traffic & Route Intelligence 
+2.4.4  Firebase Integration and Offline Support
+
+
+2.5 Definitions of terms, abbreviations, and acronyms
+
+Sr No.
+	Term/Abbreviation
+	Description
+	
+
+	SRS
+	Software Requirements Specifications
+	
+
+	IVMS
+	Intelligent Vehicle Monitoring System
+	
+
+	SOS
+	Save Our Souls
+	
+
+	IEEE
+	Institute of Electrical and Electronics engineering
+	
+
+	e-Challan
+	Electronic Challan
+	
+
+	M-2
+	Islamabad-Lahore Motorway
+	
+
+
+
+
+
+
+
+
+
+3 Overall Description
+
+3.1 Product Perspective
+IVMS is a new system that will replace manual and convoy-based monitoring with an intelligent, AI-powered, smartphone-centric platform. It integrates Driver App, Officer Mode, and HQ Dashboard through Firebase backend for real-time safety enforcement on M-2 Motorway.
+
+3.2 User Classes and Characteristics
+
+User Class
+	Description
+	
+Driver
+	Commercial bus/van drivers need simple, safe-to-use interface while driving.
+	
+Officer
+	NH&MP patrol officers need fast map-based incident response tools.
+	
+Super Admin
+	Headquarters IT staff  needs powerful monitoring, analytics, and administrative controls.
+	
+
+
+
+
+
+
+
+
+
+
+
+3.3 Operating Environment
+Hardware
+	Requirement
+	
+CPU
+	Intel Core i5 or higher
+	
+Ram
+	8 GB or higher
+	
+Storage
+	70 GB or higher
+	
+Windows Device 
+	For development with flutter.
+	
+Mobile Devices
+	Standard smartphones (Android) with GPS, microphones, and sensors for testing purposes.
+	
+
+3.4 Assumption and Dependencies
+3.4.1 Assumptions
+ASM.01 Users have smartphones with GPS, camera, and sensors.
+ASM.02 Users will provide consent for data collection.
+ASM.03 NH&MP will support pilot on M-2.
+ASM.04 Network may be intermittent in remote areas.
+3.4.2 Dependencies
+DEP.01 Mapping services for location and navigation
+DEP.02 Cloud backend services for real-time data and notifications
+DEP.03 Device sensors and camera access
+
+
+
+
+
+4 Specific Requirements
+System’s business and functional requirements are described below.
+
+4.1 Business Requirements
+SR. NO
+	Description
+	
+
+	The system shall enhance motorway safety using AI real-time monitoring
+	
+
+	The system shall detect drowsiness, crashes, and speed violations automatically.
+
+	
+
+	The system shall generate automated e-challans with legal evidence.
+
+	
+
+	The system shall enable rapid incident response by officers.
+
+	
+
+	The system shall provide centralized analytics and officer management.
+
+	
+
+	The system shall support offline operation with auto-synchronization.
+
+	
+
+
+
+
+
+
+4.2 Functional Requirements
+
+4.2.1 Driver
+
+SR. No
+	Description
+	Priority
+	
+
+	Registration & Login
+
+	
+	
+FR-D-01.
+	The system shall allow registration using Driving License Number and CNIC.
+	High
+	
+FR-D-02.
+	The system shall allow login using username and password.
+	High
+	
+FR-D-03.
+	The system shall lock account after 5 failed login attempts.
+	High
+	
+FR-D-04.
+	The system shall support forgot password functionality.
+	High
+	
+
+	
+Vehicle Association
+
+	
+	
+FR-D-05.
+	The system shall require driver to enter Vehicle Registration Number after login.
+	High
+	
+FR-D-06.
+	The system shall allow changing associated vehicle from profile.
+	High
+	
+
+	
+Consent & Monitoring
+
+	
+	
+FR-D-07.
+	The system shall display explicit consent screen before starting monitoring.
+	High
+	
+FR-D-08.
+	The system shall activate continuous monitoring mode manually or via GPS geofencing.
+	High
+	
+
+FR-D-09.
+	
+The system shall show persistent notification when monitoring is active.
+
+
+
+	
+High 
+	
+
+	
+Safety Features
+
+	
+	
+FR-D-10.
+	The system shall issue real-time speed violation warnings with tolerance.
+	High
+	
+FR-D-11.
+	The system shall perform AI-based drowsiness detection using mobile camera.
+	High
+	
+FR-D-12.
+	The system shall detect crashes using accelerometer, gyroscope, GPS and audio analysis.
+
+	High 
+	
+FR-D-13.
+	The system shall automatically trigger SOS alert on crash detection.
+	High
+	
+FR-D-14.
+	The system shall provide prominent manual SOS button with double-tap confirmation.
+	High
+	
+FR-D-15.
+	The system shall provide AI-assisted route diversion and nearest exit recommendations.
+	High 
+	
+
+	
+History & Notifications
+
+	
+	
+FR-D-16.
+	The system shall display personal violation history and safety score.
+	High 
+	
+FR-D-17.
+	The system shall show trend graph of safety score.
+	Medium
+	
+FR-D-18.
+	The system shall receive and display headquarters broadcast messages.
+	High 
+	
+FR-D-19.
+	The system shall maintain offline buffering of telemetry and evidence.
+	High 
+	
+FR-D-20.
+	The system shall automatically synchronize data when internet is restored.
+	High 
+	
+FR-D-21.
+	The system shall have a dedicated Alerts tab for all notifications.
+	High
+	
+
+	
+Others
+
+	
+	
+FR-D-22.
+	The system shall allow driver to view and acknowledge alerts.
+	High
+	
+FR-D-23.
+	The system shall allow secure logout and exit monitoring mode.
+	High
+	
+
+
+
+
+
+4.2.2 Officer
+
+
+SR. No
+	Description
+	Priority
+	
+
+	Login
+
+	
+	
+FR-O-01.
+	The system shall support secure role-based login for officers.
+	High
+	
+FR-O-02.
+	The system shall load officer-specific dashboard after login.
+	High
+	
+
+	
+Incident Management
+
+	
+	
+FR-O-03.
+	The system shall display real-time incidents and SOS alerts on interactive map.
+	High
+	
+FR-O-04.
+	The system shall auto-refresh map every 5 seconds.
+	High
+	
+FR-O-05.
+	The system shall send high-priority push notifications for SOS/crash events.
+	High
+	
+FR-O-06.
+	The system shall allow officer to update incident status (Acknowledged, En Route, Resolved).
+
+	High
+	
+FR-O-07.
+	The system shall support navigation to incident location using mapping services.
+	High
+	
+
+	
+Evidence & Reporting
+	
+	
+FR-O-08.
+	The system shall allow uploading of geo-tagged photos and videos.
+	High
+	
+FR-O-09.
+	The system shall support structured field report submission.
+	High
+	
+FR-O-10.
+	The system shall allow officers to report hazards (roadblocks, fog, etc.).
+
+
+
+	High 
+	
+
+	
+Others
+
+	
+	
+FR-O-11.
+	The system shall display assigned patrol area and live incident heatmap.
+	High
+	
+FR-O-12.
+	The system shall receive headquarters broadcast messages.
+	High
+	
+FR-O-13.
+	The system shall allow secure logout.
+	High 
+	
+
+
+
+
+
+4.2.3 Super Admin (Headquarter)
+
+
+SR. No
+	Description
+	Priority
+	
+
+	Login & Dashboard
+
+	
+	
+FR-SA-01.
+	The system shall provide secure web-based login.
+	High
+	
+FR-SA-02.
+	The system shall display real-time monitoring of all buses on interactive map.
+	High
+	
+FR-SA-03.
+	The system shall show live incident dashboard with SOS and crash alerts.
+	High
+	
+
+	
+Officer Management
+
+	
+	
+FR-SA-04.
+	The system shall display total number of officers.
+	High
+	
+FR-SA-05.
+	The system shall allow adding new officer with details and temporary password.
+	High
+	
+FR-SA-06.
+	The system shall allow assigning/editing officer duties and patrol areas.
+	High
+	
+FR-SA-07.
+	The system shall allow viewing officer performance and duty history.
+	High
+	
+FR-SA-08.
+	The system shall allow deactivating/removing officer.
+
+
+	High
+	
+
+	
+Analytics & Configuration
+
+	
+	
+FR-SA-09.
+	The system shall provide comprehensive analytics with heatmaps and trends.
+	High
+	
+FR-SA-10.
+	The system shall allow configuration of speed zones and AI model parameters.
+	High
+	
+
+	
+Enforcement & Communication
+
+	
+	
+FR-SA-11.
+	The system shall support broadcast messaging to drivers and officers.
+	High
+	
+FR-SA-12.
+	The system shall allow review and validation of officer evidence.
+	High
+	
+FR-SA-13.
+	The system shall oversee e-challan generation and violation reports.
+	High
+	
+
+	
+Others
+
+	
+	
+FR-SA-14.
+	The system shall allow management of incident archives
+	High
+	
+FR-SA-15.
+	The system shall provide account settings and logout functionality.
+	High
+	
+
+
+
+
+
+
+
+
+5 Non-Functional Requirements
+
+5.1 Security
+The system shall use secure authentication mechanisms.
+All sensitive data shall be encrypted in transit and at rest.
+Role-based access control shall be implemented.
+Evidence shall be timestamped, geo-tagged, and hash-verified.
+Explicit consent shall be mandatory for data collection.
+
+5.2 Usability
+The mobile app shall have simple and intuitive interface suitable for drivers.
+Audio feedback shall be provided for important alerts.
+The web dashboard shall be user-friendly for control room environment.
+
+5.3 Performance
+Real-time location updates shall have low latency.
+AI/ML processing shall be fast and battery efficient.
+The system shall support multiple concurrent users efficiently.
+
+5.4 Flexibility
+The system shall allow HQ to configure speed limits, hazard zones, and AI parameters easily.
+Architecture shall support future expansion to other motorways.
+
+
+
+
+5.5 Responsiveness
+The application shall be responsive on different mobile devices and screen sizes.
+The web dashboard shall work well on desktop monitors.
+
+
+5.6 Availability
+The system shall work in offline mode with automatic synchronization.
+Critical SOS and crash alerts shall be highly reliable.
+
+

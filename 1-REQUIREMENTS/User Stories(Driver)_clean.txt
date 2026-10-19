@@ -1,0 +1,203 @@
+﻿
+User Stories
+1 Driver User Stories
+US#1: Driver - Secure Registration and Login
+Story:
+As a driver, I want to register using my Driving License Number + CNIC and log in with username + password, so that I can securely access the IVMS mobile application, associate myself with the specific bus/van I am driving, and start real-time monitoring, alerts, and safety features while ensuring only authorized commercial bus drivers can use the system.
+Trigger:
+When the driver opens the IVMS mobile application for the first time or after logout, the system shall display the registration/login screen.
+Description:
+This functionality enables commercial passenger bus drivers to create an account using official identification (Driving License Number + CNIC) and authenticate via username + password. After successful login, the driver must provide the registration number of the bus or van he is currently driving before monitoring can begin.
+Acceptance Criteria:
+The system shall display a login/registration screen with options for “Register” and “Login”.
+The system shall allow registration using the following mandatory fields:
+Driving License Number (Type: Alphanumeric, required, Placeholder: “Enter Driving License Number e.g. ABC-123456”) 
+CNIC Number (Type: Numeric, Limit: 13 digits with dashes, required, Placeholder: “XXXXX-XXXXXXX-X”) 
+Username (Type: Alphanumeric, Min 5 characters, required, Placeholder: “Choose Username”) 
+Password (Type: Password, Min 8 characters, required, Placeholder: “Create Password”)
+
+The system shall validate that the Driving License Number and CNIC are unique and not already registered. 
+The system shall store credentials securely using Firebase Authentication. 
+The system shall allow login using Username (required) + Password (required). 
+The system shall display an error message “Invalid username or password” if login fails and lock the account after 5 failed attempts. 
+Upon successful login, the system shall immediately prompt the driver to enter the Vehicle Registration Number of the bus or van he is driving (Type: Alphanumeric, required, Placeholder: “Enter Vehicle Registration Number e.g. ABC-1234”). 
+The system shall associate the driver with the entered vehicle registration number for the current monitoring session (this association is required before monitoring mode can be activated). 
+The system shall display a confirmation message “Vehicle successfully associated – Monitoring ready” after the vehicle registration number is provided. 
+The system shall allow the driver to change the associated vehicle registration number later from the profile/settings screen. 
+Upon successful registration/login and vehicle association, the system shall redirect the driver to the home/dashboard screen and prompt for explicit consent to data collection (GPS, speed, accelerometer, gyroscope, camera, microphone). 
+The system shall support “Forgot Password” link that triggers password reset via secure verification (linked to registered CNIC/License).
+
+US#2: Driver - Activate Continuous Real-Time Monitoring Mode
+Story:
+As a driver, I want to activate continuous real-time monitoring mode upon entering the motorway (after vehicle registration number is associated), so that the system can start collecting telemetry data and providing safety alerts for the specific bus/van I am driving.
+Trigger:
+When the driver selects “Start Monitoring” or the GPS detects entry onto the M-2 motorway (and vehicle is already associated), the system shall activate monitoring mode.
+
+Description:
+This functionality automatically or manually starts background monitoring of location, speed, sensors, and camera feed after the driver has logged in and associated the correct bus/van registration number.
+Acceptance Criteria:
+The system shall display a prominent “Start Monitoring” button on the home screen only after vehicle registration number is associated.
+The system shall automatically detect motorway entry via GPS geofencing and prompt the driver to confirm activation.
+The system shall request and record explicit consent for data collection before starting.
+The system shall run in background mode (Flutter) collecting GPS, speed, accelerometer, gyroscope, camera, and microphone data linked to the associated vehicle.
+The system shall display a persistent notification “Monitoring Active – IVMS [Vehicle Reg No.]” with current speed and safety score.
+The system shall allow the driver to pause or exit monitoring mode only after confirming they have left the motorway.
+The system shall buffer data offline and auto-sync to Firebase when connectivity is restored.
+1.3 US#3: Driver - Grant Consent for Data Collection
+Story:
+As a driver, I want to grant explicit consent for data collection (GPS, speed, accelerometer, gyroscope, camera, microphone), so that the system can legally and transparently collect the required telemetry for monitoring and safety features.
+Trigger:
+Upon first login or when monitoring mode is activated, the system shall display the consent screen.
+Description: 
+This functionality ensures drivers are fully informed and provide consent before any data collection begins.
+
+
+
+Acceptance Criteria:
+The system shall display a clear consent screen listing all data types being collected with purpose.
+The system shall require the driver to actively check “I consent” and tap “Continue”.
+The system shall disable the “Start Monitoring” button until consent is granted.
+The system shall store consent timestamp and driver ID in Firebase.
+The system shall allow the driver to revoke consent later from the profile screen (which will stop monitoring).
+1.4 US#4: Driver - Receive Real-Time Speed Violation Warnings
+Story:
+As a driver, I want to receive real-time speed violation warnings with tolerance rules, so that I can adjust my speed and avoid e-challans.
+Trigger: 
+When the vehicle speed exceeds the configured limit for the current road segment (with tolerance), the system shall trigger a warning.
+Description: 
+The system uses GPS and speed data to detect violations and provides immediate audio/visual alerts.
+Acceptance Criteria:
+The system shall compare real-time speed against predefined speed zones (configurable by HQ).
+The system shall issue visual + audio warnings (e.g., “Speed Limit Exceeded – Slow Down”) with tolerance buffer.
+The system shall log the violation with timestamp, location, speed, and evidence (screenshot/GPS).
+The system shall display a running safety score on the home screen that decreases with violations.
+The system shall allow the driver to view personal violation history with details and safety score.
+The system shall automatically generate evidence for e-challan (timestamped, location-signed, hash-verified).
+
+1.5 US#5: Driver - AI-Based Drowsiness and Fatigue Detection
+Story:
+As a driver, I want the system to perform AI-based drowsiness and fatigue detection using the mobile camera, so that I receive timely alerts to prevent accidents due to fatigue.
+Trigger:
+When monitoring mode is active and the camera detects signs of drowsiness (blink rate + head pose), the system shall alert the driver.
+Description:
+AI Models analyze camera feed for multi-factor fatigue indicators and issues escalating alerts.
+Acceptance Criteria:
+The system shall request camera permission and run on-device AI analysis in background.
+The system shall detect drowsiness using blink rate, head pose, and yawning (multi-factor).
+The system shall issue progressive alerts: visual + audio (“Take a break – You appear drowsy”), escalating to louder alarm if ignored.
+The system shall recommend nearest safe exit or rest area via AI route intelligence.
+The system shall log detection events with evidence for HQ review while maintaining driver privacy.
+The system shall allow the driver to acknowledge or dismiss alerts.
+
+1.6 US#6: Driver - Automatic Crash Detection and SOS Alert
+Story:
+As a driver, I want automatic crash detection with auto-generation of SOS alert, so that emergency services and officers are notified instantly in case of an accident.
+Trigger: 
+When accelerometer, gyroscope, GPS, and audio signatures indicate a crash, the system shall automatically trigger SOS.
+
+
+Description: 
+The system uses sensor fusion and audio analysis to detect impacts and immediately sends SOS with location and severity.
+Acceptance Criteria:
+The system shall continuously monitor accelerometer, gyroscope, GPS, and audio for crash signatures.
+The system shall auto-generate SOS alert with precise GPS location, vehicle details, and estimated severity.
+The system shall send high-priority push notification and alert to nearest officers and HQ.
+The system shall allow manual SOS button activation as backup.
+The system shall continue buffering evidence post-crash until help arrives.
+The system shall display confirmation screen after SOS is sent.
+1.7 US#7: Driver - Manual SOS Button for Emergency Situations
+Story:
+As a driver, I want a manual SOS button for emergency situations, so that I can instantly alert authorities when automatic detection is not triggered.
+Trigger:
+When the driver taps the prominent “SOS” button on the home screen or in the notification bar.
+Description:
+This provides a manual override for any emergency.
+Acceptance Criteria:
+The system shall display a large red “SOS” button on the home screen.
+The system shall require double-tap confirmation to prevent accidental activation.
+The system shall send the same SOS payload as automatic crash detection.
+The system shall notify nearest officers and HQ immediately.
+The system shall log the manual SOS event separately for audit.
+
+
+
+1.8 US#8: Driver - Receive Traffic Awareness, Route Safety Notifications, and AI-Assisted Route Diversion
+Story:
+As a driver, I want to receive traffic awareness, route safety notifications, and AI-assisted route diversion / nearest exit recommendations, so that I can avoid hazards and reach my destination safely.
+Trigger:
+When the system detects congestion, road closures, hazards, or high-risk zones (e.g., Salt Range) via real-time data.
+Description:
+AI analyzes traffic patterns and provides proactive guidance.
+Acceptance Criteria:
+The system shall display in-app notifications and audio alerts for hazards.
+The system shall show AI-recommended diversions on an integrated map.
+The system shall suggest nearest safe exits or rest areas.
+The system shall update recommendations in real-time.
+1.9 US#9: Driver - View Personal Violation History and Safety Score
+Story:
+As a driver, I want to view my personal violation history and safety score, so that I can track my performance and improve driving habits.
+Trigger:
+When the driver navigates to the “My Profile” or “History” tab.
+Description:
+This provides transparency and feedback.
+Acceptance Criteria:
+The system shall display a safety score (0-100) with trend graph.
+The system shall show a chronological list of all violations with details (date, time, speed, location, type).
+The system shall allow filtering by date range.
+
+
+
+
+1.10 US#10: Driver - Receive Administrative Broadcast Messages and Safety Notifications
+Story:
+As a driver, I want to receive administrative broadcast messages and safety notifications, so that I stay informed about important updates from NH&MP.
+Trigger:
+When HQ or officers send a broadcast.
+Description:
+Push notifications reach all active drivers.
+Acceptance Criteria:
+The system shall display push notifications even when app is in background.
+The system shall store messages in an inbox for later reading.
+1.11 US#11: Driver - Offline Telemetry and Evidence Buffering with Automatic Synchronization
+Story:
+As a driver, I want offline telemetry and evidence buffering with automatic synchronization, so that no data is lost during network outages.
+Trigger:
+When the device loses internet connectivity while monitoring is active.
+Description:
+Local storage ensures continuity.
+Acceptance Criteria:
+The system shall buffer all telemetry and evidence locally.
+The system shall automatically sync to Firebase as soon as connectivity is restored.
+The system shall show a status indicator “Offline – Data buffering”.
+
+
+
+
+
+
+1.12 US#12: Driver - View and Acknowledge System Alerts
+Story:
+As a driver, I want to view and acknowledge system alerts, so that I can respond to important notifications.
+Trigger:
+When any alert (speed, drowsiness, crash, broadcast) is generated.
+Description:
+Alerts are centralized for easy management.
+Acceptance Criteria:
+The system shall show a dedicated “Alerts” tab.
+The system shall require the driver to acknowledge each alert.
+
+1.13 US#13: Driver - Log Out / Exit Monitoring Mode
+Story:
+As a driver, I want to log out or exit monitoring mode, so that I can end my session securely.
+Trigger:
+When the driver selects “Log Out” or “Stop Monitoring” from the menu.
+Description:
+Secure session termination.
+Acceptance Criteria:
+The system shall prompt confirmation before stopping monitoring.
+The system shall clear all temporary session data.
+The system shall redirect to the login screen.
+
+
+
+
